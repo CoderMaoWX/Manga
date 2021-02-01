@@ -17,6 +17,8 @@
 		5887389B25C558C00049ECAD /* CateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389A25C558C00049ECAD /* CateVC.swift */; };
 		5887389E25C558D10049ECAD /* BookVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389D25C558D10049ECAD /* BookVC.swift */; };
 		588738A125C558DC0049ECAD /* MineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738A025C558DC0049ECAD /* MineVC.swift */; };
+		588738CA25C7CF1F0049ECAD /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738C925C7CF1F0049ECAD /* BaseVC.swift */; };
+		588738E525C7D42B0049ECAD /* NavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738E425C7D42B0049ECAD /* NavigationVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		5887389A25C558C00049ECAD /* CateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CateVC.swift; sourceTree = "<group>"; };
 		5887389D25C558D10049ECAD /* BookVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookVC.swift; sourceTree = "<group>"; };
 		588738A025C558DC0049ECAD /* MineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineVC.swift; sourceTree = "<group>"; };
+		588738C925C7CF1F0049ECAD /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
+		588738E425C7D42B0049ECAD /* NavigationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,8 +69,8 @@
 			isa = PBXGroup;
 			children = (
 				584D5D9625C3F27A00FA507C /* AppDelegate.swift */,
-				584D5DAE25C3F62600FA507C /* TabBarController.swift */,
 				588738A325C558E20049ECAD /* Classes */,
+				588738CD25C7CF360049ECAD /* Main */,
 				584D5DB125C3F62B00FA507C /* HeaderDefine */,
 				588738AD25C55DB10049ECAD /* SupportingFiles */,
 			);
@@ -133,6 +137,16 @@
 				584D5DA425C3F27A00FA507C /* Info.plist */,
 			);
 			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		588738CD25C7CF360049ECAD /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				584D5DAE25C3F62600FA507C /* TabBarController.swift */,
+				588738E425C7D42B0049ECAD /* NavigationVC.swift */,
+				588738C925C7CF1F0049ECAD /* BaseVC.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +222,8 @@
 				584D5DAF25C3F62600FA507C /* TabBarController.swift in Sources */,
 				5887389E25C558D10049ECAD /* BookVC.swift in Sources */,
 				5887389825C5587C0049ECAD /* HomeVC.swift in Sources */,
+				588738E525C7D42B0049ECAD /* NavigationVC.swift in Sources */,
+				588738CA25C7CF1F0049ECAD /* BaseVC.swift in Sources */,
 				588738A125C558DC0049ECAD /* MineVC.swift in Sources */,
 				584D5D9B25C3F27A00FA507C /* ViewController.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,

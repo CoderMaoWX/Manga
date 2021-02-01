@@ -5,7 +5,7 @@
       "scale" : "1x"
     },
     {
-      "filename" : "tab_book_S@2x.png",
+      "filename" : "tab_book_s@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -17,5 +17,8 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "template-rendering-intent" : "original"
   }
 }

@@ -11,7 +11,8 @@ class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tabBar.isTranslucent = false
+    
         setupViewController()
     }
     
@@ -23,12 +24,12 @@ class TabBarController: UITabBarController {
     }
     
     func setupChildVC(childVC: UIViewController, title: String, imageName: String, selImageName: String) {
-        
+        //childVC.tabBarItem.title = title
+        childVC.navigationItem.title = title
         childVC.tabBarItem.image = UIImage(named: imageName)?.withRenderingMode(.alwaysOriginal)
         childVC.tabBarItem.selectedImage = UIImage(named: selImageName)?.withRenderingMode(.alwaysOriginal)
-        childVC.tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -4)
-        childVC.tabBarItem.title = title
-        addChild( UINavigationController(rootViewController: childVC) )
+        childVC.tabBarItem.imageInsets.top = 10
+        addChild( NavigationVC(rootViewController: childVC) )
     }
     
 
