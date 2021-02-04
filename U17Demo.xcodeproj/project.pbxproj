@@ -22,6 +22,8 @@
 		588738A125C558DC0049ECAD /* MineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738A025C558DC0049ECAD /* MineVC.swift */; };
 		588738CA25C7CF1F0049ECAD /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738C925C7CF1F0049ECAD /* BaseVC.swift */; };
 		588738E525C7D42B0049ECAD /* NavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738E425C7D42B0049ECAD /* NavigationVC.swift */; };
+		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
+		A32CD81225CC4A20009A5C56 /* UBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		588738C925C7CF1F0049ECAD /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		588738E425C7D42B0049ECAD /* NavigationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVC.swift; sourceTree = "<group>"; };
 		98079B8B5577BA617F3B4527 /* Pods-U17Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-U17Demo.release.xcconfig"; path = "Target Support Files/Pods-U17Demo/Pods-U17Demo.release.xcconfig"; sourceTree = "<group>"; };
+		A32CD80E25CC494A009A5C56 /* URankCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URankCCell.swift; sourceTree = "<group>"; };
+		A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UBaseCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				5887389A25C558C00049ECAD /* CateVC.swift */,
+				A32CD80E25CC494A009A5C56 /* URankCCell.swift */,
 				583D452025CBF6A500C053F7 /* UCateModel.swift */,
 			);
 			path = Cate;
@@ -174,6 +179,7 @@
 			children = (
 				584D5DAE25C3F62600FA507C /* TabBarController.swift */,
 				588738E425C7D42B0049ECAD /* NavigationVC.swift */,
+				A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */,
 				588738C925C7CF1F0049ECAD /* BaseVC.swift */,
 			);
 			path = Main;
@@ -295,11 +301,13 @@
 			files = (
 				583D451E25CBF36700C053F7 /* UApiDefiner.swift in Sources */,
 				584D5DAF25C3F62600FA507C /* TabBarController.swift in Sources */,
+				A32CD81225CC4A20009A5C56 /* UBaseCollectionViewCell.swift in Sources */,
 				5887389E25C558D10049ECAD /* BookVC.swift in Sources */,
 				5887389825C5587C0049ECAD /* HomeVC.swift in Sources */,
 				588738E525C7D42B0049ECAD /* NavigationVC.swift in Sources */,
 				588738CA25C7CF1F0049ECAD /* BaseVC.swift in Sources */,
 				588738A125C558DC0049ECAD /* MineVC.swift in Sources */,
+				A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */,
 				584D5D9B25C3F27A00FA507C /* ViewController.swift in Sources */,
 				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,

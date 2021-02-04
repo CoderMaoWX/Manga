@@ -21,6 +21,9 @@ class CateVC: BaseVC {
         cw.backgroundColor = UIColor.white
         cw.delegate = self
         cw.dataSource = self
+        
+        cw .register(URankCCell.self, forCellWithReuseIdentifier: NSStringFromClass(URankCCell.self))
+        
         return cw
     }()
     
@@ -42,9 +45,12 @@ class CateVC: BaseVC {
             
             switch response.result {
             case .success(let json):
-                let cat = (json as! NSDictionary).kj.model(CateListModel.self)
-                print(cat!)
-                
+                if let data = (json as! NSDictionary)["data"] as? NSDictionary {
+                    if let returnData = data["returnData"] {
+                        let cat = (returnData as! NSDictionary).kj.model(CateListModel.self)
+                        print(cat!)
+                    }
+                }
                 break
             case .failure(let error):
                 print("error: \(error)")

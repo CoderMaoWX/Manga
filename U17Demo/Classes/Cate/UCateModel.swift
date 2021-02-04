@@ -45,5 +45,5 @@ struct TopModel: Convertible {
 struct CateListModel: Convertible {
     var recommendSearch: String?
     var rankingList:[RankingModel]?
-    var topList:[TopModel]?
+//    var topList:[TopModel]?
 }
