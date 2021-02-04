@@ -6,6 +6,10 @@
 //
 
 import UIKit
+import SnapKit
+import Moya
+import Alamofire
+import KakaJSON
 
 class CateVC: BaseVC {
     
@@ -22,18 +26,41 @@ class CateVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        getMobileCateList()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        getMobileCateList()
+    }
+    
+    func getMobileCateList() {
+        let weatherUrl: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
+        
+        AF.request(weatherUrl, method: HTTPMethod.get, parameters: nil).responseJSON {
+            (response) in
+            
+            switch response.result {
+            case .success(let json):
+                let cat = (json as! NSDictionary).kj.model(CateListModel.self)
+                print(cat!)
+                
+                break
+            case .failure(let error):
+                print("error: \(error)")
+                break
+            
+            }
+        }
     }
     
     override func initSubView() {
-        view .addSubview(collectionView)
+//        view.addSubview(collectionView)
     }
     
     override func layoutSubView() {
-        
+//        collectionView.snp.makeConstraints { $0.edges.equalTo(self.view) }
     }
-    
     
 }
 

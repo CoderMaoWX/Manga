@@ -1,0 +1,38 @@
+PODS:
+  - Alamofire (5.4.1)
+  - KakaJSON (1.1.2)
+  - Kingfisher (6.0.0)
+  - MJRefresh (3.5.0)
+  - Moya (14.0.0):
+    - Moya/Core (= 14.0.0)
+  - Moya/Core (14.0.0):
+    - Alamofire (~> 5.0)
+  - SnapKit (5.0.1)
+
+DEPENDENCIES:
+  - KakaJSON (~> 1.1.2)
+  - Kingfisher
+  - MJRefresh
+  - Moya
+  - SnapKit
+
+SPEC REPOS:
+  https://cdn.cocoapods.org/:
+    - Alamofire
+    - KakaJSON
+    - Kingfisher
+    - MJRefresh
+    - Moya
+    - SnapKit
+
+SPEC CHECKSUMS:
+  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
+  KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
+  Kingfisher: 13f6e68c928eb50439b5cb2ea75d6035018438ea
+  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
+  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
+  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+
+PODFILE CHECKSUM: a3b62c76eac47e14b63acee67b2bb12fe46e33f9
+
+COCOAPODS: 1.9.3

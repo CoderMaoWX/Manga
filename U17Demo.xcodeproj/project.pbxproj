@@ -3,12 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		583D418A25C9017500C053F7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 583D418925C9017500C053F7 /* Kingfisher */; };
-		583D419325C905A100C053F7 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 583D419225C905A100C053F7 /* Moya */; };
+		54D108C5461197C9C5E2D41D /* Pods_U17Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0088669976CF18825985553D /* Pods_U17Demo.framework */; };
+		583D451E25CBF36700C053F7 /* UApiDefiner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583D451D25CBF36700C053F7 /* UApiDefiner.swift */; };
+		583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583D452025CBF6A500C053F7 /* UCateModel.swift */; };
 		584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9625C3F27A00FA507C /* AppDelegate.swift */; };
 		584D5D9B25C3F27A00FA507C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9A25C3F27A00FA507C /* ViewController.swift */; };
 		584D5D9E25C3F27A00FA507C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 584D5D9C25C3F27A00FA507C /* Main.storyboard */; };
@@ -24,6 +25,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0088669976CF18825985553D /* Pods_U17Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_U17Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43E473540D579EA0B62BF597 /* Pods-U17Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-U17Demo.debug.xcconfig"; path = "Target Support Files/Pods-U17Demo/Pods-U17Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		583D451D25CBF36700C053F7 /* UApiDefiner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UApiDefiner.swift; sourceTree = "<group>"; };
+		583D452025CBF6A500C053F7 /* UCateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UCateModel.swift; sourceTree = "<group>"; };
 		584D5D9325C3F27A00FA507C /* U17Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = U17Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584D5D9625C3F27A00FA507C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		584D5D9A25C3F27A00FA507C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -38,6 +43,7 @@
 		588738A025C558DC0049ECAD /* MineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineVC.swift; sourceTree = "<group>"; };
 		588738C925C7CF1F0049ECAD /* BaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
 		588738E425C7D42B0049ECAD /* NavigationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationVC.swift; sourceTree = "<group>"; };
+		98079B8B5577BA617F3B4527 /* Pods-U17Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-U17Demo.release.xcconfig"; path = "Target Support Files/Pods-U17Demo/Pods-U17Demo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,19 +51,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				583D419325C905A100C053F7 /* Moya in Frameworks */,
-				583D418A25C9017500C053F7 /* Kingfisher in Frameworks */,
+				54D108C5461197C9C5E2D41D /* Pods_U17Demo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E3B7F8F9F10B82C622FA726 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0088669976CF18825985553D /* Pods_U17Demo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3412133B075244D1B1462FAE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				43E473540D579EA0B62BF597 /* Pods-U17Demo.debug.xcconfig */,
+				98079B8B5577BA617F3B4527 /* Pods-U17Demo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		584D5D8A25C3F27900FA507C = {
 			isa = PBXGroup;
 			children = (
 				584D5D9525C3F27A00FA507C /* U17Demo */,
 				584D5D9425C3F27A00FA507C /* Products */,
+				3412133B075244D1B1462FAE /* Pods */,
+				2E3B7F8F9F10B82C622FA726 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -84,6 +108,7 @@
 		584D5DB125C3F62B00FA507C /* HeaderDefine */ = {
 			isa = PBXGroup;
 			children = (
+				583D451D25CBF36700C053F7 /* UApiDefiner.swift */,
 			);
 			path = HeaderDefine;
 			sourceTree = "<group>";
@@ -103,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				5887389A25C558C00049ECAD /* CateVC.swift */,
+				583D452025CBF6A500C053F7 /* UCateModel.swift */,
 			);
 			path = Cate;
 			sourceTree = "<group>";
@@ -160,19 +186,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 584D5DA725C3F27A00FA507C /* Build configuration list for PBXNativeTarget "U17Demo" */;
 			buildPhases = (
+				358766775DC9801B81D3696D /* [CP] Check Pods Manifest.lock */,
 				584D5D8F25C3F27A00FA507C /* Sources */,
 				584D5D9025C3F27A00FA507C /* Frameworks */,
 				584D5D9125C3F27A00FA507C /* Resources */,
+				97B1FE6C5F40A24D87B6BC13 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = U17Demo;
-			packageProductDependencies = (
-				583D418925C9017500C053F7 /* Kingfisher */,
-				583D419225C905A100C053F7 /* Moya */,
-			);
 			productName = U17Demo;
 			productReference = 584D5D9325C3F27A00FA507C /* U17Demo.app */;
 			productType = "com.apple.product-type.application";
@@ -200,10 +224,6 @@
 				Base,
 			);
 			mainGroup = 584D5D8A25C3F27900FA507C;
-			packageReferences = (
-				583D418825C9017500C053F7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				583D419125C905A100C053F7 /* XCRemoteSwiftPackageReference "Moya" */,
-			);
 			productRefGroup = 584D5D9425C3F27A00FA507C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -226,11 +246,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		358766775DC9801B81D3696D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-U17Demo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		97B1FE6C5F40A24D87B6BC13 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-U17Demo/Pods-U17Demo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-U17Demo/Pods-U17Demo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-U17Demo/Pods-U17Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		584D5D8F25C3F27A00FA507C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				583D451E25CBF36700C053F7 /* UApiDefiner.swift in Sources */,
 				584D5DAF25C3F62600FA507C /* TabBarController.swift in Sources */,
 				5887389E25C558D10049ECAD /* BookVC.swift in Sources */,
 				5887389825C5587C0049ECAD /* HomeVC.swift in Sources */,
@@ -238,6 +301,7 @@
 				588738CA25C7CF1F0049ECAD /* BaseVC.swift in Sources */,
 				588738A125C558DC0049ECAD /* MineVC.swift in Sources */,
 				584D5D9B25C3F27A00FA507C /* ViewController.swift in Sources */,
+				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,
 				584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */,
 			);
@@ -383,6 +447,7 @@
 		};
 		584D5DA825C3F27A00FA507C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43E473540D579EA0B62BF597 /* Pods-U17Demo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -403,6 +468,7 @@
 		};
 		584D5DA925C3F27A00FA507C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98079B8B5577BA617F3B4527 /* Pods-U17Demo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -443,38 +509,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		583D418825C9017500C053F7 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.1.0;
-			};
-		};
-		583D419125C905A100C053F7 /* XCRemoteSwiftPackageReference "Moya" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Moya/Moya.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 14.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		583D418925C9017500C053F7 /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 583D418825C9017500C053F7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-		583D419225C905A100C053F7 /* Moya */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 583D419125C905A100C053F7 /* XCRemoteSwiftPackageReference "Moya" */;
-			productName = Moya;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 584D5D8B25C3F27900FA507C /* Project object */;
 }
