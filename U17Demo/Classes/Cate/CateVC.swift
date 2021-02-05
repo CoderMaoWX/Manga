@@ -13,28 +13,35 @@ import KakaJSON
 
 class CateVC: BaseVC {
     
+    var rankingList = [RankingModel]()
+    
     lazy var collectionView: UICollectionView = {
         let lt = UICollectionViewFlowLayout()
         lt.minimumLineSpacing = 10
         lt.minimumInteritemSpacing = 10
+        lt.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        let width = floor(Double( UIScreen.main.bounds.width - 40.0 ) / 3.0)
+        lt.itemSize = CGSize(width: width, height: 120)
         let cw = UICollectionView(frame: CGRect.zero, collectionViewLayout: lt)
         cw.backgroundColor = UIColor.white
         cw.delegate = self
         cw.dataSource = self
-        
-        cw .register(URankCCell.self, forCellWithReuseIdentifier: NSStringFromClass(URankCCell.self))
-        
+        cw.register(URankCCell.self, forCellWithReuseIdentifier: NSStringFromClass(URankCCell.self))
         return cw
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
         getMobileCateList()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        getMobileCateList()
+    override func initSubView() {
+        view.addSubview(collectionView)
+    }
+    
+    override func layoutSubView() {
+        collectionView.snp.makeConstraints { $0.edges.equalTo(self.view) }
     }
     
     func getMobileCateList() {
@@ -48,6 +55,8 @@ class CateVC: BaseVC {
                 if let data = (json as! NSDictionary)["data"] as? NSDictionary {
                     if let returnData = data["returnData"] {
                         let cat = (returnData as! NSDictionary).kj.model(CateListModel.self)
+                        self.rankingList = cat?.rankingList ?? []
+                        self.collectionView.reloadData()
                         print(cat!)
                     }
                 }
@@ -59,26 +68,16 @@ class CateVC: BaseVC {
             }
         }
     }
-    
-    override func initSubView() {
-//        view.addSubview(collectionView)
-    }
-    
-    override func layoutSubView() {
-//        collectionView.snp.makeConstraints { $0.edges.equalTo(self.view) }
-    }
-    
 }
 
-extension CateVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension CateVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return rankingList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        fatalError()
+        let cell: URankCCell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(URankCCell.self), for: indexPath) as! URankCCell
+        cell.model = rankingList[indexPath.item]
+        return cell
     }
-    
-    
-    
 }
