@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Moya
+import MJRefresh
 import Alamofire
 import KakaJSON
 
@@ -34,6 +35,14 @@ class CateVC: BaseVC {
         super.viewDidLoad()
         
         getMobileCateList()
+        addRefreshKit()
+    }
+    
+    func addRefreshKit() {
+        collectionView.mj_header = MJRefreshNormalHeader {
+            [weak self] in
+            self?.getMobileCateList()
+        }
     }
     
     override func initSubView() {
@@ -52,13 +61,13 @@ class CateVC: BaseVC {
             
             switch response.result {
             case .success(let json):
-                if let data = (json as! NSDictionary)["data"] as? NSDictionary {
-                    if let returnData = data["returnData"] {
-                        let cat = (returnData as! NSDictionary).kj.model(CateListModel.self)
-                        self.rankingList = cat?.rankingList ?? []
-                        self.collectionView.reloadData()
-                        print(cat!)
-                    }
+                
+                let data = (json as? NSDictionary)?["data"] as? NSDictionary
+                if let returnData = data?["returnData"] {
+                    let cat = model(from: (returnData as! NSDictionary), CateListModel.self)
+                    self.rankingList = cat?.rankingList ?? []
+                    self.collectionView.reloadData()
+                    self.collectionView.mj_header?.endRefreshing()
                 }
                 break
             case .failure(let error):

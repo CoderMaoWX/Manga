@@ -23,7 +23,6 @@ class URankCCell: UBaseCollectionViewCell {
         lb.font = UIFont.systemFont(ofSize: 14)
         lb.textAlignment = .center
         lb.textColor = .white
-        
         return lb
     }()
     
@@ -57,6 +56,4 @@ class URankCCell: UBaseCollectionViewCell {
             textLabel.text = model.sortName
         }
     }
-    
-    
 }
