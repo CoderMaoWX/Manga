@@ -28,3 +28,25 @@ class UBaseCollectionViewCell: UICollectionViewCell {
         
     }
 }
+
+class UBaseTableViewCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        initSubView()
+        
+        layoutSubView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func initSubView() {
+        
+    }
+    
+    func layoutSubView()  {
+        
+    }
+}

@@ -34,14 +34,14 @@ class CateVC: BaseVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getMobileCateList()
+        loadListData()
         addRefreshKit()
     }
     
     func addRefreshKit() {
         collectionView.mj_header = MJRefreshNormalHeader {
             [weak self] in
-            self?.getMobileCateList()
+            self?.loadListData()
         }
     }
     
@@ -53,11 +53,11 @@ class CateVC: BaseVC {
         collectionView.snp.makeConstraints { $0.edges.equalTo(self.view) }
     }
     
-    func getMobileCateList() {
-        let weatherUrl: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
+    func loadListData() {
+        let loadURL: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
         
-        AF.request(weatherUrl, method: HTTPMethod.get, parameters: nil).responseJSON {
-            (response) in
+        AF.request(loadURL, method: HTTPMethod.get, parameters: nil).responseJSON {
+            [weak self](response) in
             
             switch response.result {
             case .success(let json):
@@ -65,9 +65,9 @@ class CateVC: BaseVC {
                 let data = (json as? NSDictionary)?["data"] as? NSDictionary
                 if let returnData = data?["returnData"] {
                     let cat = model(from: (returnData as! NSDictionary), CateListModel.self)
-                    self.rankingList = cat?.rankingList ?? []
-                    self.collectionView.reloadData()
-                    self.collectionView.mj_header?.endRefreshing()
+                    self?.rankingList = cat?.rankingList ?? []
+                    self?.collectionView.reloadData()
+                    self?.collectionView.mj_header?.endRefreshing()
                 }
                 break
             case .failure(let error):
@@ -88,5 +88,18 @@ extension CateVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         let cell: URankCCell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(URankCCell.self), for: indexPath) as! URankCCell
         cell.model = rankingList[indexPath.item]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let model = rankingList[indexPath.item]
+        let detailVC = UCateDetailVC()
+        detailVC.hidesBottomBarWhenPushed = true
+        detailVC.title = model.sortName
+        detailVC.argCon = model.argCon
+        detailVC.argName = model.argName ?? ""
+        detailVC.argValue = model.argValue
+        navigationController?.pushViewController(detailVC, animated: true)
+        
     }
 }
