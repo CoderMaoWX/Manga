@@ -26,6 +26,8 @@
 		58B4924E25CFDDF10052A97C /* UDetailCateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4924D25CFDDF10052A97C /* UDetailCateCell.swift */; };
 		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
 		A32CD81225CC4A20009A5C56 /* UBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */; };
+		A3A1125925E002A900A9DB82 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A1125825E002A900A9DB82 /* Global.swift */; };
+		A3A1127025E0139F00A9DB82 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A1126F25E0139F00A9DB82 /* UIColorExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		98079B8B5577BA617F3B4527 /* Pods-U17Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-U17Demo.release.xcconfig"; path = "Target Support Files/Pods-U17Demo/Pods-U17Demo.release.xcconfig"; sourceTree = "<group>"; };
 		A32CD80E25CC494A009A5C56 /* URankCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URankCCell.swift; sourceTree = "<group>"; };
 		A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UBaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		A3A1125825E002A900A9DB82 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		A3A1126F25E0139F00A9DB82 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,7 @@
 				588738CD25C7CF360049ECAD /* Main */,
 				584D5DB125C3F62B00FA507C /* HeaderDefine */,
 				588738AD25C55DB10049ECAD /* SupportingFiles */,
+				A3A1127225E013A600A9DB82 /* Extension */,
 			);
 			path = U17Demo;
 			sourceTree = "<group>";
@@ -117,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				583D451D25CBF36700C053F7 /* UApiDefiner.swift */,
+				A3A1125825E002A900A9DB82 /* Global.swift */,
 			);
 			path = HeaderDefine;
 			sourceTree = "<group>";
@@ -189,6 +195,14 @@
 				588738C925C7CF1F0049ECAD /* BaseVC.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		A3A1127225E013A600A9DB82 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				A3A1126F25E0139F00A9DB82 /* UIColorExtension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -305,6 +319,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3A1127025E0139F00A9DB82 /* UIColorExtension.swift in Sources */,
 				583D451E25CBF36700C053F7 /* UApiDefiner.swift in Sources */,
 				584D5DAF25C3F62600FA507C /* TabBarController.swift in Sources */,
 				A32CD81225CC4A20009A5C56 /* UBaseCollectionViewCell.swift in Sources */,
@@ -313,6 +328,7 @@
 				5887389825C5587C0049ECAD /* HomeVC.swift in Sources */,
 				588738E525C7D42B0049ECAD /* NavigationVC.swift in Sources */,
 				58B4924B25CFD5220052A97C /* UCateDetailVC.swift in Sources */,
+				A3A1125925E002A900A9DB82 /* Global.swift in Sources */,
 				588738CA25C7CF1F0049ECAD /* BaseVC.swift in Sources */,
 				588738A125C558DC0049ECAD /* MineVC.swift in Sources */,
 				A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */,

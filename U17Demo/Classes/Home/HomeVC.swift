@@ -6,25 +6,40 @@
 //
 
 import UIKit
+import HMSegmentedControl
+import Then
 
 class HomeVC: BaseVC {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = UIColor.white
-        // Do any additional setup after loading the view.
+    lazy var segment: HMSegmentedControl = {
+        return HMSegmentedControl().then {
+            $0.addTarget(self, action: #selector(indexChange(segment:)), for: .valueChanged)
+        }
+    }()
+    
+    @objc func indexChange(segment: HMSegmentedControl) {
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    lazy var rightBtnView: UIBarButtonItem = {
+        let rightBtn = UIBarButtonItem(image: UIImage(named: "nav_search"),style: .plain, target: self, action: #selector(clickBtn(buttonIetm:)))
+        return rightBtn
+    }()
+    
+    @objc func clickBtn(buttonIetm: UIBarButtonItem) {
+        
     }
-    */
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func initSubView() {
+        navigationItem.titleView = segment
+        navigationItem.rightBarButtonItem = rightBtnView
+    }
+    
+    override func layoutSubView() {
+        
+    }
 }

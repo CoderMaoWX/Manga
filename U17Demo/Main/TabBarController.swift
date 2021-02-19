@@ -17,10 +17,10 @@ class TabBarController: UITabBarController {
     }
     
     func setupViewController() {
-        setupChildVC(childVC: HomeVC(), title: "首页", imageName: "tab_home", selImageName: "tab_home_s")
-        setupChildVC(childVC: CateVC(), title: "分类", imageName: "tab_class", selImageName: "tab_class_s")
-        setupChildVC(childVC: BookVC(), title: "书架", imageName: "tab_book", selImageName: "tab_book_s")
-        setupChildVC(childVC: MineVC(), title: "我的", imageName: "tab_mine", selImageName: "tab_mine_s")
+        setupChildVC(childVC: HomeVC(), title: "首页", imageName: "tab_home", selImageName: "tab_home_S")
+        setupChildVC(childVC: CateVC(), title: "分类", imageName: "tab_class", selImageName: "tab_class_S")
+        setupChildVC(childVC: BookVC(), title: "书架", imageName: "tab_book", selImageName: "tab_book_S")
+        setupChildVC(childVC: MineVC(), title: "我的", imageName: "tab_mine", selImageName: "tab_mine_S")
     }
     
     func setupChildVC(childVC: UIViewController, title: String, imageName: String, selImageName: String) {
