@@ -14,7 +14,7 @@ import KakaJSON
 
 class CateVC: BaseVC {
     
-    var rankingList = [RankingModel]()
+    private var rankingList = [RankingModel]()
     
     lazy var collectionView: UICollectionView = {
         let lt = UICollectionViewFlowLayout()
@@ -33,7 +33,6 @@ class CateVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         loadListData()
         addRefreshKit()
     }
