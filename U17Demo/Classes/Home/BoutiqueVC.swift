@@ -18,13 +18,14 @@ class BoutiqueVC: BaseVC {
         let fl = UICollectionViewFlowLayout()
         fl.minimumLineSpacing = 10
         fl.minimumInteritemSpacing = 10
-        fl.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        let width = floor((UIScreen.main.bounds.width - 15.0) / 4.0)
-        fl.itemSize = CGSize(width: width, height: 80)
+        
+        let width = floor((UIScreen.main.bounds.width - 10.0) / 2.0)
+        fl.itemSize = CGSize(width: width, height: 160)
         fl.headerReferenceSize = CGSize(width: UIScreen.main.bounds.width, height: 44)
         fl.footerReferenceSize = CGSize.zero
         
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: fl)
+        cv.backgroundColor = .white
         cv.delegate = self
         cv.dataSource = self
         cv.register(BoutiqueCell.self, forCellWithReuseIdentifier: NSStringFromClass(BoutiqueCell.self))
@@ -83,7 +84,11 @@ extension BoutiqueVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             let reusableView: UComicCHead = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NSStringFromClass(UComicCHead.self), for: indexPath) as! UComicCHead
-            
+            reusableView.model = comicLists[indexPath.section]
+            reusableView.touchMoreAction {
+                [weak self] in
+                self?.collectionView.reloadData()
+            }
             return reusableView
         } else {
             return UICollectionReusableView()
@@ -93,6 +98,7 @@ extension BoutiqueVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: BoutiqueCell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(BoutiqueCell.self), for: indexPath) as! BoutiqueCell
      
+        cell.model = comicLists[indexPath.section].comics?[indexPath.item]
         return cell
     }
 }

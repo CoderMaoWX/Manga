@@ -11,7 +11,7 @@ class BaseVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.background
+        view.backgroundColor = UIColor.white
         
         edgesForExtendedLayout = .all
         extendedLayoutIncludesOpaqueBars = false
