@@ -44,14 +44,13 @@ extension UINavigationController {
             
         case .clear:
             navigationBar.barStyle = .black
-            navigationBar.setBackgroundImage(UIImage(named: "nav_bg"), for: .default)
+            navigationBar.setBackgroundImage(UIImage(), for: .default)
             navigationBar.shadowImage = UIImage()
             
         case .white:
             navigationBar.barStyle = .default
             navigationBar.setBackgroundImage(UIColor.white.image(), for: .default)
             navigationBar.shadowImage = nil
-            
         }
     }
 }

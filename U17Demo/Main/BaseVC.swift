@@ -9,36 +9,6 @@ import UIKit
 
 class BaseVC: UIViewController {
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        configNavgationBar()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        view.window?.endEditing(true)
-    }
-    
-    func configNavgationBar() {
-        guard let nav = navigationController else { return }
-        
-        if nav.visibleViewController == self {
-            nav.barStyle(.theme)
-            nav.setNavigationBarHidden(false, animated: true)
-            
-            if nav.viewControllers.count > 1 {
-                nav.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav_back_white"),
-                                                                       style: .plain,
-                                                                       target: self,
-                                                                       action: #selector(goBackAction))
-            }
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.background
@@ -56,6 +26,34 @@ class BaseVC: UIViewController {
         layoutSubView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        view.window?.endEditing(true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configNavgationBar()
+    }
+    
+    func configNavgationBar() {
+        guard let nav = navigationController else { return }
+        
+        if nav.visibleViewController == self {
+            nav.barStyle(.theme)
+            nav.setNavigationBarHidden(false, animated: true)
+            
+            if nav.viewControllers.count > 1 {
+                let image = UIImage(named: "nav_back_white")?.withRenderingMode(.alwaysOriginal)
+                navigationItem.leftBarButtonItem = UIBarButtonItem(image: image,
+                                                                   style: .plain,
+                                                                   target: self,
+                                                                   action: #selector(goBackAction))
+            }
+        }
+    }
+    
+    
     func initSubView() {
         
     }
@@ -71,6 +69,10 @@ class BaseVC: UIViewController {
         } else {
             dismiss(animated: true, completion: nil)
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
 }

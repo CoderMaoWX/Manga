@@ -51,19 +51,20 @@ class UCateDetailVC: BaseVC {
         if argName.count > 0 { param["argName"] = argName }
         param["argValue"] = argValue
         
-        AF.request(loadURL, method: .get, parameters: param).responseJSON {
+        AF.request(loadURL, parameters: param).responseJSON {
             [weak self](returnData) in
             
             switch returnData.result {
             case .success(let json):
                 let dataDict = ((json as? NSDictionary)?["data"] as? NSDictionary)?["returnData"]
+                print("详情页请求成功:" , dataDict)
                 let listModel = model(from: (dataDict as! NSDictionary), ComicListModel.self)
                 self?.dataArray = listModel?.comics ?? []
                 self?.tableView.reloadData()
                 break
                 
             case .failure(let error):
-                print("详情页面失败:", error)
+                print("详情页请求失败:", error)
                 break
             }
         }

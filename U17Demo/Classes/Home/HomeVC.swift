@@ -10,19 +10,36 @@ import HMSegmentedControl
 import Then
 
 class HomeVC: BaseVC {
-
+    
+    var titles: [NSString] = ["推荐", "VIP", "订阅", "排行"]
+    let VCs: [UIViewController] = [BoutiqueVC(), BoutiqueVC(), BoutiqueVC(), BoutiqueVC()]
+    var currentSelectIndex = 0
+    
     lazy var segment: HMSegmentedControl = {
         return HMSegmentedControl().then {
             $0.addTarget(self, action: #selector(indexChange(segment:)), for: .valueChanged)
         }
     }()
     
+    lazy var pageVC: UIPageViewController = {
+        return UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    }()
+     
     @objc func indexChange(segment: HMSegmentedControl) {
+        let index = segment.selectedSegmentIndex
+        if index == currentSelectIndex { return }
         
+        let vcs: [UIViewController] = [ VCs[Int(index)] ]
+        let direction: UIPageViewController.NavigationDirection = currentSelectIndex > Int(index) ? .reverse : .forward
+        
+        pageVC.setViewControllers(vcs, direction: direction, animated: true) { [weak self](bool) in
+            self?.currentSelectIndex = Int(index)
+        }
     }
     
     lazy var rightBtnView: UIBarButtonItem = {
-        let rightBtn = UIBarButtonItem(image: UIImage(named: "nav_search"),style: .plain, target: self, action: #selector(clickBtn(buttonIetm:)))
+        let image = UIImage(named: "nav_search")?.withRenderingMode(.alwaysOriginal)
+        let rightBtn = UIBarButtonItem(image: image, style:.plain, target: self, action: #selector(clickBtn(buttonIetm:)))
         return rightBtn
     }()
     
@@ -35,6 +52,23 @@ class HomeVC: BaseVC {
     }
     
     override func initSubView() {
+        pageVC.delegate = self
+        pageVC.dataSource = self
+        pageVC.setViewControllers([VCs[0]], direction: .forward, animated: true, completion: nil)
+        addChild(pageVC)
+        view.addSubview(pageVC.view)
+        
+        segment.backgroundColor = UIColor.clear
+        segment.sectionTitles = titles as [String]?
+        segment.selectionIndicatorLocation = .none
+        segment.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white.withAlphaComponent(0.5),
+                                       NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20) ]
+        
+        segment.selectedTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white,
+                                       NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 20) ]
+        
+        segment.selectedSegmentIndex = UInt(currentSelectIndex)
+        segment.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width-120, height: 40)
         navigationItem.titleView = segment
         navigationItem.rightBarButtonItem = rightBtnView
     }
@@ -42,4 +76,31 @@ class HomeVC: BaseVC {
     override func layoutSubView() {
         
     }
+}
+
+extension HomeVC : UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let index = VCs.firstIndex(of: viewController) else { return nil }
+        let beforeIndex = index - 1
+        
+        guard beforeIndex >= 0 else { return nil }
+        return VCs[beforeIndex]
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let index = VCs.firstIndex(of: viewController) else { return nil }
+        let afterIndex = index + 1
+        guard afterIndex <= VCs.count - 1 else { return nil }
+        return VCs[afterIndex]
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard let viewController = pageViewController.viewControllers?.last,
+            let index = VCs.firstIndex(of: viewController) else {
+                return
+        }
+        currentSelectIndex = index
+        segment.setSelectedSegmentIndex(UInt(index), animated: true)
+    }
+    
 }

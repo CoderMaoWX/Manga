@@ -138,3 +138,29 @@ struct ComicListModel: Convertible {
     var defaultParameters: DefaultParametersModel?
     var page: Int = 0
 }
+
+// MARK: - 首页模型
+struct BoutiqueListModel: Convertible {
+    var galleryItems: [GalleryItemModel]?
+    var textItems: [TextItemModel]?
+    var comicLists: [ComicListModel]?
+    var editTime: TimeInterval = 0
+}
+
+struct GalleryItemModel: Convertible {
+    var id: Int = 0
+    var linkType: Int = 0
+    var cover: String?
+    var ext: [ExtModel]?
+    var title: String?
+    var content: String?
+}
+
+struct TextItemModel: Convertible {
+    var id: Int = 0
+    var linkType: Int = 0
+    var cover: String?
+    var ext: [ExtModel]?
+    var title: String?
+    var content: String?
+}
