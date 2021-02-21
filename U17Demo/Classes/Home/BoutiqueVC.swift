@@ -22,22 +22,23 @@ class BoutiqueVC: BaseVC {
         let width = floor((UIScreen.main.bounds.width - 10.0) / 2.0)
         fl.itemSize = CGSize(width: width, height: 160)
         fl.headerReferenceSize = CGSize(width: UIScreen.main.bounds.width, height: 44)
-        fl.footerReferenceSize = CGSize.zero
+        fl.footerReferenceSize = CGSize(width: UIScreen.main.bounds.width, height: 8)
         
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: fl)
-        cv.backgroundColor = .white
+        cv.backgroundColor = .background
         cv.delegate = self
         cv.dataSource = self
         cv.register(BoutiqueCell.self, forCellWithReuseIdentifier: NSStringFromClass(BoutiqueCell.self))
        
         cv.register(UComicCHead.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NSStringFromClass(UComicCHead.self))
         
+         cv.register(UComicCFoot.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(UComicCFoot.self))
+        
         return cv
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         loadData()
     }
     
@@ -91,13 +92,14 @@ extension BoutiqueVC: UICollectionViewDelegate, UICollectionViewDataSource {
             }
             return reusableView
         } else {
-            return UICollectionReusableView()
+            let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(UComicCFoot.self), for: indexPath)
+            reusableView.backgroundColor = .groupTableViewBackground
+            return reusableView
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: BoutiqueCell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(BoutiqueCell.self), for: indexPath) as! BoutiqueCell
-     
         cell.model = comicLists[indexPath.section].comics?[indexPath.item]
         return cell
     }

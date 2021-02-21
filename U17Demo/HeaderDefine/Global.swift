@@ -10,7 +10,7 @@ import UIKit
 
 extension UIColor {
     class var theme: UIColor {
-        return UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+        return UIColor(red: 29, green: 221, blue: 43, alpha: 1)
     }
     
     class var background: UIColor {

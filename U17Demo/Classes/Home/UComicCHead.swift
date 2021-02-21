@@ -11,6 +11,17 @@ import SnapKit
 
 typealias UComicCHeadMoreActionClosure = ()->Void
 
+class UComicCFoot: UICollectionReusableView {
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIColor.background
+    }
+}
+
 class UComicCHead: UICollectionReusableView {
     
     private var moreActionClosure: UComicCHeadMoreActionClosure?
