@@ -103,4 +103,13 @@ extension BoutiqueVC: UICollectionViewDelegate, UICollectionViewDataSource {
         cell.model = comicLists[indexPath.section].comics?[indexPath.item]
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let model = comicLists[indexPath.section].comics?[indexPath.item]
+        
+        #warning("测试代码")
+        let webVC = WebVC(url: "http://forum.1kxun.com/detail?id=235372&_v=3.9.1&debug=1")
+        webVC.title = model?.name;
+        navigationController?.pushViewController(webVC, animated: true)
+    }
 }

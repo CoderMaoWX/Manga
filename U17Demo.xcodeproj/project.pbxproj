@@ -25,6 +25,7 @@
 		58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */; };
 		58A4C11B25E1035A00C1DAB5 /* BoutiqueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11A25E1035A00C1DAB5 /* BoutiqueCell.swift */; };
 		58A4C11E25E1084600C1DAB5 /* UComicCHead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11D25E1084600C1DAB5 /* UComicCHead.swift */; };
+		58A8219D2609C34F002F7689 /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A8219C2609C34F002F7689 /* WebVC.swift */; };
 		58B4924B25CFD5220052A97C /* UCateDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4924A25CFD5220052A97C /* UCateDetailVC.swift */; };
 		58B4924E25CFDDF10052A97C /* UDetailCateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4924D25CFDDF10052A97C /* UDetailCateCell.swift */; };
 		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
@@ -55,6 +56,7 @@
 		58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoutiqueVC.swift; sourceTree = "<group>"; };
 		58A4C11A25E1035A00C1DAB5 /* BoutiqueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoutiqueCell.swift; sourceTree = "<group>"; };
 		58A4C11D25E1084600C1DAB5 /* UComicCHead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UComicCHead.swift; sourceTree = "<group>"; };
+		58A8219C2609C34F002F7689 /* WebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
 		58B4924A25CFD5220052A97C /* UCateDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UCateDetailVC.swift; sourceTree = "<group>"; };
 		58B4924D25CFDDF10052A97C /* UDetailCateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDetailCateCell.swift; sourceTree = "<group>"; };
 		98079B8B5577BA617F3B4527 /* Pods-U17Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-U17Demo.release.xcconfig"; path = "Target Support Files/Pods-U17Demo/Pods-U17Demo.release.xcconfig"; sourceTree = "<group>"; };
@@ -200,8 +202,9 @@
 			children = (
 				584D5DAE25C3F62600FA507C /* TabBarController.swift */,
 				588738E425C7D42B0049ECAD /* NavigationVC.swift */,
-				A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */,
 				588738C925C7CF1F0049ECAD /* BaseVC.swift */,
+				58A8219C2609C34F002F7689 /* WebVC.swift */,
+				A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				588738A125C558DC0049ECAD /* MineVC.swift in Sources */,
 				58A4C11E25E1084600C1DAB5 /* UComicCHead.swift in Sources */,
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,
+				58A8219D2609C34F002F7689 /* WebVC.swift in Sources */,
 				A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */,
 				584D5D9B25C3F27A00FA507C /* ViewController.swift in Sources */,
 				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,

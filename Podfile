@@ -20,4 +20,11 @@ pod 'HMSegmentedControl'
 pod 'IQKeyboardManagerSwift'
 pod 'EmptyDataSet-Swift'
 pod 'UINavigation-SXFixSpace'
+
+pod 'SwiftyJSON'
+pod 'SVProgressHUD'
+pod 'Moya/RxSwift'
+pod 'FDFullscreenPopGesture'
+pod 'KVOController'
+
 end
