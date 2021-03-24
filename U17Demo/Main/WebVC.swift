@@ -8,12 +8,12 @@
 import UIKit
 import SnapKit
 import WebKit
+import Kingfisher
 
 class WebVC: BaseVC {
     fileprivate var webURL: String? = ""
     
     var imageItemArray: [ Any ] = []
-    
     
     convenience init(url: String?) {
         self.init()
@@ -105,22 +105,22 @@ extension WebVC: WKNavigationDelegate, WKUIDelegate {
         navigationItem.title = webView.title ?? title
         
         // 注入JS代码获取图片url和个数
-        self.webView.evaluateJavaScript("""
+        webView.evaluateJavaScript("""
              function getImages(){\
-                             var imgs = document.getElementsByTagName('img');\
-                             var imgScr = '';\
-                             for(var i=0;i<imgs.length;i++){\
-                                 if (i == 0){ \
-                                    imgScr = imgs[i].src; \
-                                 } else {\
-                                    imgScr = imgScr +'***'+ imgs[i].src;\
-                                 } \
-                             };\
-                             return imgScr;\
-                         };
-     """, completionHandler: nil)
+                 var imgs = document.getElementsByTagName('img');\
+                 var imgScr = '';\
+                 for(var i=0;i<imgs.length;i++){\
+                     if (i == 0){ \
+                        imgScr = imgs[i].src; \
+                     } else {\
+                        imgScr = imgScr +'***'+ imgs[i].src;\
+                     } \
+                 };\
+                 return imgScr;\
+             };
+        """, completionHandler: nil)
         
-        self.webView.evaluateJavaScript("getImages()") { [weak self] (result, error) in
+        webView.evaluateJavaScript("getImages()") { [weak self] (result, error) in
             guard error == nil else { return }
             guard let resultString: String = result as? String else { return }
             
@@ -133,18 +133,18 @@ extension WebVC: WKNavigationDelegate, WKUIDelegate {
         
         //添加图片点击的回调
         self.webView.evaluateJavaScript("""
-                            function registerImageClickAction(){\
-                                 var imgs = document.getElementsByTagName('img');\
-                                 for(var i=0;i<imgs.length;i++){\
-                                     imgs[i].customIndex = i;\
-                                     imgs[i].onclick=function(){\
-                                        window.location.href='image-preview-index:'+this.customIndex;\
-                                     }\
-                                 }\
-                             }
-                """, completionHandler: nil)
+                function registerImageClickAction(){\
+                    var imgs = document.getElementsByTagName('img');\
+                    for(var i=0;i<imgs.length;i++){\
+                        imgs[i].customIndex = i;\
+                        imgs[i].onclick=function(){\
+                            window.location.href='image-preview-index:'+this.customIndex;\
+                        }\
+                    }\
+                }
+        """, completionHandler: nil)
         
-        self.webView.evaluateJavaScript("registerImageClickAction();", completionHandler: nil)
+        webView.evaluateJavaScript("registerImageClickAction();", completionHandler: nil)
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -155,11 +155,60 @@ extension WebVC: WKNavigationDelegate, WKUIDelegate {
             //图片点击回调
             let index = Int((url!.absoluteString as NSString).substring(from: "image-preview-index:".count)) ?? 0
             print("点击图片 INDEX = \(index)")
-            print("点击图片 IMAGEPATH = " , self.imageItemArray[index] as! String)
+            
+            //大图 host:  jp.forum.1kxun.com
+            let tapStr = self.imageItemArray[index] as! String
+            let tapURL = URL(string: tapStr)
+            guard let url = tapURL?.host else {
+                decisionHandler(.cancel)
+                return
+            }
+            guard url == "jp.forum.1kxun.com" else {
+                decisionHandler(.cancel)
+                return
+            }
+            print("点击图片 IMAGEPATH =  \(url)")
+            navigationController?.pushViewController(PreviewImgVC(previewURL: tapStr), animated: true)
             
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)
+        }
+    }
+}
+
+
+class PreviewImgVC: BaseVC {
+    
+    var previewURL: String = ""
+    
+    convenience init(previewURL: String) {
+        self.init()
+        self.previewURL = previewURL
+    }
+    
+    var imgView: UIImageView = {
+        let img = UIImageView()
+        img.backgroundColor = .black
+        img.contentMode = .scaleAspectFit
+        return img
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.imgView.kf.setImage(with: URL(string: previewURL))
+    }
+    
+    override func initSubView() {
+        view.backgroundColor = .black
+        view.addSubview(imgView)
+    }
+    
+    override func layoutSubView() {
+        imgView.snp.makeConstraints{
+            $0.leading.trailing.equalTo(view)
+            $0.height.equalTo(500)
+            $0.centerY.equalTo(view.snp.centerY)
         }
     }
 }
