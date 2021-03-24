@@ -28,7 +28,7 @@ class TrendInfoCell: UITableViewCell {
             
             userImgView.kf.setImage(with: URL(string: model.icon))
             nameLabel.text = model.nickname
-            leveLabel.text = "LV." + model.level
+            leveLabel.text = model.level
             trendTitleLabel.text = model.title
             trendDescLabel.text = model.intro
             

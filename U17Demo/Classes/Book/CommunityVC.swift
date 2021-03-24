@@ -7,16 +7,19 @@
 
 import UIKit
 import SnapKit
+import KakaJSON
+import SwiftyJSON
+import Alamofire
 
 class CommunityVC: BaseVC {
     
-    var dataArray = [TrendInfoModel]()
+    var dataArray = [TrendPostModel]()
     
     lazy var tableView: UITableView = {
         let tb = UITableView(frame: .zero, style: .plain)
         tb.backgroundColor = .groupTableViewBackground
-        let nib = UINib(nibName: NSStringFromClass(TrendInfoCell.self), bundle: Bundle(for: TrendInfoCell.self))
-        tb.register(nib, forCellReuseIdentifier: NSStringFromClass(TrendInfoCell.self))
+        let nib = UINib(nibName: "TrendInfoCell", bundle: nil)
+        tb.register(nib, forCellReuseIdentifier: "TrendInfoCell")
         tb.estimatedRowHeight = 300
         tb.delegate = self
         tb.dataSource = self
@@ -35,7 +38,31 @@ class CommunityVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        https://jp.forum.1kxun.mobi/api/forum/specialPosts?_=1616553270&_brand=Apple&_carrier=%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8&_channel=Appstore&_idfa=1809AD50-995C-4F59-AB73-00DD0384D5A4&_locale=CN&_mg_language=zh_tw&_model=iPhone13%2C2&_ov=14.2&_package=com.truecolor.Manga&_resolution=1170%2C2532&_udid=948f9c4694912ff0e1c72e1b38581d80&_v=3.9.1&follow=0&id=1&page=0&sort_type=hot
+        
+        loadData()
+    }
+    
+    func loadData() {
+        let url = "https://jp.forum.1kxun.mobi/api/forum/specialPosts"
+        
+        //let param: [String : Any] = ["sexType" : 1]
+        AF.request(url, parameters: nil).responseJSON {
+            [weak self] (resultData) in
+            
+            switch resultData.result {
+            case .success(let json):
+                print("主页请求成功:")
+                let dataList = (json as? NSDictionary)?["data"] as? NSArray
+                let listModel = modelArray(from: dataList!, TrendPostModel.self)
+                
+                self?.dataArray += listModel
+                self?.tableView.reloadData()
+                break
+            case .failure(let error):
+                print("主页请求失败:", error)
+                break
+            }
+        }
     }
 }
 
@@ -45,8 +72,9 @@ extension CommunityVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NSStringFromClass(TrendInfoCell.self), for: indexPath) as! TrendInfoCell
-        cell.model = dataArray[indexPath.row].post
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TrendInfoCell", for: indexPath) as! TrendInfoCell
+        cell.selectionStyle = .none
+        cell.model = dataArray[indexPath.row]
         return cell
     }
 }

@@ -6,55 +6,60 @@
 //
 
 import Foundation
+import KakaJSON
 
-struct TrendInfoModel {
+struct TrendInfoModel: Convertible  {
+    init() { self.init() }
+    
     var post : TrendPostModel
-    var type : Int
+    var type : Int = 0
 }
 
-struct TrendPostModel {
-    var attributeImage : String
-    var bottomStr : String
-    var clickUrl : String
-    var commentN : Int
-    var commentImg : String
-    var createdAt : Int
-    var date : String
-    var followUser : Int
-    var icon : String
-    var id : Int
-    var ilikeImg : String
-    var image : String
-    var images : [TrendImage]
-    var intro : String
-    var isCartoonAuthor : Int
-    var isRedStarShow : Bool
-    var isVip : Bool
-    var level : String
-    var levelN : Int
-    var likeN : Int
-    var likeImg : String
-    var liked : Bool
-    var lotteryStatus : Int
-    var medals : [String]
-    var nickname : String
-    var role : Int
-    var specials : [TrendSpecial]
-    var status : Int
-    var title : String
-    var userFlagIcon : String
-    var userId : Int
-    var vip : [AnyObject]
-    var voteId : Int
+struct TrendPostModel: Convertible {
+
+    var attributeImage : String = ""
+    var bottomStr : String = ""
+    var clickUrl : String = ""
+    var commentN : Int = 0
+    var commentImg : String = ""
+    var createdAt : Int = 0
+    var date : String = ""
+    var followUser : Int = 0
+    var icon : String = ""
+    var id : Int = 0
+    var ilikeImg : String = ""
+    var image : String = ""
+    var images : [TrendImage] = []
+    var intro : String = ""
+    var isCartoonAuthor : Int = 0
+    var isRedStarShow : Bool = false
+    var isVip : Bool = false
+    var level : String = ""
+    var levelN : Int = 0
+    var likeN : Int = 0
+    var likeImg : String = ""
+    var liked : Bool = false
+    var lotteryStatus : Int = 0
+    var medals : [String] = []
+    var nickname : String = ""
+    var role : Int = 0
+    var specials : [TrendSpecial] = []
+    var status : Int = 0
+    var title : String = ""
+    var userFlagIcon : String = ""
+    var userId : Int = 0
+    var vip : [AnyObject] = []
+    var voteId : Int = 0
 }
 
-struct TrendSpecial {
-    var clickUrl : String
-    var name : String
-    var type : Int
+struct TrendSpecial: Convertible {
+    var clickUrl : String = ""
+    var name : String = ""
+    var type : Int = 0
 }
-struct TrendImage {
-    var height : String
-    var url : String
-    var width : String
+
+struct TrendImage: Convertible {
+    var height : String = ""
+    var url : String = ""
+    var width : String = ""
 }
