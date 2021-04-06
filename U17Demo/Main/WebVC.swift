@@ -11,7 +11,7 @@ import WebKit
 import Kingfisher
 
 class WebVC: BaseVC {
-    fileprivate var webURL: String? = ""
+    fileprivate var webURL: String?
     
     var imageItemArray: [ Any ] = []
     

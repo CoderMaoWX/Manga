@@ -5,8 +5,9 @@ target 'U17Demo' do
 use_frameworks!
 inhibit_all_warnings!
 
-pod 'SnapKit'
+#pod 'SnapKit'
 pod 'KakaJSON'
+pod 'SnapKitExtend'
 
 pod 'Then'
 pod 'Moya'

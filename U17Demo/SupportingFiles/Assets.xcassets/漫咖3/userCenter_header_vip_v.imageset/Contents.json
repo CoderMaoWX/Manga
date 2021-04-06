@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "userCenter_header_vip_v.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "userCenter_header_vip_v@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "userCenter_header_vip_v@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

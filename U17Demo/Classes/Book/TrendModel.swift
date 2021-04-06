@@ -8,10 +8,15 @@
 import Foundation
 import KakaJSON
 
+struct TrendModel: Convertible  {
+    var data : [TrendInfoModel] = []
+    var timestamp : Int = 0
+    var total_count : Int = 0
+}
+
+
 struct TrendInfoModel: Convertible  {
-    init() { self.init() }
-    
-    var post : TrendPostModel
+    var post : TrendPostModel = TrendPostModel()
     var type : Int = 0
 }
 
@@ -19,7 +24,7 @@ struct TrendPostModel: Convertible {
 
     var attributeImage : String = ""
     var bottomStr : String = ""
-    var clickUrl : String = ""
+    var click_url : String = ""
     var commentN : Int = 0
     var commentImg : String = ""
     var createdAt : Int = 0
@@ -33,7 +38,7 @@ struct TrendPostModel: Convertible {
     var intro : String = ""
     var isCartoonAuthor : Int = 0
     var isRedStarShow : Bool = false
-    var isVip : Bool = false
+    var is_vip : Bool = false
     var level : String = ""
     var levelN : Int = 0
     var likeN : Int = 0

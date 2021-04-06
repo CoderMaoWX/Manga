@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "new_home_recommend_banner_bottom_arc.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "new_home_recommend_banner_bottom_arc@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "new_home_recommend_banner_bottom_arc@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

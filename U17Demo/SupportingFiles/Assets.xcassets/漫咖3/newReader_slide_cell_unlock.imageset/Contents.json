@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "newReader_slide_cell_unlock.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "newReader_slide_cell_unlock@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "newReader_slide_cell_unlock@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

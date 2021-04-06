@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "AppIcon~marketing~1024x1024.png",
+      "scale" : "1x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
