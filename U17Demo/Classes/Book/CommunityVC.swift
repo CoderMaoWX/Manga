@@ -17,9 +17,13 @@ class CommunityVC: BaseVC {
     
     lazy var tableView: UITableView = {
         let tb = UITableView(frame: .zero, style: .plain)
-        tb.backgroundColor = .groupTableViewBackground
-        let nib = UINib(nibName: "TrendInfoCell", bundle: nil)
-        tb.register(nib, forCellReuseIdentifier: "TrendInfoCell")
+        tb.backgroundColor = UIColor(r: 247, g: 248, b: 248)
+        tb.separatorStyle = .none
+        let trend = UINib(nibName: "TrendInfoCell", bundle: nil)
+        tb.register(trend, forCellReuseIdentifier: "TrendInfoCell")
+        
+        let recommed = UINib(nibName: "TrendRecommedCell", bundle: nil)
+        tb.register(recommed, forCellReuseIdentifier: "TrendRecommedCell")
         tb.estimatedRowHeight = 300
         tb.delegate = self
         tb.dataSource = self
@@ -86,6 +90,13 @@ class CommunityVC: BaseVC {
             }
         }
     }
+    
+    func pushWebVC(url: String?, title: String?) {
+        guard let url = url else { return }
+        let webVC = WebVC(url: url)
+        webVC.title = title
+        navigationController?.pushViewController(webVC, animated: true)
+    }
 }
 
 extension CommunityVC: UITableViewDelegate, UITableViewDataSource {
@@ -94,16 +105,30 @@ extension CommunityVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TrendInfoCell", for: indexPath) as! TrendInfoCell
-        cell.selectionStyle = .none
-        cell.model = dataArray[indexPath.row].post
-        return cell
+        
+        let model: TrendInfoModel = dataArray[indexPath.row]
+        if model.type == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TrendInfoCell", for: indexPath) as! TrendInfoCell
+            cell.model = model.post
+            cell.linkBtnClosure = { [weak self] (link)  in
+                let title = self?.dataArray[indexPath.row].post.title
+                self!.pushWebVC(url: link, title: title)
+            };
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TrendRecommedCell", for: indexPath) as! TrendRecommedCell
+            cell.model = model
+            cell.linkBtnClosure = { [weak self] (link)  in
+                let title = self?.dataArray[indexPath.row].post.title
+                self!.pushWebVC(url: link, title: title)
+            };
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let url = dataArray[indexPath.row].post.click_url
-        let webVC = WebVC(url: url)
-        webVC.title = dataArray[indexPath.row].post.title;
-        navigationController?.pushViewController(webVC, animated: true)
+        let link = dataArray[indexPath.row].post.click_url
+        let title = dataArray[indexPath.row].post.title
+        pushWebVC(url: link, title: title)
     }
 }

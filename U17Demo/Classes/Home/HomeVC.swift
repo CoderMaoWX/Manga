@@ -39,8 +39,12 @@ class HomeVC: BaseVC {
     
     lazy var rightBtnView: UIBarButtonItem = {
         let image = UIImage(named: "nav_search")?.withRenderingMode(.alwaysOriginal)
-        let rightBtn = UIBarButtonItem(image: image, style:.plain, target: self, action: #selector(clickBtn(buttonIetm:)))
-        return rightBtn
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
+        btn.setImage(image, for: .normal)
+        btn.addTarget(self, action: #selector(clickBtn(buttonIetm:)), for: .touchUpInside)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: btn);
+        
+        return UIBarButtonItem(customView: btn)
     }()
     
     @objc func clickBtn(buttonIetm: UIBarButtonItem) {

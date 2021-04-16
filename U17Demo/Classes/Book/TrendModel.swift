@@ -18,14 +18,21 @@ struct TrendModel: Convertible  {
 struct TrendInfoModel: Convertible  {
     var post : TrendPostModel = TrendPostModel()
     var type : Int = 0
+    var cicle : [CicleModel] = []
+    var more_link : String = ""
+}
+
+struct CicleModel: Convertible  {
+    var name : String = ""
+    var click_url : String = ""
+    var image_url : String = ""
 }
 
 struct TrendPostModel: Convertible {
-
     var attributeImage : String = ""
     var bottomStr : String = ""
     var click_url : String = ""
-    var commentN : Int = 0
+    var commentN : String = ""
     var commentImg : String = ""
     var createdAt : Int = 0
     var date : String = ""
@@ -40,8 +47,8 @@ struct TrendPostModel: Convertible {
     var isRedStarShow : Bool = false
     var is_vip : Bool = false
     var level : String = ""
-    var levelN : Int = 0
-    var likeN : Int = 0
+    var levelN : String = ""
+    var likeN : String = ""
     var likeImg : String = ""
     var liked : Bool = false
     var lotteryStatus : Int = 0
@@ -55,12 +62,26 @@ struct TrendPostModel: Convertible {
     var userId : Int = 0
     var vip : [AnyObject] = []
     var voteId : Int = 0
+    
+    func kj_modelKey(from property: Property) -> ModelPropertyKey {
+            // 由于开发中可能经常遇到`驼峰`映射`下划线`的需求，KakaJSON已经内置了处理方法
+            // 直接调用字符串的underlineCased方法就可以从`驼峰`转为`下划线`
+            // `nickName` -> `nick_name`
+            return property.name.kj.underlineCased()
+        }
 }
 
 struct TrendSpecial: Convertible {
     var clickUrl : String = ""
     var name : String = ""
     var type : Int = 0
+    
+    func kj_modelKey(from property: Property) -> ModelPropertyKey {
+            // 由于开发中可能经常遇到`驼峰`映射`下划线`的需求，KakaJSON已经内置了处理方法
+            // 直接调用字符串的underlineCased方法就可以从`驼峰`转为`下划线`
+            // `nickName` -> `nick_name`
+            return property.name.kj.underlineCased()
+        }
 }
 
 struct TrendImage: Convertible {

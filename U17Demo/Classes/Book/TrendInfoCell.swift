@@ -9,13 +9,21 @@ import UIKit
 import Kingfisher
 import SnapKitExtend
 
+typealias UTrendInfoCellActionClosure = (String?)->()
+
 class TrendInfoCell: UITableViewCell {
+    
+    ///tag: 50, 51, 51
+    @IBOutlet weak var iconImg1: UIImageView!
+    @IBOutlet weak var iconImg2: UIImageView!
+    @IBOutlet weak var iconImg3: UIImageView!
 
     @IBOutlet weak var userImgView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var leveLabel: UILabel!
     @IBOutlet weak var trendTitleLabel: UILabel!
     @IBOutlet weak var trendDescLabel: UILabel!
+    @IBOutlet weak var lotteryStatusBtn: UIButton!
     @IBOutlet weak var linkBtn1: UIButton!
     @IBOutlet weak var linkBtn2: UIButton!
     @IBOutlet weak var linkBtn3: UIButton!
@@ -24,28 +32,53 @@ class TrendInfoCell: UITableViewCell {
     @IBOutlet weak var commentBtn: UIButton!
     
     @IBOutlet weak var ImgBgView: UIView!
-    ///tag: 1, 2, 3
+    ///tag: 101, 102, 103
     @IBOutlet weak var imgView1: UIImageView!
     @IBOutlet weak var imgView2: UIImageView!
     @IBOutlet weak var imgView3: UIImageView!
     
+    var linkBtnClosure: UTrendInfoCellActionClosure?
+    
+    
+    @IBAction func linkBtnAction(_ sender: UIButton) {
+        guard sender.tag > 100 else { return }
+        
+        guard let linkBtnClosure = linkBtnClosure else { return }
+        if (model?.specials.count)! > (sender.tag - 101) {
+            let linkStr = model?.specials[sender.tag - 101].clickUrl
+            linkBtnClosure(linkStr);
+        }
+    }
+    
     var model: TrendPostModel? {
         didSet {
             guard let model = model else { return }
+            
+            ///icon
+            let iconArr = [iconImg1, iconImg2, iconImg3]
+            let _ = iconArr.map { $0?.isHidden = true }
+            var icon = 49
+            for tmp in model.medals {
+                icon += 1
+                let imgView = viewWithTag(icon) as? UIImageView
+                imgView?.isHidden = false
+                imgView?.kf.setImage(with: URL(string: tmp))
+            }
+            
+            //图片
             ImgBgView.isHidden = (model.images.count == 0)
             
             let imgArr = [imgView1, imgView2, imgView3]
             let _ = imgArr.map { $0?.isHidden = true }
-
             var index = 0
             for tmp in model.images {
                 index += 1
-                let tmpImg = ImgBgView.viewWithTag(index) as? UIImageView
-                tmpImg?.isHidden = false
+                let imgView = ImgBgView.viewWithTag(index) as? UIImageView
+                imgView?.isHidden = false
                 let url = tmp.url
-                tmpImg?.kf.setImage(with: URL(string: url))
+                imgView?.kf.setImage(with: URL(string: url))
             }
-
+            
             //  axisType:方向
             //  fixedSpacing:中间间距
             //  leadSpacing:左边距(上边距)
@@ -69,6 +102,10 @@ class TrendInfoCell: UITableViewCell {
             trendTitleLabel.text = model.title
             trendDescLabel.text = model.intro
             
+            let lottery = (model.lotteryStatus == 1) ? "进行中" : "已开奖"
+            lotteryStatusBtn.setTitle(lottery, for: .normal)
+            lotteryStatusBtn.backgroundColor = (model.lotteryStatus == 1) ? UIColor(r: 249, g: 84, b: 84) : UIColor(r: 192, g: 192, b: 192)
+            
             let linkBtnArr = [linkBtn1, linkBtn2, linkBtn3]
             let _ = linkBtnArr.map {  $0?.isHidden = true }
             
@@ -79,17 +116,15 @@ class TrendInfoCell: UITableViewCell {
                 tmpBtn?.isHidden = false
                 let name = tmp.name
                 tmpBtn?.setTitle(name, for: .normal)
-//                tmpBtn?.setImage(UIImage(named: "write_post_insert_tag_button"), for: .normal)
             }
             
             timeLabel.text = model.bottomStr
-            print("时间:", model.bottomStr)
             
-            likeBtn.setTitle("", for: .normal)
-            likeBtn.setImage(UIImage(named: ""), for: .normal)
+            likeBtn.setTitle("  "+model.likeN, for: .normal)
+            likeBtn.setImage(UIImage(named: "acg_like"), for: .normal)
             
-            commentBtn.setTitle("", for: .normal)
-            commentBtn.setImage(UIImage(named: ""), for: .normal)
+            commentBtn.setTitle("  "+model.commentN, for: .normal)
+            commentBtn.setImage(UIImage(named: "acg_comment"), for: .normal)
         }
     }
     

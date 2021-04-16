@@ -57,7 +57,12 @@ class WebVC: BaseVC {
     
     override func configNavgationBar() {
         super.configNavgationBar()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "nav_reload"), style: .plain, target: self, action: #selector(reloadWebView))
+        
+        let image = UIImage(named: "nav_reload")?.withRenderingMode(.alwaysOriginal)
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
+        btn.setImage(image, for: .normal)
+        btn.addTarget(self, action: #selector(reloadWebView), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: btn);
     }
     
     @objc func reloadWebView() {

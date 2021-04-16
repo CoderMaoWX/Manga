@@ -44,11 +44,11 @@ class BaseVC: UIViewController {
             nav.setNavigationBarHidden(false, animated: true)
             
             if nav.viewControllers.count > 1 {
-                let image = UIImage(named: "nav_back_white")?.withRenderingMode(.alwaysOriginal)
-                navigationItem.leftBarButtonItem = UIBarButtonItem(image: image,
-                                                                   style: .plain,
-                                                                   target: self,
-                                                                   action: #selector(goBackAction))
+                let image = UIImage(named: "nvp_navigation_back")?.withRenderingMode(.alwaysOriginal)
+                let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
+                btn.setImage(image, for: .normal)
+                btn.addTarget(self, action: #selector(goBackAction), for: .touchUpInside)
+                navigationItem.leftBarButtonItem = UIBarButtonItem(customView: btn);
             }
         }
     }
