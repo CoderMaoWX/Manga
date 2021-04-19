@@ -186,7 +186,11 @@ extension MineVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
         let sectionModel: MineListModel = dataArray[indexPath.section]
         let model: MineItemModel = sectionModel.list[indexPath.item]
         
-        let webVC = WebVC(url: model.click_url)
+        guard let URL = model.click_url else { return }
+        if URL.isEmpty {
+            return
+        }
+        let webVC = WebVC(url: URL)
         webVC.title = model.title
         navigationController?.pushViewController(webVC, animated: true)
     }

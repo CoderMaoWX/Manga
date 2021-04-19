@@ -76,6 +76,9 @@ class WebVC: BaseVC {
     
     func loadWebURL() {
         guard let webURL = webURL else { return }
+        if webURL.isEmpty {
+            return
+        }
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
         let request = URLRequest(url: URL(string: webURL)!)
         webView.load(request)
