@@ -33,6 +33,10 @@
 		58B3BDBF262949720075272C /* TrendRecommedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58B3BDBD262949720075272C /* TrendRecommedCell.xib */; };
 		58B4924B25CFD5220052A97C /* UCateDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4924A25CFD5220052A97C /* UCateDetailVC.swift */; };
 		58B4924E25CFDDF10052A97C /* UDetailCateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4924D25CFDDF10052A97C /* UDetailCateCell.swift */; };
+		58B812DB262D3D9400EB00C7 /* MineCenterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B812D9262D3D9400EB00C7 /* MineCenterHeaderView.swift */; };
+		58B812DC262D3D9400EB00C7 /* MineCenterHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58B812DA262D3D9400EB00C7 /* MineCenterHeaderView.xib */; };
+		58B812DF262D60E500EB00C7 /* MineItemCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B812DE262D60E500EB00C7 /* MineItemCCell.swift */; };
+		58B812E2262D638F00EB00C7 /* MineItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B812E1262D638F00EB00C7 /* MineItemModel.swift */; };
 		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
 		A32CD81225CC4A20009A5C56 /* UBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */; };
 		A3A1125925E002A900A9DB82 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A1125825E002A900A9DB82 /* Global.swift */; };
@@ -69,6 +73,10 @@
 		58B3BDBD262949720075272C /* TrendRecommedCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrendRecommedCell.xib; sourceTree = "<group>"; };
 		58B4924A25CFD5220052A97C /* UCateDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UCateDetailVC.swift; sourceTree = "<group>"; };
 		58B4924D25CFDDF10052A97C /* UDetailCateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UDetailCateCell.swift; sourceTree = "<group>"; };
+		58B812D9262D3D9400EB00C7 /* MineCenterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineCenterHeaderView.swift; sourceTree = "<group>"; };
+		58B812DA262D3D9400EB00C7 /* MineCenterHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MineCenterHeaderView.xib; sourceTree = "<group>"; };
+		58B812DE262D60E500EB00C7 /* MineItemCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineItemCCell.swift; sourceTree = "<group>"; };
+		58B812E1262D638F00EB00C7 /* MineItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineItemModel.swift; sourceTree = "<group>"; };
 		98079B8B5577BA617F3B4527 /* Pods-U17Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-U17Demo.release.xcconfig"; path = "Target Support Files/Pods-U17Demo/Pods-U17Demo.release.xcconfig"; sourceTree = "<group>"; };
 		A32CD80E25CC494A009A5C56 /* URankCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URankCCell.swift; sourceTree = "<group>"; };
 		A32CD81125CC4A20009A5C56 /* UBaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UBaseCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -196,6 +204,10 @@
 			isa = PBXGroup;
 			children = (
 				588738A025C558DC0049ECAD /* MineVC.swift */,
+				58B812E1262D638F00EB00C7 /* MineItemModel.swift */,
+				58B812DE262D60E500EB00C7 /* MineItemCCell.swift */,
+				58B812D9262D3D9400EB00C7 /* MineCenterHeaderView.swift */,
+				58B812DA262D3D9400EB00C7 /* MineCenterHeaderView.xib */,
 			);
 			path = Mine;
 			sourceTree = "<group>";
@@ -292,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				58B3BDBF262949720075272C /* TrendRecommedCell.xib in Resources */,
+				58B812DC262D3D9400EB00C7 /* MineCenterHeaderView.xib in Resources */,
 				584D5DA325C3F27A00FA507C /* LaunchScreen.storyboard in Resources */,
 				584D5DA025C3F27A00FA507C /* Assets.xcassets in Resources */,
 				584D5D9E25C3F27A00FA507C /* Main.storyboard in Resources */,
@@ -353,6 +366,7 @@
 				584D5DAF25C3F62600FA507C /* TabBarController.swift in Sources */,
 				58B3BDBE262949720075272C /* TrendRecommedCell.swift in Sources */,
 				58A4C11B25E1035A00C1DAB5 /* BoutiqueCell.swift in Sources */,
+				58B812E2262D638F00EB00C7 /* MineItemModel.swift in Sources */,
 				A32CD81225CC4A20009A5C56 /* UBaseCollectionViewCell.swift in Sources */,
 				58A821B8260ADFA2002F7689 /* TrendInfoCell.swift in Sources */,
 				5887389E25C558D10049ECAD /* CommunityVC.swift in Sources */,
@@ -361,6 +375,7 @@
 				588738E525C7D42B0049ECAD /* NavigationVC.swift in Sources */,
 				58B4924B25CFD5220052A97C /* UCateDetailVC.swift in Sources */,
 				A3A1125925E002A900A9DB82 /* Global.swift in Sources */,
+				58B812DF262D60E500EB00C7 /* MineItemCCell.swift in Sources */,
 				588738CA25C7CF1F0049ECAD /* BaseVC.swift in Sources */,
 				588738A125C558DC0049ECAD /* MineVC.swift in Sources */,
 				58A4C11E25E1084600C1DAB5 /* UComicCHead.swift in Sources */,
@@ -370,6 +385,7 @@
 				A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */,
 				584D5D9B25C3F27A00FA507C /* ViewController.swift in Sources */,
 				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,
+				58B812DB262D3D9400EB00C7 /* MineCenterHeaderView.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,
 				584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */,
 			);
