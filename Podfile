@@ -1,7 +1,7 @@
 
 platform :ios, '10.0'
 
-target 'U17Demo' do
+target 'Manga' do
 use_frameworks!
 inhibit_all_warnings!
 
