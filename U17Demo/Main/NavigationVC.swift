@@ -19,7 +19,7 @@ class NavigationVC: UINavigationController {
     func initialize()  {
         let navBar = UINavigationBar.appearance()
         navBar.barTintColor =  UIColor.white
-        navBar.tintColor =  UIColor.white // UIColor.theme
+        navBar.tintColor =  UIColor.white
         navBar.titleTextAttributes = [
             .font : UIFont.systemFont(ofSize: 18),
             .foregroundColor : UIColor.white

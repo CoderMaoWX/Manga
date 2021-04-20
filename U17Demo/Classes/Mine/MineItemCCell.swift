@@ -47,7 +47,7 @@ class MineItemCCell: UBaseCollectionViewCell {
     
     lazy var imageView: UIImageView = {
         let img = UIImageView(frame: .zero)
-        img.contentMode = .scaleAspectFill
+        img.contentMode = .scaleAspectFit
         return img
     }()
     
@@ -57,6 +57,7 @@ class MineItemCCell: UBaseCollectionViewCell {
         lab.textAlignment = .center
         lab.font = .systemFont(ofSize: 14)
         lab.textColor = .black
+        lab.preferredMaxLayoutWidth = 70
         return lab
     }()
     

@@ -52,8 +52,8 @@ class MineCenterTextHeaderView: UICollectionReusableView {
     
     func wx_layoutUI() {
         lineView.snp.makeConstraints{
-            $0.leading.equalTo(snp.leading).offset(-1)
-            $0.size.equalTo(CGSize(width: 10, height: 8))
+            $0.leading.equalTo(snp.leading).offset(-5)
+            $0.size.equalTo(CGSize(width: 10, height: 20))
             $0.centerY.equalTo(snp.centerY)
         }
         
@@ -66,6 +66,8 @@ class MineCenterTextHeaderView: UICollectionReusableView {
     lazy var lineView: UIView = {
         let view = UIView(frame: .zero)
         view.backgroundColor = .theme
+        view.layer.cornerRadius = 5
+        view.layer.masksToBounds = true
         return view
     }()
     

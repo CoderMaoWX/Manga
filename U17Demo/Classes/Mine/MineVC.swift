@@ -20,11 +20,11 @@ class MineVC: BaseVC {
         fl.minimumInteritemSpacing = 10
 //        let w = UIScreen.main.bounds.size.width / 4.0
         fl.itemSize = CGSize(width: 70, height: 80)
-        fl.sectionInset = UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
+        fl.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: fl)
         cv.showsVerticalScrollIndicator = false
-        cv.backgroundColor = .background
+        cv.backgroundColor = .white
         cv.delegate = self
         cv.dataSource = self
         cv.register(MineItemCCell.self, forCellWithReuseIdentifier: NSStringFromClass(MineItemCCell.self))
@@ -164,7 +164,6 @@ extension MineVC: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, 
             
             if indexPath.section == 0 {
                 let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "MineCenterHeaderView", for: indexPath) as! MineCenterHeaderView
-                header.backgroundColor = .white
                 return header
             } else {
                 let titleHeader = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NSStringFromClass(MineCenterTextHeaderView.self), for: indexPath) as! MineCenterTextHeaderView
