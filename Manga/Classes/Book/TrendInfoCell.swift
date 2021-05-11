@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 import SnapKitExtend
 
 typealias UTrendInfoCellActionClosure = (String?)->()
@@ -62,7 +61,7 @@ class TrendInfoCell: UITableViewCell {
                 icon += 1
                 let imgView = viewWithTag(icon) as? UIImageView
                 imgView?.isHidden = false
-                imgView?.kf.setImage(with: URL(string: tmp))
+                imgView?.mg.setImageURL(with: tmp)
             }
             
             //图片
@@ -75,8 +74,7 @@ class TrendInfoCell: UITableViewCell {
                 index += 1
                 let imgView = ImgBgView.viewWithTag(index) as? UIImageView
                 imgView?.isHidden = false
-                let url = tmp.url
-                imgView?.kf.setImage(with: URL(string: url))
+                imgView?.mg.setImageURL(with: tmp.url, placeholder: "normal_placeholder_h")
             }
             
             //  axisType:方向
@@ -96,7 +94,7 @@ class TrendInfoCell: UITableViewCell {
                 $0.height.equalTo(imgH)
             }
             
-            userImgView.kf.setImage(with: URL(string: model.icon))
+            userImgView.mg.setImageURL(with: model.icon)
             nameLabel.text = model.nickname
             leveLabel.text = model.level
             trendTitleLabel.text = model.title
