@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 import SnapKit
 import Reusable
 
@@ -97,9 +96,7 @@ class UComicCHead: UICollectionReusableView, Reusable {
         didSet {
             guard let model = model else { return }
             
-            let url = URL(string: model.newTitleIconUrl ?? "")
-            
-            imgView.kf.setImage(with: url)
+            imgView.mg.setImageURL(with: model.newTitleIconUrl)
             
             titleLabel.text = model.itemTitle
         }

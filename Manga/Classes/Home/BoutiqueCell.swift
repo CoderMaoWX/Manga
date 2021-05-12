@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class BoutiqueCell: UBaseCollectionViewCell {
     
@@ -63,8 +62,7 @@ class BoutiqueCell: UBaseCollectionViewCell {
     var model: ComicModel? {
         didSet {
             guard let model = model else { return }
-            let url = URL(string: model.cover ?? "")
-            imageView.kf.setImage(with: url)
+            imageView.mg.setImageURL(with: model.cover)
             textLabel.text = model.name ?? model.title
             subTextLabel.text = model.subTitle ?? "更新至\(model.content ?? "0")集"
         }

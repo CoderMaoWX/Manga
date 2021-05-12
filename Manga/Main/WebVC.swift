@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import WebKit
-import Kingfisher
 
 class WebVC: BaseVC {
     fileprivate var webURL: String?
@@ -204,7 +203,7 @@ class PreviewImgVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.imgView.kf.setImage(with: URL(string: previewURL))
+        self.imgView.mg.setImageURL(with: previewURL)
     }
     
     override func initSubView() {

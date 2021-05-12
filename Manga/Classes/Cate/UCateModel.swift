@@ -61,8 +61,8 @@ struct DefaultParametersModel: Convertible {
     var defaultConTagType: String?
 }
 
-enum UComicType: Int, Convertible {
-    init() { self.init() }
+enum UComicType: Int {
+//    init() { self.init() }  Convertible
     case none = 0
     case update = 3
     case thematic = 5

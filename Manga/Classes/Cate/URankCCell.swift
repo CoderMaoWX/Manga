@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 import SnapKit
 
 class URankCCell: UBaseCollectionViewCell {
@@ -50,8 +49,7 @@ class URankCCell: UBaseCollectionViewCell {
         didSet {
             guard let model = model else { return }
             
-            let url = URL(string: model.cover ?? "")
-            imageView.kf.setImage(with: url)
+            imageView.mg.setImageURL(with: model.cover)
             
             textLabel.text = model.sortName
         }

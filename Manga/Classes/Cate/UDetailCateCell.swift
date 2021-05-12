@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import Kingfisher
 
 class UDetailCateCell: UBaseTableViewCell {
     
@@ -80,8 +79,7 @@ class UDetailCateCell: UBaseTableViewCell {
         didSet {
             guard let model = model else { return }
             
-            let url = URL(string: model.cover!)
-            imgView.kf.setImage(with: url)
+            imgView.mg.setImageURL(with: model.cover)
             
             titleLabel.text = model.name
             subTitleLabel.text = "\(model.tags?.joined(separator: " ") ?? "") | \(model.author ?? "")"

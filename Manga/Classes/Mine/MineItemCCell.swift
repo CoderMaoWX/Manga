@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 import SnapKit
 
 class MineItemCCell: UBaseCollectionViewCell {
@@ -20,7 +19,7 @@ class MineItemCCell: UBaseCollectionViewCell {
             let imageName = model.image
             
             if imageName.hasPrefix("http") {
-                imageView.kf.setImage(with: URL(string: model.image))
+                imageView.mg.setImageURL(with: model.image)
             } else {
                 imageView.image = UIImage(named: imageName)
             }

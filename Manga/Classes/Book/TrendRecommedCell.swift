@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 typealias UTrendRecommedClosure = (String?)->()
 

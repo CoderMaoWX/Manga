@@ -8,7 +8,6 @@
 import UIKit
 import Alamofire
 import KakaJSON
-//import SnapKit
 import SwiftyJSON
 import SVProgressHUD
 import Reusable
@@ -47,8 +46,7 @@ class BoutiqueVC: BaseVC {
     }
     
     override func layoutSubView() {
-//        collectionView.snp.makeConstraints { $0.edges.equalTo(view) }
-        collectionView.mg.makeConstraints { $0.edges.equalTo(view) }
+        collectionView.snp.makeConstraints { $0.edges.equalTo(view) }
     }
     
     func loadData() {
@@ -110,7 +108,7 @@ extension BoutiqueVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let model = comicLists[indexPath.section].comics?[indexPath.item]
+//        let model = comicLists[indexPath.section].comics?[indexPath.item]
 
     }
 }
