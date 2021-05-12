@@ -8,6 +8,7 @@
 import UIKit
 import Foundation
 import Kingfisher
+import SnapKit
 
 //============================ 给指定的类添加前缀来扩展方法 ============================
 
@@ -68,5 +69,18 @@ extension Manga where Base: UIImageView {
     func setImageURL(with: String?, placeholder: String) {
         let url = URL(string: with ?? "")
         base.kf.setImage(with: url, placeholder: UIImage(named: placeholder))
+    }
+}
+
+
+extension UIView: MgCompatible {}
+extension Manga where Base: UIView {
+
+//    base.snp.makeConstraints {
+//        $0.edges.equalTo(view)
+//    }
+
+    func makeConstraints(_ closure: (_ make: ConstraintMaker) -> Void) {
+        base.snp.makeConstraints(closure)
     }
 }

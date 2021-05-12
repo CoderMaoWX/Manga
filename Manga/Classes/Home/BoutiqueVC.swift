@@ -8,7 +8,10 @@
 import UIKit
 import Alamofire
 import KakaJSON
-import SnapKit
+//import SnapKit
+import SwiftyJSON
+import SVProgressHUD
+import Reusable
 
 class BoutiqueVC: BaseVC {
     
@@ -28,12 +31,9 @@ class BoutiqueVC: BaseVC {
         cv.backgroundColor = .background
         cv.delegate = self
         cv.dataSource = self
-        cv.register(BoutiqueCell.self, forCellWithReuseIdentifier: NSStringFromClass(BoutiqueCell.self))
-       
-        cv.register(UComicCHead.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NSStringFromClass(UComicCHead.self))
-        
-         cv.register(UComicCFoot.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(UComicCFoot.self))
-        
+        cv.register(cellType: BoutiqueCell.self)
+        cv.register(supplementaryViewType: UComicCHead.self, ofKind: UICollectionView.elementKindSectionHeader)
+        cv.register(supplementaryViewType: UComicCFoot.self, ofKind: UICollectionView.elementKindSectionFooter)
         return cv
     }()
 
@@ -47,30 +47,36 @@ class BoutiqueVC: BaseVC {
     }
     
     override func layoutSubView() {
-        collectionView.snp.makeConstraints { $0.edges.equalTo(view) }
+//        collectionView.snp.makeConstraints { $0.edges.equalTo(view) }
+        collectionView.mg.makeConstraints { $0.edges.equalTo(view) }
     }
     
     func loadData() {
+        SVProgressHUD.show()
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         AF.request(url, parameters: param).responseJSON {
             [weak self] (resultData) in
+            SVProgressHUD.dismiss()
             
             switch resultData.result {
             case .success(let json):
-                let dataDict = ((json as? NSDictionary)?["data"] as? NSDictionary)?["returnData"]
-                let listModel = model(from: (dataDict as! NSDictionary), BoutiqueListModel.self)
-                self?.comicLists = listModel?.comicLists ?? []
-                print("主页请求成功:" , self?.comicLists as Any)
+                print("主页请求成功响应Json", JSON(json));
+                let dataDict = JSON(json)["data"]["returnData"].dictionaryObject                
+                let listModel = model(from: dataDict!, BoutiqueListModel.self)
+                self?.comicLists = listModel.comicLists ?? []
                 self?.collectionView.reloadData()
+                if self?.comicLists.count == 0 {
+                    SVProgressHUD.showError(withStatus: "数据刷新失败")
+                }
                 break
             case .failure(let error):
                 print("主页请求失败:", error)
+                SVProgressHUD.showError(withStatus: "数据刷新失败")
                 break
             }
         }
     }
-
 }
 
 extension BoutiqueVC: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -84,32 +90,27 @@ extension BoutiqueVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            let reusableView: UComicCHead = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NSStringFromClass(UComicCHead.self), for: indexPath) as! UComicCHead
+            let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath, viewType: UComicCHead.self)
             reusableView.model = comicLists[indexPath.section]
             reusableView.touchMoreAction {
-                [weak self] in
-                self?.collectionView.reloadData()
+                collectionView.reloadData()
             }
             return reusableView
         } else {
-            let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: NSStringFromClass(UComicCFoot.self), for: indexPath)
+            let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath, viewType: UComicCFoot.self)
             reusableView.backgroundColor = .groupTableViewBackground
             return reusableView
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: BoutiqueCell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(BoutiqueCell.self), for: indexPath) as! BoutiqueCell
+        let cell = collectionView.dequeueReusableCell(for: indexPath, cellType: BoutiqueCell.self)
         cell.model = comicLists[indexPath.section].comics?[indexPath.item]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let model = comicLists[indexPath.section].comics?[indexPath.item]
-//        
-//        #warning("测试代码")
-//        let webVC = WebVC(url: "http://forum.1kxun.com/detail?id=235372&_v=3.9.1&debug=1")
-//        webVC.title = model?.name;
-//        navigationController?.pushViewController(webVC, animated: true)
+
     }
 }
