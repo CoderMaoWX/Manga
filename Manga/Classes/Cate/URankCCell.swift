@@ -49,7 +49,7 @@ class URankCCell: UBaseCollectionViewCell {
         didSet {
             guard let model = model else { return }
             
-            imageView.mg.setImageURL(with: model.cover)
+            imageView.mg.setImageURL(model.cover)
             
             textLabel.text = model.sortName
         }

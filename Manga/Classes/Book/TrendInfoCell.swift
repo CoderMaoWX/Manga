@@ -61,7 +61,7 @@ class TrendInfoCell: UITableViewCell {
                 icon += 1
                 let imgView = viewWithTag(icon) as? UIImageView
                 imgView?.isHidden = false
-                imgView?.mg.setImageURL(with: tmp)
+                imgView?.mg.setImageURL(tmp)
             }
             
             //图片
@@ -94,7 +94,7 @@ class TrendInfoCell: UITableViewCell {
                 $0.height.equalTo(imgH)
             }
             
-            userImgView.mg.setImageURL(with: model.icon)
+            userImgView.mg.setImageURL(model.icon)
             nameLabel.text = model.nickname
             leveLabel.text = model.level
             trendTitleLabel.text = model.title

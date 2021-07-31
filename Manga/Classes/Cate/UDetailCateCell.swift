@@ -79,7 +79,7 @@ class UDetailCateCell: UBaseTableViewCell {
         didSet {
             guard let model = model else { return }
             
-            imgView.mg.setImageURL(with: model.cover)
+            imgView.mg.setImageURL(model.cover)
             
             titleLabel.text = model.name
             subTitleLabel.text = "\(model.tags?.joined(separator: " ") ?? "") | \(model.author ?? "")"

@@ -203,7 +203,7 @@ class PreviewImgVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.imgView.mg.setImageURL(with: previewURL)
+        self.imgView.mg.setImageURL(previewURL)
     }
     
     override func initSubView() {

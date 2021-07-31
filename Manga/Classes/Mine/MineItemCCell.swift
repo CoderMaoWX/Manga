@@ -19,7 +19,7 @@ class MineItemCCell: UBaseCollectionViewCell {
             let imageName = model.image
             
             if imageName.hasPrefix("http") {
-                imageView.mg.setImageURL(with: model.image)
+                imageView.mg.setImageURL(model.image)
             } else {
                 imageView.image = UIImage(named: imageName)
             }

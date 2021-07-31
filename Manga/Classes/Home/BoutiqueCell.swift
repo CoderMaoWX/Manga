@@ -62,7 +62,7 @@ class BoutiqueCell: UBaseCollectionViewCell {
     var model: ComicModel? {
         didSet {
             guard let model = model else { return }
-            imageView.mg.setImageURL(with: model.cover)
+            imageView.mg.setImageURL(model.cover)
             textLabel.text = model.name ?? model.title
             subTextLabel.text = model.subTitle ?? "更新至\(model.content ?? "0")集"
         }

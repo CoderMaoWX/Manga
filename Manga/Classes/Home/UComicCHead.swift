@@ -96,7 +96,7 @@ class UComicCHead: UICollectionReusableView, Reusable {
         didSet {
             guard let model = model else { return }
             
-            imgView.mg.setImageURL(with: model.newTitleIconUrl)
+            imgView.mg.setImageURL(model.newTitleIconUrl)
             
             titleLabel.text = model.itemTitle
         }
