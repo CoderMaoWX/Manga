@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BoutiqueCell: UBaseCollectionViewCell {
+class BoutiqueCell: UBaseCCell {
     
     lazy var imageView: UIImageView = {
        let iv = UIImageView()

@@ -42,7 +42,7 @@
 		58CDFB7726BA33F100056527 /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5A26BA33F000056527 /* WebVC.swift */; };
 		58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5B26BA33F000056527 /* BaseNavigationVC.swift */; };
 		58CDFB7926BA33F100056527 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5C26BA33F000056527 /* TabBarController.swift */; };
-		58CDFB7A26BA33F100056527 /* UBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5E26BA33F000056527 /* UBaseCollectionViewCell.swift */; };
+		58CDFB7A26BA33F100056527 /* UBaseCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5E26BA33F000056527 /* UBaseCCell.swift */; };
 		58CDFB7B26BA33F100056527 /* PublicConfigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB6126BA33F000056527 /* PublicConfigure.swift */; };
 		58CDFB7C26BA33F100056527 /* GlobalTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB6226BA33F000056527 /* GlobalTools.swift */; };
 		58CDFB7D26BA33F100056527 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB6426BA33F000056527 /* Assets.xcassets */; };
@@ -90,7 +90,7 @@
 		58CDFB5A26BA33F000056527 /* WebVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
 		58CDFB5B26BA33F000056527 /* BaseNavigationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationVC.swift; sourceTree = "<group>"; };
 		58CDFB5C26BA33F000056527 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		58CDFB5E26BA33F000056527 /* UBaseCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UBaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		58CDFB5E26BA33F000056527 /* UBaseCCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UBaseCCell.swift; sourceTree = "<group>"; };
 		58CDFB6126BA33F000056527 /* PublicConfigure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicConfigure.swift; sourceTree = "<group>"; };
 		58CDFB6226BA33F000056527 /* GlobalTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalTools.swift; sourceTree = "<group>"; };
 		58CDFB6426BA33F000056527 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -288,7 +288,7 @@
 		58CDFB5D26BA33F000056527 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				58CDFB5E26BA33F000056527 /* UBaseCollectionViewCell.swift */,
+				58CDFB5E26BA33F000056527 /* UBaseCCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -305,8 +305,8 @@
 		58CDFB6326BA33F000056527 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				58CDFB6426BA33F000056527 /* Assets.xcassets */,
 				58CDFB8226BA34AC00056527 /* Info.plist */,
+				58CDFB6426BA33F000056527 /* Assets.xcassets */,
 				58CDFB8626BA34E200056527 /* LaunchScreen.storyboard */,
 			);
 			path = SupportingFiles;
@@ -462,7 +462,7 @@
 				58B812DB262D3D9400EB00C7 /* MineCenterHeaderView.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,
 				58CDFB7726BA33F100056527 /* WebVC.swift in Sources */,
-				58CDFB7A26BA33F100056527 /* UBaseCollectionViewCell.swift in Sources */,
+				58CDFB7A26BA33F100056527 /* UBaseCCell.swift in Sources */,
 				584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */,
 				58CDFB6C26BA33F100056527 /* UIColor+Extension.swift in Sources */,
 			);

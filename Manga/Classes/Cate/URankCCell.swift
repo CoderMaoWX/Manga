@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class URankCCell: UBaseCollectionViewCell {
+class URankCCell: UBaseCCell {
     
     lazy var imageView: UIImageView = {
        let iv = UIImageView()

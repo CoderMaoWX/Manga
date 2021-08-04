@@ -8,7 +8,7 @@
 import UIKit
 import Reusable
 
-class UBaseCollectionViewCell: UICollectionViewCell, Reusable {
+class UBaseCCell: UICollectionViewCell, Reusable {
     
     override init(frame: CGRect) {
         super.init(frame: frame)

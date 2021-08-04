@@ -80,13 +80,12 @@ class BaseNavigationVC: UINavigationController {
         if viewController is BaseVC {
             target = viewController
         }
-        let leftItem = UIBarButtonItem(image: UIImage(named: "nav_arrow_left"),
+        let leftItem = UIBarButtonItem(image: UIImage(named: "nav_back_white"),
                                        style: .plain,
                                        target: target,
                                        action: #selector(goBackAction))
         leftItem.imageInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0)
         viewController.navigationItem.leftBarButtonItem = leftItem
-        
     }
     
     @objc func goBackAction() {
