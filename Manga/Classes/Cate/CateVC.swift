@@ -11,6 +11,7 @@ import Moya
 import MJRefresh
 import Alamofire
 import KakaJSON
+import SVProgressHUD
 
 class CateVC: BaseVC {
     
@@ -55,8 +56,10 @@ class CateVC: BaseVC {
     func loadListData() {
         let loadURL: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
         
+        SVProgressHUD.show()
         request(loadURL, method: HTTPMethod.get, parameters: nil).responseJSON {
             [weak self](response) in
+            SVProgressHUD.dismiss()
             
             switch response.result {
             case .success(let json):

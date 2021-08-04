@@ -10,6 +10,8 @@ import SnapKit
 import KakaJSON
 import SwiftyJSON
 import Alamofire
+import SVProgressHUD
+
 
 class CommunityVC: BaseVC {
     
@@ -68,9 +70,11 @@ class CommunityVC: BaseVC {
         dict["page"] = "0"
         dict["sort_type"] = "hot"
         
+        SVProgressHUD.show()
         //let param: [String : Any] = ["sexType" : 1]
         request(url, parameters: dict).responseJSON {
             [weak self] (resultData) in
+            SVProgressHUD.dismiss()
             
             switch resultData.result {
             case .success(let json):

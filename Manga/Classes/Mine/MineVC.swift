@@ -9,6 +9,7 @@ import UIKit
 import KakaJSON
 import Alamofire
 import SnapKit
+import SVProgressHUD
 
 class MineVC: BaseVC {
     
@@ -76,8 +77,10 @@ class MineVC: BaseVC {
         dict["page"] = "0"
         dict["sort_type"] = "hot"
         
+        SVProgressHUD.show()
         request(url, parameters: dict).responseJSON {
             [weak self] (resultData) in
+            SVProgressHUD.dismiss()
             
             switch resultData.result {
             case .success(let json):

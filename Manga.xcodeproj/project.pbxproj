@@ -606,7 +606,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P8FFNR95EQ;
-				INFOPLIST_FILE = /Users/xin610582/Documents/GitHub_WorkSpace/Manga/Manga/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -629,7 +629,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P8FFNR95EQ;
-				INFOPLIST_FILE = /Users/xin610582/Documents/GitHub_WorkSpace/Manga/Manga/SupportingFiles/Info.plist;
+				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
