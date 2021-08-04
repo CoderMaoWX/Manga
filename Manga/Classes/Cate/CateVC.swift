@@ -55,7 +55,7 @@ class CateVC: BaseVC {
     func loadListData() {
         let loadURL: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
         
-        AF.request(loadURL, method: HTTPMethod.get, parameters: nil).responseJSON {
+        request(loadURL, method: HTTPMethod.get, parameters: nil).responseJSON {
             [weak self](response) in
             
             switch response.result {

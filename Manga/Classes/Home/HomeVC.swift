@@ -7,7 +7,6 @@
 
 import UIKit
 import HMSegmentedControl
-import Then
 
 class HomeVC: BaseVC {
     
@@ -16,9 +15,9 @@ class HomeVC: BaseVC {
     var currentSelectIndex = 0
     
     lazy var segment: HMSegmentedControl = {
-        return HMSegmentedControl().then {
-            $0.addTarget(self, action: #selector(indexChange(segment:)), for: .valueChanged)
-        }
+        let segmente = HMSegmentedControl()
+        segmente.addTarget(self, action: #selector(indexChange(segment:)), for: .valueChanged)
+        return segmente
     }()
     
     lazy var pageVC: UIPageViewController = {

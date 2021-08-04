@@ -53,7 +53,7 @@ class BoutiqueVC: BaseVC {
         SVProgressHUD.show()
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
-        AF.request(url, parameters: param).responseJSON {
+        request(url, parameters: param).responseJSON {
             [weak self] (resultData) in
             SVProgressHUD.dismiss()
             

@@ -17,7 +17,7 @@ class CommunityVC: BaseVC {
     
     lazy var tableView: UITableView = {
         let tb = UITableView(frame: .zero, style: .plain)
-        tb.backgroundColor = UIColor(r: 247, g: 248, b: 248)
+        tb.backgroundColor = UIColor(r: 247, g: 248, b: 248, a: 1)
         tb.separatorStyle = .none
         let trend = UINib(nibName: "TrendInfoCell", bundle: nil)
         tb.register(trend, forCellReuseIdentifier: "TrendInfoCell")
@@ -69,7 +69,7 @@ class CommunityVC: BaseVC {
         dict["sort_type"] = "hot"
         
         //let param: [String : Any] = ["sexType" : 1]
-        AF.request(url, parameters: dict).responseJSON {
+        request(url, parameters: dict).responseJSON {
             [weak self] (resultData) in
             
             switch resultData.result {

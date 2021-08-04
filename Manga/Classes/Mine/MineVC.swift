@@ -76,7 +76,7 @@ class MineVC: BaseVC {
         dict["page"] = "0"
         dict["sort_type"] = "hot"
         
-        AF.request(url, parameters: dict).responseJSON {
+        request(url, parameters: dict).responseJSON {
             [weak self] (resultData) in
             
             switch resultData.result {

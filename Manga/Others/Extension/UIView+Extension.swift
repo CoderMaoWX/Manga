@@ -1,0 +1,189 @@
+//
+//  UIViewExtension.swift
+//  WXSwiftDemo
+//
+//  Created by 610582 on 2021/8/2.
+//
+
+import Foundation
+import UIKit
+import CoreGraphics
+
+enum WXDrawLinePosition: Int {
+    case top
+    case left
+    case bottom
+    case right
+}
+
+extension UIView {
+    
+    fileprivate struct AssociatedKeys {
+        static var tapGestureKey = "tapGestureKey"
+    }
+    
+    ///获取视图所在的控制器
+    func viewController() -> UIViewController? {
+        for view in sequence(first: self.superview, next: {$0?.superview}){
+            if let responder = view?.next{
+                if responder.isKind(of: UIViewController.self){
+                    return responder as? UIViewController
+                }
+            }
+        }
+        return nil
+    }
+    
+    ///绘制圆角 要设置的圆角 使用“|”来组合
+    func addCorners(corners: UIRectCorner, cornerRadii: CGSize) {
+        let maskPath = UIBezierPath.init(roundedRect: bounds,
+                                         byRoundingCorners: corners,
+                                         cornerRadii: cornerRadii)
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = bounds
+        maskLayer.path = maskPath.cgPath
+        layer.mask = maskLayer
+    }
+    
+    ///寻找子视图Tag
+    func subViewWithTag(tag: Int) -> UIView? {
+        for tmpView in subviews {
+            if tmpView.tag == tag {
+                return tmpView
+            }
+        }
+        return nil
+    }
+    
+    ///移除Window的Tag子视图
+    func removeTagViewFromWindow(tag: Int) {
+        let tagView = UIApplication.shared.delegate?.window
+        tagView??.viewWithTag(tag)
+    }
+    
+    /// 给当前视图添加线条
+    /// - Parameters:
+    ///   - position: 添加的位置
+    ///   - lineWidth: 天条宽度或高度
+    /// - Returns: 添加的线条
+    @discardableResult
+    func addLineToPosition(position: WXDrawLinePosition, lineWidth: CGFloat) -> UIView {
+        
+        let line = UIView()
+        
+        switch position {
+        case .top:
+            line.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: lineWidth)
+        
+        case .left:
+            line.frame = CGRect(x: 0, y: 0, width: lineWidth, height: frame.size.height)
+            
+        case .bottom:
+            line.frame = CGRect(x: 0, y: frame.size.height-lineWidth, width: frame.size.width, height: lineWidth)
+            
+        case .right:
+            line.frame = CGRect(x: frame.size.width-lineWidth, y: 0, width: lineWidth, height: frame.size.height)
+        }
+        return line
+    }
+    
+    ///给指定view顶部添加投影阴影
+    func addDropShadowWithOffset(offset: CGSize, radius: CGFloat, color: UIColor, opacity: Float) {
+        let path = CGMutablePath()
+        path.addRect(bounds)
+        layer.shadowPath = path
+        path.closeSubpath()
+        
+        layer.shadowColor = color.cgColor
+        layer.shadowOffset = offset
+        layer.shadowRadius = radius;
+        layer.shadowOpacity = opacity
+        clipsToBounds = false;
+    }
+    
+    ///左右摇摆抖动动画
+    func shakeAnimation(times: Float) -> CAKeyframeAnimation {
+        let animation = CAKeyframeAnimation(keyPath: "transform.rotation.z")
+        //让动画先左旋转-M_PI_4 / 5，再右旋转同样的度数，再左旋转
+        let MPI4 = Double.pi / 4
+        animation.values = [(-MPI4 / 5), (MPI4 / 5), (-MPI4 / 5)];
+        animation.duration = 0.25;
+        //设置动画重复次数
+        animation.repeatCount = times
+        return animation
+    }
+    
+    ///缩放动画 max：结束最大值
+    func scaleToVlaueAnimation(scale: CGFloat) -> CAKeyframeAnimation {
+        //FIXME: occ Bug 1101
+        let a = transform.a;
+        let b = transform.b;
+        let c = transform.c;
+        let d = transform.d;
+
+        var resultAD: CGFloat = 1.0;
+        if (a > 0 || a < 0) {
+            resultAD *= a;
+        }
+        if (b > 0 || b < 0) {
+            resultAD *= b;
+        }
+        if (c > 0 || c < 0) {
+            resultAD *= c;
+        }
+        if (d > 0 || d < 0) {
+            resultAD *= d;
+        }
+        let animation = CAKeyframeAnimation(keyPath: "transform.scale")
+        animation.values = [resultAD * 0.1, resultAD * 1.0, resultAD * scale];
+        animation.keyTimes = [(0.0), (0.5), (0.8), (1.0)]
+        animation.calculationMode = .linear
+        return animation;
+    }
+    
+    
+    public typealias TapGestureClosure = @convention(block) (_ view: UIView) -> Void
+    var tapGestureHandler:TapGestureClosure? {
+        get {
+            let closureObject: AnyObject? = objc_getAssociatedObject(self, &AssociatedKeys.tapGestureKey) as AnyObject?
+            guard closureObject != nil else {
+                return nil
+            }
+            let closure = unsafeBitCast(closureObject, to: TapGestureClosure.self)
+            return closure
+        }
+        set {
+            guard let value = newValue else {  return }
+            let dealObject: AnyObject = unsafeBitCast(value, to: AnyObject.self)
+            objc_setAssociatedObject(self, &AssociatedKeys.tapGestureKey,dealObject,objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    ///给视图添加手势
+    func addTapGesture(complete: @escaping TapGestureClosure) {
+        self.tapGestureHandler = complete
+        isUserInteractionEnabled = true
+        isExclusiveTouch = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapViewGestureAction))
+        addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func tapViewGestureAction() {
+        guard let tapClosure = self.tapGestureHandler else {
+            return
+        }
+        tapClosure(self)
+    }
+    
+    ///DEBUG模式下 显示调试UI边框
+    func showDebugBorder() {
+        #if DEBUG
+            layer.borderColor = UIColor.red.cgColor
+            layer.borderWidth = 0.5
+        #endif
+    }
+}
+
+
+
+

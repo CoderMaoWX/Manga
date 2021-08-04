@@ -102,7 +102,7 @@ class TrendInfoCell: UITableViewCell {
             
             let lottery = (model.lotteryStatus == 1) ? "进行中" : "已开奖"
             lotteryStatusBtn.setTitle(lottery, for: .normal)
-            lotteryStatusBtn.backgroundColor = (model.lotteryStatus == 1) ? UIColor(r: 249, g: 84, b: 84) : UIColor(r: 192, g: 192, b: 192)
+            lotteryStatusBtn.backgroundColor = (model.lotteryStatus == 1) ? UIColor(r: 249, g: 84, b: 84, a: 1) : UIColor(r: 192, g: 192, b: 192, a: 1)
             
             let linkBtnArr = [linkBtn1, linkBtn2, linkBtn3]
             let _ = linkBtnArr.map {  $0?.isHidden = true }

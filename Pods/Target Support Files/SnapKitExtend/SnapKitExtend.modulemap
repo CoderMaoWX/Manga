@@ -1,4 +1,4 @@
-framework module SnapKitExtend {
+module SnapKitExtend {
   umbrella header "SnapKitExtend-umbrella.h"
 
   export *
