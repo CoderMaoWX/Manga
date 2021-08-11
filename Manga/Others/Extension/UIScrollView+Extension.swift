@@ -25,7 +25,6 @@ extension UIScrollView {
         case WXBlankTipViewStatus_Fail          //2 请求失败状态
         case WXBlankTipViewStatus_NoNetWork     //3 网络连接失败状态
     }
-    
     fileprivate struct AssociatedKeys {
         static var emptyDataTitleKey: Void?
         static var emptyDataSubTitleKey: Void?
@@ -107,10 +106,10 @@ extension UIScrollView {
     /// - Parameters:
     ///   - headerClosure: 下拉刷新需要调用的函数
     ///   - footerClosure: 上拉刷新需要调用的函数
-    ///   - startHeaderRefreshing: 是否立即头部刷新
-    func addRefreshKit(headerClosure: WXRefreshingBlock? = nil,
-                       footerClosure: WXRefreshingBlock?  = nil,
-                       startHeaderRefreshing: Bool = false) {
+    ///   - start headerRefreshing: 是否立即头部刷新
+    func addRefreshKit(startHeader refreshing: Bool = false,
+                       headerClosure: WXRefreshingBlock? = nil,
+                       footerClosure: WXRefreshingBlock?  = nil) {
         //头部下拉
         if let headerClosure = headerClosure {
             mj_header = MJRefreshNormalHeader {  [weak self] in
@@ -122,7 +121,7 @@ extension UIScrollView {
                 
                 headerClosure()
             }
-            if startHeaderRefreshing {
+            if refreshing {
                 mj_header?.beginRefreshing()
             }
         }
@@ -150,15 +149,141 @@ extension UIScrollView {
     
     //MARK: - 添加空白页总方法入口
     func judgeBlankView(pageInfo: Dictionary<String, Any>?) {
-        
         self.mj_header?.endRefreshing()
         self.mj_footer?.endRefreshing()
         
         //判断请求状态: totalCurrentPageInfo为字典就是请求成功, 否则为请求失败
-        let requestSuccess = pageInfo is Dictionary<String, Any>
+//        let requestSuccess = pageInfo is Dictionary<String, Any>
         
-//        BOOL requestSuccess = [totalCurrentPageInfo isKindOfClass:[NSDictionary class]];
+    }
+    
+    /// 判断ScrollView页面上是否有数据
+    /// - Returns: 是否有数据
+    func isEmptyDataContentView() -> Bool {
+        var isEmptyCell = true
+        var sections = 1 //默认系统都只有1个sections
         
-        
+        if let tableView = self as? UITableView { ///当前页面是 UITableView子视图
+            
+            if tableView.tableHeaderView?.bounds.size.height ?? 0 > 10 ||
+               tableView.tableFooterView?.bounds.size.height ?? 0 > 10 {
+                return false
+            }
+            //计算有多少个Sections
+            if let dataSource = tableView.dataSource {
+                if dataSource.responds(to: #selector( dataSource.numberOfSections(in:))) {
+                    sections = dataSource.numberOfSections?(in: tableView) ?? 1
+                }
+                for idx in 0..<sections {
+                    let rows = dataSource.tableView(tableView, numberOfRowsInSection: idx)
+                    if rows > 0 {
+                        isEmptyCell = false
+                        break
+                    }
+                }
+            }
+            // 如果每个Cell没有数据源, 则还需要判断Header和Footer高度是否为0
+            if isEmptyCell, let delegate = tableView.delegate {
+                var isEmptyHeader = true
+                
+                //检查是否有自定义HeaderView
+                if delegate.responds(to: #selector(delegate.tableView(_:heightForHeaderInSection:))) {
+                    for idx in 0..<sections {
+                        let headerHeight = delegate.tableView?(tableView, heightForHeaderInSection: idx) ?? 0
+                        if headerHeight > 1.0 {
+                            isEmptyHeader = false
+                            isEmptyCell = false
+                            break
+                        }
+                    }
+                } else if tableView.sectionHeaderHeight > 0 || tableView.estimatedSectionHeaderHeight > 0 {
+                    isEmptyHeader = false
+                    isEmptyCell = false
+                }
+                
+                // 如果Header没有高度还要判断Footer是否有高度
+                if isEmptyHeader, delegate.responds(to: #selector(delegate.tableView(_:heightForFooterInSection:))) {
+                    for idx in 0..<sections {
+                        let footerHeight = delegate.tableView?(tableView, heightForFooterInSection: idx) ?? 0
+                        if footerHeight > 1.0 {
+                            isEmptyCell = false
+                            break
+                        }
+                    }
+                } else if tableView.sectionFooterHeight > 0 || tableView.estimatedSectionFooterHeight > 0 {
+                    isEmptyCell = false
+                }
+            }
+            
+        } else if let collectionView = self as? UICollectionView { ///当前页面是 UICollectionView子视图
+            
+            if let dataSource = collectionView.dataSource {
+                
+                if dataSource.responds(to: #selector(dataSource.collectionView(_:numberOfItemsInSection:))) {
+                    sections = dataSource.numberOfSections?(in: collectionView) ?? 1
+                }
+                for idx in 0..<sections {
+                    let items = dataSource.collectionView(collectionView, numberOfItemsInSection: idx)
+                    if items > 0 {
+                        isEmptyCell = false
+                        break
+                    }
+                }
+            }
+            // 如果每个ItemCell没有数据源, 则还需要判断Header和Footer高度是否为0
+            if isEmptyCell, let delegate = collectionView.delegate {
+                
+                ///<UICollectionViewDelegateFlowLayout>
+                if let delegateFlowLayout = delegate as? UICollectionViewDelegateFlowLayout {
+                    var isEmptyHeader = true
+                    
+                    //检查是否有自定义HeaderView
+                    if delegateFlowLayout.responds(to: #selector(delegateFlowLayout.collectionView(_:layout:referenceSizeForHeaderInSection:))) {
+                        
+                        for idx in 0..<sections {
+                            let headerSize = delegateFlowLayout.collectionView?(collectionView, layout: collectionView.collectionViewLayout, referenceSizeForHeaderInSection: idx) ?? .zero
+                            
+                            if headerSize.width > 1.0 || headerSize.height > 1.0 {
+                                isEmptyHeader = false
+                                isEmptyCell = false
+                                break
+                            }
+                        }
+                    } else if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                        if flowLayout.headerReferenceSize.width > 1.0 {
+                            isEmptyHeader = false
+                            isEmptyCell = false
+                        }
+                    }
+                    
+                    // 如果Header没有高度还要判断Footer是否有高度
+                    if isEmptyHeader, delegateFlowLayout.responds(to: #selector(delegateFlowLayout.collectionView(_:layout:referenceSizeForFooterInSection:))) {
+                        
+                        for idx in 0..<sections {
+                            let footerSize = delegateFlowLayout.collectionView?(collectionView, layout: collectionView.collectionViewLayout, referenceSizeForFooterInSection: idx) ?? .zero
+                            
+                            if footerSize.width > 1.0 || footerSize.height > 1.0 {
+                                isEmptyCell = false
+                                break
+                            }
+                        }
+                    }  else if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                        if flowLayout.footerReferenceSize.width > 1.0 {
+                            isEmptyCell = false
+                        }
+                    }
+                }
+                
+                if !collectionView.collectionViewLayout.collectionViewContentSize.equalTo(.zero) {
+                    isEmptyCell = false
+                }
+            }
+            
+        } else { ///当前页面是 UIScrollView 子视图
+            if subviews.count > 0 {
+                isEmptyCell = false
+            }
+        }
+        return isEmptyCell
     }
 }
