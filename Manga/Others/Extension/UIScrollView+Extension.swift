@@ -8,22 +8,40 @@
 import Foundation
 import UIKit
 import MJRefresh
+import SnapKit
+
+//判断表格数据空白页和分页的字段key
+let kBlankViewTotalPageKey    = "pageCount"
+let kBlankViewCurrentPageKey  = "curPage"
+let kBlankViewListKey         = "list"
 
 //当前提示view在父视图上的tag
 let kBlankTipViewTag: Int = 1990
 
 ///空白提示页
 class WXBlankTipView: UIView {
+    var iconImage: UIImage? = nil
+    var title: String? = nil
+    var subTitle: String? = nil
+    var buttonTitle: String? = nil
+    var actionBtnBlcok: (()->()?)? = nil
+    
+    var contenViewOffsetPoint: CGPoint? {
+        didSet {
+            guard let contenViewOffsetPoint = contenViewOffsetPoint else { return }
+        }
+    }
+    
     
 }
 
 extension UIScrollView {
     
     enum WXBlankTipViewStatus {
-        case WXBlankTipViewStatus_Normal        //0 正常状态
-        case WXBlankTipViewStatus_EmptyData     //1 空数据状态
-        case WXBlankTipViewStatus_Fail          //2 请求失败状态
-        case WXBlankTipViewStatus_NoNetWork     //3 网络连接失败状态
+        case Normal        //0 正常状态
+        case EmptyData     //1 空数据状态
+        case Fail          //2 请求失败状态
+        case NoNetWork     //3 网络连接失败状态
     }
     fileprivate struct AssociatedKeys {
         static var emptyDataTitleKey: Void?
@@ -36,6 +54,7 @@ extension UIScrollView {
         static var networkErrorTitleKey: Void?
         static var networkErrorImageKey: Void?
         static var networkErrorBtnTitleKey: Void?
+        static var blankViewOffsetPointKey: Void?
         static var blankTipViewActionBlcokKey: Void?
     }
     
@@ -88,6 +107,13 @@ extension UIScrollView {
     var networkErrorBtnTitle: String? {
         get { (objc_getAssociatedObject(self, &AssociatedKeys.networkErrorBtnTitleKey) as? String) }
         set { objc_setAssociatedObject(self, &AssociatedKeys.networkErrorBtnTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
+    }
+    
+    ///外部可控制整体View的中心点上下偏移位置 {0, 0}:表示上下居中显示, 默认居中显示
+    var blankViewOffsetPoint: CGPoint? {
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.blankViewOffsetPointKey) as? CGPoint) }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.blankViewOffsetPointKey, newValue, .OBJC_ASSOCIATION_ASSIGN) }
     }
     
     typealias blankTipViewBlockType = (WXBlankTipViewStatus) -> ()
@@ -147,15 +173,170 @@ extension UIScrollView {
         }
     }
     
+    func networkReachable() -> Bool {
+        return true
+    }
+    
     //MARK: - 添加空白页总方法入口
     func judgeBlankView(pageInfo: Dictionary<String, Any>?) {
         self.mj_header?.endRefreshing()
         self.mj_footer?.endRefreshing()
         
-        //判断请求状态: totalCurrentPageInfo为字典就是请求成功, 否则为请求失败
-//        let requestSuccess = pageInfo is Dictionary<String, Any>
-        
+        if isEmptyDataContentView() { //页面没有数据
+            //根据状态,显示背景提示Viwe
+            var status: WXBlankTipViewStatus = .Fail
+            
+            if networkReachable() == false {
+                status = .NoNetWork //显示没有网络提示
+                
+            } else if let _ = pageInfo {
+                status = .EmptyData
+            }
+            //设置状态提示图片和文字
+            showBlankTipWithStatus(status)
+            
+        } else { //页面有数据
+            //移除页面上已有的提示视图
+            removeBlankView()
+            
+            if let pageInfo = pageInfo, mj_footer != nil {
+                //控制刷新控件显示的分页逻辑
+                convertShowMjFooterView(pageInfo)
+            }
+        }
     }
+    
+    ///设置提示图片和文字
+    func showBlankTipWithStatus(_ state: WXBlankTipViewStatus) {
+        //先移除页面上已有的提示视图
+        removeBlankView()
+        
+        let removeTipViewAndRefreshHeadBlock = { [weak self] in
+            if let mj_header = self?.mj_header, mj_header.state == .idle {
+                //1.先移除页面上已有的提示视图
+                self?.removeBlankView()
+                //2.开始走下拉请求
+                mj_header.beginRefreshing()
+            }
+        }
+        
+        let blankPageViewBtnActionBlcok = { [weak self] in
+            if let blankTipViewActionBlcok = self?.blankTipViewActionBlcok {
+                //1. 先移除页面上已有的提示视图
+                if (state != .EmptyData) {
+                    self?.removeBlankView()
+                }
+                //2. 回调按钮点击事件
+                blankTipViewActionBlcok(state)
+            }
+        }
+        
+        var tipString: String?
+        var subTipString: String?
+        var tipImage: UIImage?
+        var actionBtnTitle: String?
+        var actionBtnBlock: (() -> ())?
+        
+        switch state {
+        case .NoNetWork:
+            tipString = networkErrorTitle
+            tipImage = networkErrorImage
+            actionBtnTitle = networkErrorBtnTitle
+
+            if blankTipViewActionBlcok != nil {
+                actionBtnBlock = blankPageViewBtnActionBlcok
+                
+            } else if mj_header != nil {
+                actionBtnBlock = removeTipViewAndRefreshHeadBlock
+            } else {
+                actionBtnTitle = nil;
+            }
+            
+        case .EmptyData:
+            tipString = emptyDataTitle
+            tipImage = emptyDataImage
+            subTipString = emptyDataSubTitle
+            actionBtnTitle = emptyDataBtnTitle
+            
+            if blankTipViewActionBlcok != nil {
+                actionBtnBlock = blankPageViewBtnActionBlcok
+            } else {
+                actionBtnTitle = nil;
+            }
+            
+        case .Fail:
+            tipString = requestFailTitle
+            tipImage = requestFailImage
+            actionBtnTitle = requestFailBtnTitle
+            if blankTipViewActionBlcok != nil {
+                actionBtnBlock = blankPageViewBtnActionBlcok
+                
+            } else if mj_header != nil {
+                actionBtnBlock = removeTipViewAndRefreshHeadBlock
+            } else {
+                actionBtnTitle = nil;
+            }
+            
+        default:
+            return
+        }
+        
+        guard let tipString = tipString, let tipImage = tipImage, let subTipString = subTipString, let actionBtnTitle = actionBtnTitle else { return }
+        
+        //防止重复添加
+        removeBlankView()
+        
+        //需要显示的自定义提示view
+        let tipBgView = WXBlankTipView()
+        tipBgView.iconImage = tipImage;
+        tipBgView.title = tipString
+        tipBgView.subTitle = subTipString
+        tipBgView.buttonTitle = actionBtnTitle
+        tipBgView.actionBtnBlcok = actionBtnBlock
+        tipBgView.tag = kBlankTipViewTag
+        addSubview(tipBgView)
+        
+        if let offsetPoint = blankViewOffsetPoint, __CGPointEqualToPoint(offsetPoint, .zero) {
+            tipBgView.contenViewOffsetPoint = blankViewOffsetPoint
+        }
+        
+        tipBgView.snp.makeConstraints {
+            $0.leading.top.equalTo(self)
+            $0.height.equalTo(snp.height)
+            $0.width.equalTo(snp.width).offset(-(contentInset.left + contentInset.right))
+        }
+        
+        if let bgColor = backgroundColor {
+            tipBgView.backgroundColor = bgColor
+        }
+    }
+    
+    
+    ///控制Footer刷新控件是否显示
+    func convertShowMjFooterView(_ pageInfo: Dictionary<String, Any> ) {
+        let totalPage = pageInfo[kBlankViewTotalPageKey]
+        let currentPage = pageInfo[kBlankViewCurrentPageKey]
+        let dataArr = pageInfo[kBlankViewListKey]
+        
+        if totalPage != nil && currentPage != nil {
+            if let totalPage = totalPage as? Int, let currentPage = currentPage as? Int {
+                mj_header?.isHidden = (totalPage > currentPage)
+            } else {
+                mj_footer?.endRefreshingWithNoMoreData()
+                mj_footer?.isHidden = true
+            }
+        } else if let dataArr = dataArr as? Array<Any> {
+            if dataArr.count > 0 {
+                mj_footer?.isHidden = false
+            } else {
+                mj_footer?.endRefreshingWithNoMoreData()
+                mj_footer?.isHidden = true
+            }
+        } else {
+            mj_footer?.isHidden = false
+        }
+    }
+    
     
     /// 判断ScrollView页面上是否有数据
     /// - Returns: 是否有数据
@@ -165,8 +346,8 @@ extension UIScrollView {
         
         if let tableView = self as? UITableView { ///当前页面是 UITableView子视图
             
-            if tableView.tableHeaderView?.bounds.size.height ?? 0 > 10 ||
-               tableView.tableFooterView?.bounds.size.height ?? 0 > 10 {
+            if tableView.tableHeaderView?.bounds.size.height ?? 0 > 0 ||
+               tableView.tableFooterView?.bounds.size.height ?? 0 > 0 {
                 return false
             }
             //计算有多少个Sections
@@ -243,14 +424,14 @@ extension UIScrollView {
                         for idx in 0..<sections {
                             let headerSize = delegateFlowLayout.collectionView?(collectionView, layout: collectionView.collectionViewLayout, referenceSizeForHeaderInSection: idx) ?? .zero
                             
-                            if headerSize.width > 1.0 || headerSize.height > 1.0 {
+                            if headerSize.width > 0 || headerSize.height > 0 {
                                 isEmptyHeader = false
                                 isEmptyCell = false
                                 break
                             }
                         }
                     } else if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                        if flowLayout.headerReferenceSize.width > 1.0 {
+                        if flowLayout.headerReferenceSize.width > 0 {
                             isEmptyHeader = false
                             isEmptyCell = false
                         }
@@ -262,13 +443,13 @@ extension UIScrollView {
                         for idx in 0..<sections {
                             let footerSize = delegateFlowLayout.collectionView?(collectionView, layout: collectionView.collectionViewLayout, referenceSizeForFooterInSection: idx) ?? .zero
                             
-                            if footerSize.width > 1.0 || footerSize.height > 1.0 {
+                            if footerSize.width > 0 || footerSize.height > 0 {
                                 isEmptyCell = false
                                 break
                             }
                         }
                     }  else if let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                        if flowLayout.footerReferenceSize.width > 1.0 {
+                        if flowLayout.footerReferenceSize.width > 0 {
                             isEmptyCell = false
                         }
                     }
