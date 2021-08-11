@@ -44,7 +44,9 @@ class CommunityVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setNavBarRightItem(info: ["测试"]) { [weak self](idx) in
+            self?.tableView.judgeBlankView(nil)
+        }
         loadData()
     }
     
@@ -84,8 +86,9 @@ class CommunityVC: BaseVC {
                 
                 let trendModel = (json as? NSDictionary)?.kj.model(TrendModel.self)
                 let listModel = trendModel?.data
-                self?.dataArray += listModel ?? []
+//                self?.dataArray += listModel ?? []
                 self?.tableView.reloadData()
+                self?.tableView.judgeBlankView( [kBlankViewCurrentPageKey : 10, kBlankViewTotalPageKey: 20])
                 break
                 
             case .failure(let error):

@@ -16,12 +16,12 @@ class PublicConfigure: NSObject {
         }
         
         //配置全局输入框光标颜色
-        let tinColor = UIColor.hex(hexString: "0x000000")
+        let tinColor = UIColor.hex("0x000000")
         UITextField.appearance().tintColor(tinColor)
         UITextView.appearance().tintColor(tinColor)
         
         //全局表格分割线设置统一颜色值
-        UITableView.appearance().tintColor(UIColor.hex(hexString: "0xDDDDDD"))
+        UITableView.appearance().tintColor(UIColor.hex("0xDDDDDD"))
 
         //全局禁止视图多指点击
         UIView.appearance().isExclusiveTouch = true

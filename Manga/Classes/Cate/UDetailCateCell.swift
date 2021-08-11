@@ -75,7 +75,6 @@ class UDetailCateCell: UBaseTableViewCell {
     
     
     var model: ComicModel? {
-        
         didSet {
             guard let model = model else { return }
             

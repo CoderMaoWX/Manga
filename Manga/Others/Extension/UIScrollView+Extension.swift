@@ -19,19 +19,180 @@ let kBlankTipViewTag: Int = 1990
 
 ///空白提示页
 class WXBlankTipView: UIView {
-    var iconImage: UIImage? = nil
-    var title: String? = nil
-    var subTitle: String? = nil
-    var buttonTitle: String? = nil
+    
+    //MARK: - InitMethod
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initLayoutSubView()
+    }
+    
+    //MARK: - Setter Method
+    var iconImage: UIImage? {
+        didSet {
+            guard let iconImage = iconImage else { return }
+            tipImageView.image = iconImage
+            tipImageView.isHidden = false
+        }
+    }
+    var title: Any? {
+        didSet {
+            if let title = title as? String {
+                tipLabel.text = title
+                tipLabel.isHidden = false
+                
+            } else if let title = title as? NSAttributedString {
+                tipLabel.attributedText = title
+                tipLabel.isHidden = false
+            }
+        }
+    }
+    var subTitle: Any? {
+        didSet {
+            if let subTitle = subTitle as? String {
+                subTitleLabel.text = subTitle
+                subTitleLabel.isHidden = false
+                
+            } else if let subTitle = subTitle as? NSAttributedString {
+                subTitleLabel.attributedText = subTitle
+                subTitleLabel.isHidden = false
+            }
+            if !subTitleLabel.isHidden {
+                subTitleLabel.snp.updateConstraints {
+                    $0.top.equalTo(tipLabel.snp.bottom).offset(36)
+                }
+            }
+        }
+    }
+    var buttonTitle: Any? {
+        didSet {
+            if let buttonTitle = buttonTitle as? String {
+                actionBtn.setTitle(buttonTitle, for: .normal)
+                actionBtn.isHidden = false
+            } else if let buttonTitle = buttonTitle as? NSAttributedString {
+                actionBtn.setAttributedTitle(buttonTitle, for: .normal)
+                actionBtn.isHidden = false
+            }
+            if !actionBtn.isHidden {
+                actionBtn.snp.updateConstraints {
+                    $0.top.equalTo(subTitleLabel.snp.bottom).offset(20)
+                    $0.height.equalTo(40)
+                }
+            }
+        }
+    }
+    
+    ///提示按钮点击事件
     var actionBtnBlcok: (()->()?)? = nil
+    
+    @objc func buttonAction() {
+        if let actionBtnBlcok = actionBtnBlcok {
+            actionBtnBlcok()
+        }
+    }
     
     var contenViewOffsetPoint: CGPoint? {
         didSet {
             guard let contenViewOffsetPoint = contenViewOffsetPoint else { return }
+            contenView.snp.remakeConstraints {
+                $0.centerX.equalTo(snp.centerX).offset(contenViewOffsetPoint.x);
+                $0.centerY.equalTo(snp.centerY).offset(contenViewOffsetPoint.y);
+                $0.width.equalTo(snp.width)
+            }
         }
     }
     
+    func initLayoutSubView() {
+        addSubview(contenView)
+        contenView.snp.makeConstraints {
+            $0.centerX.equalTo(snp.centerX)
+            $0.centerY.equalTo(snp.centerY)
+            $0.width.equalTo(snp.width)
+        }
+        contenView.addSubview(tipImageView)
+        tipImageView.snp.makeConstraints {
+            $0.top.equalTo(contenView.snp.top)
+            $0.centerX.equalTo(contenView.snp.centerX)
+        }
+        contenView.addSubview(tipLabel)
+        tipLabel.snp.makeConstraints {
+            $0.top.equalTo(tipImageView.snp.bottom).offset(16);
+            $0.leading.equalTo(contenView.snp.leading).offset(12);
+            $0.trailing.equalTo(contenView.snp.trailing).offset(-12);
+        }
+        contenView.addSubview(subTitleLabel)
+        subTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(tipLabel.snp.bottom).offset(0);
+            $0.leading.equalTo(contenView.snp.leading).offset(12);
+            $0.trailing.equalTo(contenView.snp.trailing).offset(-12);
+        }
+        contenView.addSubview(actionBtn)
+        actionBtn.snp.makeConstraints {
+            $0.top.equalTo(subTitleLabel.snp.bottom).offset(0);
+            $0.centerX.equalTo(contenView.snp.centerX);
+            $0.height.equalTo(0);
+            $0.bottom.equalTo(contenView.snp.bottom);
+        }
+    }
     
+    //MARK: - Getter UI
+    
+    //提示背景主视图
+    lazy var contenView: UIView = {
+        let contenView = UIView()
+        contenView.backgroundColor = .clear
+        return contenView
+    }()
+    //提示图片
+    lazy var tipImageView: UIImageView = {
+        let tipImageView = UIImageView()
+        tipImageView.backgroundColor = .clear
+        tipImageView.contentMode = .scaleAspectFit
+        tipImageView.isHidden = true
+        return tipImageView
+    }()
+    //提示文案
+    lazy var tipLabel: UILabel = {
+        let tipLabel = UILabel()
+        tipLabel.backgroundColor = .clear
+        tipLabel.font = UIFont.systemFont(ofSize: 14)
+        tipLabel.textColor = .hex("0x999999")
+        tipLabel.textAlignment = .center
+        tipLabel.adjustsFontSizeToFitWidth = true
+        tipLabel.numberOfLines = 0
+        tipLabel.isHidden = true
+        return tipLabel
+    }()
+    //提示描述文案
+    lazy var subTitleLabel: UILabel = {
+        let tipLabel = UILabel()
+        tipLabel.backgroundColor = .clear
+        tipLabel.font = UIFont.systemFont(ofSize: 14)
+        tipLabel.textColor = UIColor(r: 153, g: 153, b: 153, a: 1)
+        tipLabel.textAlignment = .center
+        tipLabel.adjustsFontSizeToFitWidth = true
+        tipLabel.numberOfLines = 0
+        tipLabel.isHidden = true
+        return tipLabel
+    }()
+    //点击事件按钮
+    lazy var actionBtn: UIButton = {
+        let actionBtn = UIButton()
+        actionBtn.setTitleColor(.white, for: .normal)
+        actionBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        actionBtn.setBackgroundColor(color: .hex("0xF29448"), for: .normal)
+        actionBtn.setBackgroundColor(color: .hex("0xF29448"), for: .highlighted)
+        actionBtn.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        actionBtn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 28, bottom: 0, right: 28)
+        actionBtn.titleLabel?.numberOfLines = 0
+        actionBtn.layer.cornerRadius = 20
+        actionBtn.layer.masksToBounds = true
+        actionBtn.isHidden = true
+        return actionBtn
+    }()
 }
 
 extension UIScrollView {
@@ -58,8 +219,8 @@ extension UIScrollView {
     }
     
     ///空数据标题
-    var emptyDataTitle: String? {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.emptyDataTitleKey) as? String) }
+    var emptyDataTitle: String {
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.emptyDataTitleKey) as? String) ?? "暂无可用数据" }
         set { objc_setAssociatedObject(self, &AssociatedKeys.emptyDataTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///空数据副标题
@@ -68,8 +229,8 @@ extension UIScrollView {
         set { objc_setAssociatedObject(self, &AssociatedKeys.emptyDataSubTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///空数据图片
-    var emptyDataImage: UIImage {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.emptyDataImageKey) as? UIImage) ?? UIImage(named: "search_no_data")! }
+    var emptyDataImage: UIImage? {
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.emptyDataImageKey) as? UIImage) ?? UIImage(named: "search_no_data") }
         set { objc_setAssociatedObject(self, &AssociatedKeys.emptyDataImageKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///空数据按钮标题
@@ -78,28 +239,28 @@ extension UIScrollView {
         set { objc_setAssociatedObject(self, &AssociatedKeys.emptyDataBtnTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///请求失败文字
-    var requestFailTitle: String? {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.requestFailTitleKey) as? String) }
+    var requestFailTitle: String {
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.requestFailTitleKey) as? String) ?? "加载失败,请稍后再试" }
         set { objc_setAssociatedObject(self, &AssociatedKeys.requestFailTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///请求失败图片
-    var requestFailImage: UIImage {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.requestFailImageKey) as? UIImage) ?? UIImage(named: "blankPage_networkError")! }
+    var requestFailImage: UIImage? {
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.requestFailImageKey) as? UIImage) ?? UIImage(named: "blankPage_networkError") }
         set { objc_setAssociatedObject(self, &AssociatedKeys.requestFailImageKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///请求失败按钮
-    var requestFailBtnTitle: String? {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.requestFailBtnTitleKey) as? String) }
+    var requestFailBtnTitle: String {
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.requestFailBtnTitleKey) as? String) ?? "刷新" }
         set { objc_setAssociatedObject(self, &AssociatedKeys.requestFailBtnTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///网络连接失败文字
-    var networkErrorTitle: String? {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.networkErrorTitleKey) as? String) }
+    var networkErrorTitle: String {
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.networkErrorTitleKey) as? String) ?? "网络连接失败,请检查网络" }
         set { objc_setAssociatedObject(self, &AssociatedKeys.networkErrorTitleKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///网络连接失败图片
-    var networkErrorImage: UIImage {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.networkErrorImageKey) as? UIImage) ?? UIImage(named: "blankPage_networkError")! }
+    var networkErrorImage: UIImage? {
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.networkErrorImageKey) as? UIImage) ?? UIImage(named: "blankPage_networkError") }
         set { objc_setAssociatedObject(self, &AssociatedKeys.networkErrorImageKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///网络连接失败按钮
@@ -177,7 +338,7 @@ extension UIScrollView {
     }
     
     //MARK: - 添加空白页总方法入口
-    func judgeBlankView(pageInfo: Dictionary<String, Any>?) {
+    func judgeBlankView(_ pageInfo: Dictionary<String, Any>?) {
         self.mj_header?.endRefreshing()
         self.mj_footer?.endRefreshing()
         
@@ -280,36 +441,33 @@ extension UIScrollView {
             return
         }
         
-        guard let tipString = tipString, let tipImage = tipImage, let subTipString = subTipString, let actionBtnTitle = actionBtnTitle else { return }
+        if tipString == nil, tipImage == nil, subTipString == nil, actionBtnTitle == nil { return }
         
         //防止重复添加
         removeBlankView()
         
         //需要显示的自定义提示view
-        let tipBgView = WXBlankTipView()
+        let tipBgView = WXBlankTipView(frame: .zero)
         tipBgView.iconImage = tipImage;
         tipBgView.title = tipString
         tipBgView.subTitle = subTipString
         tipBgView.buttonTitle = actionBtnTitle
         tipBgView.actionBtnBlcok = actionBtnBlock
         tipBgView.tag = kBlankTipViewTag
+        tipBgView.backgroundColor = backgroundColor ?? .white
         addSubview(tipBgView)
         
-        if let offsetPoint = blankViewOffsetPoint, __CGPointEqualToPoint(offsetPoint, .zero) {
-            tipBgView.contenViewOffsetPoint = blankViewOffsetPoint
-        }
-        
         tipBgView.snp.makeConstraints {
-            $0.leading.top.equalTo(self)
-            $0.height.equalTo(snp.height)
-            $0.width.equalTo(snp.width).offset(-(contentInset.left + contentInset.right))
+            $0.leading.equalTo(snp.leading);
+            $0.top.equalTo(snp.top);
+            $0.height.equalTo(snp.height);
+            $0.width.equalTo(snp.width).offset(-(contentInset.left + contentInset.right));
         }
         
-        if let bgColor = backgroundColor {
-            tipBgView.backgroundColor = bgColor
+        if let offsetPoint = blankViewOffsetPoint, !__CGPointEqualToPoint(offsetPoint, .zero) {
+            tipBgView.contenViewOffsetPoint = offsetPoint
         }
     }
-    
     
     ///控制Footer刷新控件是否显示
     func convertShowMjFooterView(_ pageInfo: Dictionary<String, Any> ) {

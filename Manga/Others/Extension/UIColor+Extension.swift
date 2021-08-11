@@ -41,7 +41,7 @@ extension UIColor {
         return image!
     }
     
-    class func hex(hexString: String) -> UIColor {
+    class func hex(_ hexString: String) -> UIColor {
         var cString: String = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
         if cString.count < 6 { return UIColor.black }
         
