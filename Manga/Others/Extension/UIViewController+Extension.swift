@@ -81,8 +81,8 @@ extension UIViewController {
     }
     
     ///添加右侧导航按钮
-    func setNavBarRightItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) {
-        let itemArr = createNavBarItems(object: info, actionClosure: actionClosure)
+    func setNavBarRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) {
+        let itemArr = createNavBarItems(object: infoArr, actionClosure: actionClosure)
         navigationItem.rightBarButtonItems = itemArr
     }
 
