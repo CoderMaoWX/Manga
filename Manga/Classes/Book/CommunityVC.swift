@@ -10,6 +10,7 @@ import SnapKit
 import KakaJSON
 import SwiftyJSON
 import Alamofire
+import MJRefresh
 import SVProgressHUD
 
 
@@ -44,13 +45,19 @@ class CommunityVC: BaseVC {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavBarRightItem(infoArr: ["测试"]) { [weak self](idx) in
-            self?.tableView.judgeBlankView(nil)
-        }
-        loadData()
+        
+        tableView.addRefreshKit(startHeader: true, headerClosure:  { [weak self] in
+            self?.loadData(firstPage: true)
+            
+        }, footerClosure:  { [weak self] in
+            self?.loadData(firstPage: false)
+        })
     }
     
-    func loadData() {
+    var page = 0
+    func loadData(firstPage: Bool) {
+        page = firstPage ? 0 : (page+1)
+        
         let url = "https://jp.forum.1kxun.mobi/api/forum/specialPosts"
         
         var dict: [String: String] = [:]
@@ -69,10 +76,12 @@ class CommunityVC: BaseVC {
         dict["_v"] = "3.9.2"
         dict["follow"] = "0"
         dict["id"] = "1"
-        dict["page"] = "0"
+        dict["page"] = "\(page)"
         dict["sort_type"] = "hot"
         
-        SVProgressHUD.show()
+        if tableView.mj_header?.isRefreshing == false {
+            SVProgressHUD.show()
+        }
         //let param: [String : Any] = ["sexType" : 1]
         request(url, parameters: dict).responseJSON {
             [weak self] (resultData) in
@@ -86,13 +95,18 @@ class CommunityVC: BaseVC {
                 
                 let trendModel = (json as? NSDictionary)?.kj.model(TrendModel.self)
                 let listModel = trendModel?.data
-                self?.dataArray += listModel ?? []
+                if firstPage {
+                    self?.dataArray = listModel ?? []
+                } else {
+                    self?.dataArray += listModel ?? []
+                }
                 self?.tableView.reloadData()
-                self?.tableView.judgeBlankView( [kBlankViewCurrentPageKey : 10, kBlankViewTotalPageKey: 20])
+                self?.tableView.judgeBlankView(pageInfo: configPageDict(self?.dataArray))
                 break
                 
             case .failure(let error):
                 print("主页请求失败:", error)
+                self?.tableView.judgeBlankView(pageInfo: nil)
                 break
             }
         }

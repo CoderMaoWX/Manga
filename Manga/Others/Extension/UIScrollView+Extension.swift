@@ -8,6 +8,7 @@ import Foundation
 import UIKit
 import MJRefresh
 import SnapKit
+import Alamofire
 
 //判断表格数据空白页和分页的字段key
 let kBlankViewTotalPageKey    = "pageCount"
@@ -16,6 +17,23 @@ let kBlankViewListKey         = "list"
 
 //当前提示view在父视图上的tag
 let kBlankTipViewTag: Int = 1990
+
+
+/// 配置列表下拉分页字典
+/// - Parameter dataInfo: 页面的接口数据, 可在此处统一包装分页字典, 注意:currPage、maxPage为后台约定好的统一页码参数key
+/// - Returns: 请把返回的字典传给函数 func judgeBlankView(pageInfo: Dictionary<String, Any?>?)  的pageInfo参数来自动判断能否显示下一页控件
+func configPageDict(_ dataInfo: Any?) -> [String : Any] {
+    if let dataDict = dataInfo as? [String : Any] {
+        return [ kBlankViewCurrentPageKey : dataDict["currPage"] as Any,
+                 kBlankViewTotalPageKey : dataDict["maxPage"] as Any, ]
+        
+    } else if let dataArr = dataInfo as? [Any] {
+        let currPage = (dataArr.count > 0) ? 1 : 0
+        return [ kBlankViewCurrentPageKey : currPage ,
+                 kBlankViewTotalPageKey : (currPage + 1) ]
+    }
+    return [:]
+}
 
 ///空白提示页
 class WXBlankTipView: UIView {
@@ -67,6 +85,7 @@ class WXBlankTipView: UIView {
             }
         }
     }
+    
     var buttonTitle: Any? {
         didSet {
             if let buttonTitle = buttonTitle as? String {
@@ -324,21 +343,13 @@ extension UIScrollView {
         }
     }
     
-    ///移除页面上已有的提示视图
-    func removeBlankView() {
-        for tmpView in subviews {
-            if tmpView is WXBlankTipView, tmpView.tag == kBlankTipViewTag {
-                tmpView.removeFromSuperview()
-            }
-        }
-    }
+    //MARK: - 自动添加列表空白页
     
-    func networkReachable() -> Bool {
-        return true
-    }
-    
-    //MARK: - 添加空白页总方法入口
-    func judgeBlankView(_ pageInfo: Dictionary<String, Any>?) {
+    /// 为列表判断有无数据来自动添加空白提示页
+    /// - Parameter pageInfo:
+    /// 1.列表有分页逻辑: 请传入数据页码字典; (字典配置可调用快捷方法: func configPageDict(_ dataInfo: Any?)
+    /// 2.列表没有分页逻辑: 列表有数据随便传什么; 没有数据传空:nil
+    func judgeBlankView(pageInfo: Dictionary<String, Any?>?) {
         self.mj_header?.endRefreshing()
         self.mj_footer?.endRefreshing()
         
@@ -366,8 +377,26 @@ extension UIScrollView {
         }
     }
     
+    //MARK: - 移除空白提示页
+    
+    ///移除页面上已有的空白提示页
+    func removeBlankView() {
+        for tmpView in subviews {
+            if tmpView is WXBlankTipView, tmpView.tag == kBlankTipViewTag {
+                tmpView.removeFromSuperview()
+            }
+        }
+    }
+    
+    //MARK: - (数据判断逻辑,外部请忽略下面方法)
+    
+    ///网络是否可用
+    fileprivate func networkReachable() -> Bool {
+        return reachabilityNetwork?.isReachable ?? true
+    }
+    
     ///设置提示图片和文字
-    func showBlankTipWithStatus(_ state: WXBlankTipViewStatus) {
+    fileprivate func showBlankTipWithStatus(_ state: WXBlankTipViewStatus) {
         //先移除页面上已有的提示视图
         removeBlankView()
         
@@ -440,7 +469,6 @@ extension UIScrollView {
         default:
             return
         }
-        
         if tipString == nil, tipImage == nil, subTipString == nil, actionBtnTitle == nil { return }
         
         //防止重复添加
@@ -469,35 +497,10 @@ extension UIScrollView {
         }
     }
     
-    ///控制Footer刷新控件是否显示
-    func convertShowMjFooterView(_ pageInfo: Dictionary<String, Any> ) {
-        let totalPage = pageInfo[kBlankViewTotalPageKey]
-        let currentPage = pageInfo[kBlankViewCurrentPageKey]
-        let dataArr = pageInfo[kBlankViewListKey]
-        
-        if totalPage != nil && currentPage != nil {
-            if let totalPage = totalPage as? Int, let currentPage = currentPage as? Int {
-                mj_header?.isHidden = (totalPage > currentPage)
-            } else {
-                mj_footer?.endRefreshingWithNoMoreData()
-                mj_footer?.isHidden = true
-            }
-        } else if let dataArr = dataArr as? Array<Any> {
-            if dataArr.count > 0 {
-                mj_footer?.isHidden = false
-            } else {
-                mj_footer?.endRefreshingWithNoMoreData()
-                mj_footer?.isHidden = true
-            }
-        } else {
-            mj_footer?.isHidden = false
-        }
-    }
-    
     
     /// 判断ScrollView页面上是否有数据
     /// - Returns: 是否有数据
-    func isEmptyDataContentView() -> Bool {
+    fileprivate func isEmptyDataContentView() -> Bool {
         var isEmptyCell = true
         var sections = 1 //默认系统都只有1个sections
         
@@ -515,41 +518,35 @@ extension UIScrollView {
                 for idx in 0..<sections {
                     let rows = dataSource.tableView(tableView, numberOfRowsInSection: idx)
                     if rows > 0 {
-                        isEmptyCell = false
-                        break
+                        return false
                     }
                 }
             }
             // 如果每个Cell没有数据源, 则还需要判断Header和Footer高度是否为0
             if isEmptyCell, let delegate = tableView.delegate {
-                var isEmptyHeader = true
                 
                 //检查是否有自定义HeaderView
                 if delegate.responds(to: #selector(delegate.tableView(_:heightForHeaderInSection:))) {
                     for idx in 0..<sections {
                         let headerHeight = delegate.tableView?(tableView, heightForHeaderInSection: idx) ?? 0
                         if headerHeight > 1.0 {
-                            isEmptyHeader = false
-                            isEmptyCell = false
-                            break
+                            return false
                         }
                     }
                 } else if tableView.sectionHeaderHeight > 0 || tableView.estimatedSectionHeaderHeight > 0 {
-                    isEmptyHeader = false
-                    isEmptyCell = false
+                    return false
                 }
                 
                 // 如果Header没有高度还要判断Footer是否有高度
-                if isEmptyHeader, delegate.responds(to: #selector(delegate.tableView(_:heightForFooterInSection:))) {
+                if delegate.responds(to: #selector(delegate.tableView(_:heightForFooterInSection:))) {
                     for idx in 0..<sections {
                         let footerHeight = delegate.tableView?(tableView, heightForFooterInSection: idx) ?? 0
                         if footerHeight > 1.0 {
-                            isEmptyCell = false
-                            break
+                            return false
                         }
                     }
                 } else if tableView.sectionFooterHeight > 0 || tableView.estimatedSectionFooterHeight > 0 {
-                    isEmptyCell = false
+                    return false
                 }
             }
             
@@ -624,4 +621,31 @@ extension UIScrollView {
         }
         return isEmptyCell
     }
+    
+    
+    ///控制Footer刷新控件是否显示
+    fileprivate func convertShowMjFooterView(_ pageInfo: Dictionary<String, Any?> ) {
+        let totalPage = pageInfo[kBlankViewTotalPageKey]
+        let currentPage = pageInfo[kBlankViewCurrentPageKey]
+        let dataArr = pageInfo[kBlankViewListKey]
+        
+        if let totalPage = totalPage as? Int, let currentPage = currentPage as? Int {
+            if totalPage > currentPage {
+                mj_footer?.isHidden = false
+            } else {
+                mj_footer?.endRefreshingWithNoMoreData()
+                mj_footer?.isHidden = true
+            }
+        } else if let dataArr = dataArr as? Array<Any> {
+            if dataArr.count > 0 {
+                mj_footer?.isHidden = false
+            } else {
+                mj_footer?.endRefreshingWithNoMoreData()
+                mj_footer?.isHidden = true
+            }
+        } else {
+            mj_footer?.isHidden = false
+        }
+    }
+    
 }

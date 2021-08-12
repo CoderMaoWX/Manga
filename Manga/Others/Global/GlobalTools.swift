@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import CoreGraphics
 import Kingfisher
+import Alamofire
 
 //============================ 给指定的类添加前缀来扩展方法 ============================
 
@@ -103,6 +104,28 @@ enum GradientChangeDirection: Int {
     case Vertical            //竖直渐变
     case UpwardDiagonalLine  //向下对角线渐变
     case DownDiagonalLine    //向上对角线渐变
+}
+
+///初始化网络监听器
+let reachabilityNetwork: NetworkReachabilityManager? = {
+    return NetworkReachabilityManager(host: "https://www.baidu.com")
+}()
+
+///开启网络监听, 网络变化回调
+func networkListen() {
+    reachabilityNetwork?.listener = { status in
+        switch status {
+        case .reachable(.wwan):
+            print("主人,检测到您正在使用移动数据,请注意流量变化")
+        case .notReachable:
+            print("主人,检测到您网络连接失败,请检查网络")
+        default:
+            print("网络连接变化: \(status)")
+            break
+        }
+    }
+    let status = reachabilityNetwork?.startListening()
+    print("监听网络: \(String(describing: status))")
 }
 
 ///获取渐变色

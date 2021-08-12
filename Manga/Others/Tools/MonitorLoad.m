@@ -11,7 +11,8 @@
 @implementation MonitorLoad
 
 + (void)load {
-
+//    ApiClass *api = [[ApiClass alloc] init];
+//    [api studyApi];
 }
 
 + (void)initialize {

@@ -8,8 +8,9 @@
 import UIKit
 
 class ApiClass: NSObject {
-
-    func studyApi() {
+    
+    
+    @objc func studyApi() {
         print("Hello, World! StudyApi")
 
         let arr: [String] = ["1", "2", "6", "89", "2", "34"]
