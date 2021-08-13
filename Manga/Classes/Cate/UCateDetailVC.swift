@@ -57,14 +57,14 @@ class UCateDetailVC: BaseVC {
             switch returnData.result {
             case .success(let json):
                 let dataDict = ((json as? NSDictionary)?["data"] as? NSDictionary)?["returnData"]
-                print("详情页请求成功:" , dataDict as Any)
+                debugLog("详情页请求成功:" , dataDict as Any)
                 let listModel = model(from: (dataDict as! NSDictionary), ComicListModel.self)
                 self?.dataArray = listModel?.comics ?? []
                 self?.tableView.reloadData()
                 break
                 
             case .failure(let error):
-                print("详情页请求失败:", error)
+                debugLog("详情页请求失败:", error)
                 break
             }
         }

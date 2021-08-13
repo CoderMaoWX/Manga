@@ -133,7 +133,7 @@ extension WebVC: WKNavigationDelegate, WKUIDelegate {
             for (_, num) in resultString.components(separatedBy: "***").enumerated() {
                 self?.imageItemArray.append(num)
             }
-            print("一共有\((self?.imageItemArray.count)!)张图片")
+            debugLog("一共有\((self?.imageItemArray.count)!)张图片")
         }
         
         //添加图片点击的回调
@@ -159,7 +159,7 @@ extension WebVC: WKNavigationDelegate, WKUIDelegate {
         if url?.scheme == "image-preview-index" {
             //图片点击回调
             let index = Int((url!.absoluteString as NSString).substring(from: "image-preview-index:".count)) ?? 0
-            print("点击图片 INDEX = \(index)")
+            debugLog("点击图片 INDEX = \(index)")
             
             //大图 host:  jp.forum.1kxun.com
             let tapStr = self.imageItemArray[index] as! String
@@ -172,7 +172,7 @@ extension WebVC: WKNavigationDelegate, WKUIDelegate {
                 decisionHandler(.cancel)
                 return
             }
-            print("点击图片 IMAGEPATH =  \(url)")
+            debugLog("点击图片 IMAGEPATH =  \(url)")
             navigationController?.pushViewController(PreviewImgVC(previewURL: tapStr), animated: true)
             
             decisionHandler(.cancel)

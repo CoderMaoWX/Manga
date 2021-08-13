@@ -73,7 +73,7 @@ class CateVC: BaseVC {
                 }
                 break
             case .failure(let error):
-                print("error: \(error)")
+                debugLog("error: \(error)")
                 break
             
             }

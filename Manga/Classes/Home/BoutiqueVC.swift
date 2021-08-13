@@ -9,7 +9,6 @@ import UIKit
 import Alamofire
 import KakaJSON
 import SwiftyJSON
-import SVProgressHUD
 import Reusable
 
 class BoutiqueVC: BaseVC {
@@ -38,6 +37,8 @@ class BoutiqueVC: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        debugLog("导航栏高度: \(tabBarHeight)")
+        
         collectionView.addRefreshKit(startHeader: true, headerClosure:  { [weak self] in
             self?.loadData()
         })
@@ -46,11 +47,11 @@ class BoutiqueVC: BaseVC {
     override func initSubView() {
         view.addSubview(collectionView)
     }
-    
+
     override func layoutSubView() {
         collectionView.snp.makeConstraints { $0.edges.equalTo(view) }
     }
-    
+
     func loadData() {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
@@ -59,14 +60,14 @@ class BoutiqueVC: BaseVC {
             
             switch resultData.result {
             case .success(let json):
-                print("主页请求成功响应Json", JSON(json));
+                debugLog("主页请求成功响应Json", JSON(json));
                 let dataDict = JSON(json)["data"]["returnData"].dictionaryObject                
                 let listModel = model(from: dataDict!, BoutiqueListModel.self)
                 self?.comicLists = listModel.comicLists ?? []
                 self?.collectionView.reloadData(autoEmptyViewInfo: self?.comicLists)
                 break
             case .failure(let error):
-                print("主页请求失败:", error)
+                debugLog("主页请求失败:", error)
                 self?.collectionView.reloadData(autoEmptyViewInfo: nil)
                 break
             }

@@ -14,43 +14,9 @@ extension UIViewController {
         static var navBarButtonItemKey = "navBarButtonItemKey"
     }
     
-    ///获取App最顶层的控制器
-    func appTopVC() -> UIViewController? {
-        let window = UIApplication.shared.keyWindow
-        //当前windows的根控制器
-        var controller = window?.rootViewController
-
-        //通过循环一层一层往下查找
-        while true {
-            //先判断是否有present的控制器
-            if (controller?.presentedViewController) != nil {
-                //有的话直接拿到弹出控制器，省去多余的判断
-                controller = controller?.presentedViewController;
-            } else {
-                if controller is UINavigationController {
-                    //如果是NavigationController，取最后一个控制器（当前）
-                    controller = controller?.children.last
-                    
-                } else if controller is UITabBarController {
-                    //如果TabBarController，取当前控制器
-                    controller = tabBarController?.selectedViewController
-                    
-                } else if controller?.children.count ?? 0 > 0 {
-                    //如果是普通控制器，找childViewControllers最后一个
-                    controller = controller?.children.last
-                    
-                } else {
-                    //没有present，没有childViewController，则表示当前控制器
-                    return controller
-                }
-            }
-        }
-    }
-    
-    
     ///避免KVC设值异常
     open override class func setValue(_ value: Any?, forUndefinedKey key: String) {
-        print("❌❌❌ 警告:", "\(self.self)", "类没有实现该属性: ", key)
+        debugLog("❌❌❌ 警告:", "\(self.self)", "类没有实现该属性: ", key)
     }
     
     

@@ -90,11 +90,11 @@ extension UIImage {
     /// EZSE: Returns cropped image from CGRect
     public func croppedImage(_ bound: CGRect) -> UIImage? {
         guard self.size.width > bound.origin.x else {
-            print("EZSE: Your cropping X coordinate is larger than the image width")
+            debugLog("EZSE: Your cropping X coordinate is larger than the image width")
             return nil
         }
         guard self.size.height > bound.origin.y else {
-            print("EZSE: Your cropping Y coordinate is larger than the image height")
+            debugLog("EZSE: Your cropping Y coordinate is larger than the image height")
             return nil
         }
         let scaledBounds: CGRect = CGRect(x: bound.origin.x * self.scale, y: bound.origin.y * self.scale, width: bound.width * self.scale, height: bound.height * self.scale)
@@ -130,7 +130,7 @@ extension UIImage {
             return
         }
         guard let data = try? Data(contentsOf: url) else {
-            print("EZSE: No image in URL \(urlString)")
+            debugLog("EZSE: No image in URL \(urlString)")
             self.init(data: Data())
             return
         }

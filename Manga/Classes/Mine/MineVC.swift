@@ -90,11 +90,11 @@ class MineVC: BaseVC {
                 listModel.insert(contentsOf: self?.defaultUserItem() ?? [], at: 0)
                 
                 self?.dataArray = listModel
-                print("主页请求成功:" , self?.dataArray as Any)
+                debugLog("主页请求成功:" , self?.dataArray as Any)
                 self?.collectionView.reloadData()
                 break
             case .failure(let error):
-                print("主页请求失败:", error)
+                debugLog("主页请求失败:", error)
                 break
             }
         }

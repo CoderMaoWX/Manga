@@ -85,7 +85,7 @@ class CommunityVC: BaseVC {
             
             switch resultData.result {
             case .success(let json):
-                print("主页请求成功:", json)
+                debugLog("主页请求成功:", json)
 //                let dataList = (json as? NSDictionary)?["data"] as? NSArray
 //                let listModel = modelArray(from: dataList!, TrendPostModel.self)
                 
@@ -100,7 +100,7 @@ class CommunityVC: BaseVC {
                 break
                 
             case .failure(let error):
-                print("主页请求失败:", error)
+                debugLog("主页请求失败:", error)
                 self?.tableView.reloadData(autoEmptyViewInfo: nil)
                 break
             }

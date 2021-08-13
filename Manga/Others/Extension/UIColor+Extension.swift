@@ -47,7 +47,7 @@ extension UIColor {
         
         let index = cString.index(cString.endIndex, offsetBy: -6)
         let subString = cString[index...]
-        if cString.hasPrefix("0x") { cString = String(subString) }
+        if cString.lowercased().hasPrefix("0x") { cString = String(subString) }
         if cString.hasPrefix("#") { cString = String(subString) }
         
         if cString.count != 6 { return UIColor.black }
