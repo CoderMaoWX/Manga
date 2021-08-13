@@ -1,16 +1,15 @@
 {
   "images" : [
     {
+      "filename" : "load_fail_tip.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "blank_activity@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "blank_activity@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

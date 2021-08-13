@@ -63,7 +63,7 @@ class BoutiqueVC: BaseVC {
                 let dataDict = JSON(json)["data"]["returnData"].dictionaryObject                
                 let listModel = model(from: dataDict!, BoutiqueListModel.self)
                 self?.comicLists = listModel.comicLists ?? []
-                self?.collectionView.reloadData(autoEmptyViewInfo: self)
+                self?.collectionView.reloadData(autoEmptyViewInfo: self?.comicLists)
                 break
             case .failure(let error):
                 print("主页请求失败:", error)

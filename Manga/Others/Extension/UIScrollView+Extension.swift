@@ -22,7 +22,7 @@ let kEmptyViewListKey         = "list"
 /// 配置列表下拉分页字典
 /// - Parameter dataInfo: 页面的接口数据, 可在此处统一包装分页字典, 注意:currPage、maxPage为后台约定好的统一页码参数key
 /// - Returns: 请把返回的字典传给函数 func autoEmptyView(pageInfo: Dictionary<String, Any?>?)  的pageInfo参数来自动判断能否显示下一页控件
-func configPageDict(_ dataInfo: Any?) -> [String : Any] {
+func configPageDict(_ dataInfo: Any?) -> Any? { // -> [String : Any]
     if let dataDict = dataInfo as? [String : Any] {
         return [ kEmptyViewCurrentPageKey : dataDict[kEmptyViewCurrentPageKey] as Any,
                  kEmptyViewTotalPageKey : dataDict[kEmptyViewTotalPageKey] as Any, ]
@@ -32,7 +32,7 @@ func configPageDict(_ dataInfo: Any?) -> [String : Any] {
         return [ kEmptyViewCurrentPageKey : currPage ,
                  kEmptyViewTotalPageKey : (currPage + 1) ]
     }
-    return [:]
+    return nil //[:]
 }
 
 ///空白提示页
@@ -98,7 +98,7 @@ fileprivate class WXEmptyTipView: UIView {
             if !actionBtn.isHidden {
                 actionBtn.snp.updateConstraints {
                     $0.top.equalTo(subTitleLabel.snp.bottom).offset(20)
-                    $0.height.equalTo(40)
+                    $0.height.equalTo(35)
                 }
             }
         }
@@ -199,15 +199,17 @@ fileprivate class WXEmptyTipView: UIView {
     }()
     //点击事件按钮
     lazy var actionBtn: UIButton = {
-        let actionBtn = UIButton()
-        actionBtn.setTitleColor(.white, for: .normal)
+        let mainColor = UIColor.hex("0x999999")
+        let actionBtn = UIButton(type: .custom)
+        actionBtn.setTitleColor(mainColor, for: .normal)
+        actionBtn.setTitleColor(mainColor.withAlphaComponent(0.7), for: .highlighted)
         actionBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        actionBtn.setBackgroundColor(color: .hex("0xF29448"), for: .normal)
-        actionBtn.setBackgroundColor(color: .hex("0xF29448"), for: .highlighted)
         actionBtn.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         actionBtn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 28, bottom: 0, right: 28)
         actionBtn.titleLabel?.numberOfLines = 0
-        actionBtn.layer.cornerRadius = 20
+        actionBtn.layer.borderWidth = 1
+        actionBtn.layer.borderColor = mainColor.cgColor
+        actionBtn.layer.cornerRadius = 35/2
         actionBtn.layer.masksToBounds = true
         actionBtn.isHidden = true
         return actionBtn
@@ -253,7 +255,7 @@ extension UIScrollView {
     }
     ///空数据图片
     var emptyDataImage: UIImage? {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.emptyDataImageKey) as? UIImage) ?? UIImage(named: "empty_data_image") }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.emptyDataImageKey) as? UIImage) ?? UIImage(named: "empty_data_tip") }
         set { objc_setAssociatedObject(self, &AssociatedKeys.emptyDataImageKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///空数据按钮标题
@@ -268,7 +270,7 @@ extension UIScrollView {
     }
     ///请求失败图片
     var loadFailImage: UIImage? {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.loadFailImageKey) as? UIImage) ?? UIImage(named: "emptyPage_noSearchData") }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.loadFailImageKey) as? UIImage) ?? UIImage(named: "load_fail_tip") }
         set { objc_setAssociatedObject(self, &AssociatedKeys.loadFailImageKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///请求失败按钮
@@ -283,7 +285,7 @@ extension UIScrollView {
     }
     ///网络连接失败图片
     var networkErrorImage: UIImage? {
-        get { (objc_getAssociatedObject(self, &AssociatedKeys.networkErrorImageKey) as? UIImage) ?? UIImage(named: "emptyPage_networkError") }
+        get { (objc_getAssociatedObject(self, &AssociatedKeys.networkErrorImageKey) as? UIImage) ?? UIImage(named: "network_error_tip") }
         set { objc_setAssociatedObject(self, &AssociatedKeys.networkErrorImageKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     ///网络连接失败按钮
@@ -359,13 +361,13 @@ extension UIScrollView {
             tableView.reloadData()
             
             let pageDict = configPageDict(autoEmptyViewInfo)
-            autoEmptyView(pageInfo: pageDict)
+            autoEmptyView(pageInfo: pageDict as? Dictionary<String, Any?>)
             
         } else if let collectionView = self as? UICollectionView {
             collectionView.reloadData()
             
             let pageDict = configPageDict(autoEmptyViewInfo)
-            autoEmptyView(pageInfo: pageDict)
+            autoEmptyView(pageInfo: pageDict as? Dictionary<String, Any?>)
         }
     }
     
@@ -637,12 +639,11 @@ extension UIScrollView {
         return true
     }
     
-    
     ///控制Footer刷新控件是否显示
     fileprivate func convertShowMjFooterView(_ pageInfo: Dictionary<String, Any?> ) {
-        let totalPage = pageInfo[kEmptyViewTotalPageKey]
         let currentPage = pageInfo[kEmptyViewCurrentPageKey]
-        let dataArr = pageInfo[kEmptyViewListKey]
+        let totalPage   = pageInfo[kEmptyViewTotalPageKey]
+        let dataArr     = pageInfo[kEmptyViewListKey]
         
         if let totalPage = totalPage as? Int, let currentPage = currentPage as? Int {
             if totalPage > currentPage {

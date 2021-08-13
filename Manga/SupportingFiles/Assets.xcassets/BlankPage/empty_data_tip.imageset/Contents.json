@@ -1,16 +1,15 @@
 {
   "images" : [
     {
+      "filename" : "empty_data_tip.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "bag@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "bag@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
