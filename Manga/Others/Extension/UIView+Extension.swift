@@ -68,9 +68,7 @@ extension UIView {
     /// - Returns: 添加的线条
     @discardableResult
     func addLineToPosition(position: WXDrawLinePosition, lineWidth: CGFloat) -> UIView {
-        
         let line = UIView()
-        
         switch position {
         case .top:
             line.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: lineWidth)

@@ -79,13 +79,9 @@ class CommunityVC: BaseVC {
         dict["page"] = "\(page)"
         dict["sort_type"] = "hot"
         
-        if tableView.mj_header?.isRefreshing == false {
-            SVProgressHUD.show()
-        }
         //let param: [String : Any] = ["sexType" : 1]
         request(url, parameters: dict).responseJSON {
             [weak self] (resultData) in
-            SVProgressHUD.dismiss()
             
             switch resultData.result {
             case .success(let json):
@@ -100,13 +96,12 @@ class CommunityVC: BaseVC {
                 } else {
                     self?.dataArray += listModel ?? []
                 }
-                self?.tableView.reloadData()
-                self?.tableView.judgeBlankView(pageInfo: configPageDict(self?.dataArray))
+                self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
                 break
                 
             case .failure(let error):
                 print("主页请求失败:", error)
-                self?.tableView.judgeBlankView(pageInfo: nil)
+                self?.tableView.reloadData(autoEmptyViewInfo: nil)
                 break
             }
         }

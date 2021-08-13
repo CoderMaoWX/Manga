@@ -38,7 +38,9 @@ class BoutiqueVC: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadData()
+        collectionView.addRefreshKit(startHeader: true, headerClosure:  { [weak self] in
+            self?.loadData()
+        })
     }
     
     override func initSubView() {
@@ -50,12 +52,10 @@ class BoutiqueVC: BaseVC {
     }
     
     func loadData() {
-        SVProgressHUD.show()
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         request(url, parameters: param).responseJSON {
             [weak self] (resultData) in
-            SVProgressHUD.dismiss()
             
             switch resultData.result {
             case .success(let json):
@@ -63,14 +63,11 @@ class BoutiqueVC: BaseVC {
                 let dataDict = JSON(json)["data"]["returnData"].dictionaryObject                
                 let listModel = model(from: dataDict!, BoutiqueListModel.self)
                 self?.comicLists = listModel.comicLists ?? []
-                self?.collectionView.reloadData()
-                if self?.comicLists.count == 0 {
-                    SVProgressHUD.showError(withStatus: "数据刷新失败")
-                }
+                self?.collectionView.reloadData(autoEmptyViewInfo: self)
                 break
             case .failure(let error):
                 print("主页请求失败:", error)
-                SVProgressHUD.showError(withStatus: "数据刷新失败")
+                self?.collectionView.reloadData(autoEmptyViewInfo: nil)
                 break
             }
         }
