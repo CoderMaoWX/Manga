@@ -13,6 +13,7 @@
 + (void)load {
 //    ApiClass *api = [[ApiClass alloc] init];
 //    [api studyApi];
+    [UIViewController swizzlingMethod];
 }
 
 + (void)initialize {

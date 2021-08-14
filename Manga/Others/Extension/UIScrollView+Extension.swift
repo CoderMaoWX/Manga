@@ -660,7 +660,7 @@ extension UIScrollView {
                 mj_footer?.isHidden = true
             }
         } else {
-            mj_footer?.isHidden = false
+            //mj_footer?.isHidden = false
         }
     }
     

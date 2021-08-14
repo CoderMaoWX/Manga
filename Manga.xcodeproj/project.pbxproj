@@ -54,6 +54,7 @@
 		58CDFB8926BA34E200056527 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB8626BA34E200056527 /* LaunchScreen.storyboard */; };
 		7075E033816A232E3D55CCF6 /* libPods-Manga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */; };
 		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
+		A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +109,7 @@
 		58CDFB8726BA34E200056527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Manga.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A32CD80E25CC494A009A5C56 /* URankCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URankCCell.swift; sourceTree = "<group>"; };
+		A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwizzlingMethod.swift; sourceTree = "<group>"; };
 		C4DEF34117E1022E8F7858A7 /* Pods-Manga.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Manga.debug.xcconfig"; path = "Target Support Files/Pods-Manga/Pods-Manga.debug.xcconfig"; sourceTree = "<group>"; };
 		C7AFDB0A11E2C413F9EE7078 /* Pods-Manga.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Manga.release.xcconfig"; path = "Target Support Files/Pods-Manga/Pods-Manga.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -247,6 +249,7 @@
 				5899402926BA39B20086C830 /* MonitorLoad.h */,
 				5899402A26BA39B20086C830 /* MonitorLoad.m */,
 				5899402826BA39B20086C830 /* Manga-Bridging-Header.h */,
+				A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -261,10 +264,10 @@
 				58CDFB5026BA33F000056527 /* UIViewController+Extension.swift */,
 				58CDFB5126BA33F000056527 /* String+Extension.swift */,
 				58CDFB5226BA33F000056527 /* Dictionary+Extension.swift */,
+				58CDFB5426BA33F000056527 /* Array+Extension.swift */,
 				58CDFB5326BA33F000056527 /* UIScrollView+Extension.swift */,
 				5824E5DF26C6181600246D19 /* ListView+Extension.swift */,
 				5824E5E126C6183000246D19 /* TableView+Extension.swift */,
-				58CDFB5426BA33F000056527 /* Array+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -468,6 +471,7 @@
 				58CDFB7526BA33F100056527 /* ApiClass.swift in Sources */,
 				5824E5E626C655DB00246D19 /* PublicFrame.swift in Sources */,
 				5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */,
+				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
 				5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,

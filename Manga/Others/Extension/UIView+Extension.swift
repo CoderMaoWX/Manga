@@ -64,29 +64,29 @@ extension UIView {
     /// 给当前视图添加线条
     /// - Parameters:
     ///   - position: 添加的位置
-    ///   - lineWidth: 天条宽度或高度
+    ///   - thinSize: 天条宽度或高度
     /// - Returns: 添加的线条
     @discardableResult
-    func addLineToPosition(position: WXDrawLinePosition, lineWidth: CGFloat) -> UIView {
+    func addLineTo(position: WXDrawLinePosition, thinSize: CGFloat) -> UIView {
         let line = UIView()
         switch position {
         case .top:
-            line.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: lineWidth)
+            line.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: thinSize)
         
         case .left:
-            line.frame = CGRect(x: 0, y: 0, width: lineWidth, height: frame.size.height)
+            line.frame = CGRect(x: 0, y: 0, width: thinSize, height: frame.size.height)
             
         case .bottom:
-            line.frame = CGRect(x: 0, y: frame.size.height-lineWidth, width: frame.size.width, height: lineWidth)
+            line.frame = CGRect(x: 0, y: frame.size.height-thinSize, width: frame.size.width, height: thinSize)
             
         case .right:
-            line.frame = CGRect(x: frame.size.width-lineWidth, y: 0, width: lineWidth, height: frame.size.height)
+            line.frame = CGRect(x: frame.size.width-thinSize, y: 0, width: thinSize, height: frame.size.height)
         }
         return line
     }
     
     ///给指定view顶部添加投影阴影
-    func addDropShadowWithOffset(offset: CGSize, radius: CGFloat, color: UIColor, opacity: Float) {
+    func addDropShadow(with offset: CGSize, radius: CGFloat, color: UIColor, opacity: Float) {
         let path = CGMutablePath()
         path.addRect(bounds)
         layer.shadowPath = path

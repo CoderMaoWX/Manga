@@ -10,6 +10,28 @@ import UIKit
 
 extension UIViewController {
     
+    @objc class func swizzlingMethod() {
+        let originalSelector = #selector(UIViewController.viewDidAppear(_:))
+        let swizzledSelector = #selector(UIViewController.wx_viewDidAppear(animated:))
+
+        let originalMethod = class_getInstanceMethod(self, originalSelector)
+        let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
+
+        //在进行 Swizzling 的时候,需要用 class_addMethod 先进行判断一下原有类中是否有要替换方法的实现
+        let didAddMethod: Bool = class_addMethod(self, originalSelector, method_getImplementation(swizzledMethod!), method_getTypeEncoding(swizzledMethod!))
+        //如果 class_addMethod 返回 yes,说明当前类中没有要替换方法的实现,所以需要在父类中查找,这时候就用到 method_getImplemetation 去获取 class_getInstanceMethod 里面的方法实现,然后再进行 class_replaceMethod 来实现 Swizzing
+        if didAddMethod {
+            class_replaceMethod(self, swizzledSelector, method_getImplementation(originalMethod!), method_getTypeEncoding(originalMethod!))
+        } else {
+            method_exchangeImplementations(originalMethod!, swizzledMethod!)
+        }
+    }
+    
+    @objc func wx_viewDidAppear(animated: Bool) {
+        self.wx_viewDidAppear(animated: animated)
+        debugLog("wx_viewDidAppear 替换了", self.className)
+    }
+    
     fileprivate struct AssociatedKeys {
         static var navBarButtonItemKey = "navBarButtonItemKey"
     }
@@ -18,6 +40,8 @@ extension UIViewController {
     open override class func setValue(_ value: Any?, forUndefinedKey key: String) {
         debugLog("❌❌❌ 警告:", "\(self.self)", "类没有实现该属性: ", key)
     }
+    
+    
     
     
     ///模态一个半透明的视图。
