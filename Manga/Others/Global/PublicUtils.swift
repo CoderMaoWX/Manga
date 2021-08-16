@@ -8,6 +8,37 @@
 import Foundation
 import UIKit
 
+
+///获取成员变量
+func namesOfMemberVaribale(cls: AnyClass) -> [String] {
+    var resultArr: [String] = []
+    var count: UInt32 = 0
+    let ivars = class_copyIvarList(cls.self, &count)
+    
+    for i in 0 ..< count {
+        let tmpIvar = ivars![Int(i)]
+        let name = ivar_getName(tmpIvar)
+        resultArr.append(String(cString: name!))
+    }
+    free(ivars)
+    return resultArr
+}
+
+///获取类的属性名数组(只是声明property的成员变量)
+func propertyNamesOfMember(cls: AnyClass) -> [String] {
+    var resultArr: [String] = []
+    var count: UInt32 = 0
+    let propertys = class_copyPropertyList(cls.self, &count)
+    
+    for i in 0 ..< count {
+        let tmpProperty = propertys![Int(i)]
+        let name = property_getName(tmpProperty)
+        resultArr.append(String(cString: name))
+    }
+    free(propertys)
+    return resultArr
+}
+
 ///获取App最顶层的控制器
 func appTopVC() -> UIViewController? {
     let window = UIApplication.shared.keyWindow

@@ -37,7 +37,6 @@ class BoutiqueVC: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        debugLog("导航栏高度: \(tabBarHeight)")
         
         collectionView.addRefreshKit(startHeader: true, headerClosure:  { [weak self] in
             self?.loadData()
