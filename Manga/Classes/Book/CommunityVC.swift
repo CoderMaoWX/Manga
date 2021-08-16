@@ -43,17 +43,6 @@ class CommunityVC: BaseVC {
         }
     }
     
-    func testAlert() {
-        setNavBarRightItem(infoArr: ["谈事"]) { _ in
-            showAlertMultiple(title: "请闭上眼睛", message: "休息一下,马上回来...", otherBtnTitles: ["我要工作", "努力赚钱"], otherBtnClosure: { idx, title in
-                debugLog("== 好好工作 ==idx=\(idx), title=\(title)");
-                
-            }, cancelTitle: "好的") {
-                debugLog("== 好的 ==");
-            }
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         

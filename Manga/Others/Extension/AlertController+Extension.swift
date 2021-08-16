@@ -49,7 +49,7 @@ func showAlertMultiple(title: String?, message: String?,
             }
             let array = namesOfMemberVaribale(cls: UIAlertAction.self)
             if array.contains(colorKey) {
-                otherAction.setValue(UIColor.red, forKey: colorKey)
+                otherAction.setValue(UIColor.black, forKey: colorKey)
             }
             alertController.addAction(otherAction)
         }
@@ -61,7 +61,7 @@ func showAlertMultiple(title: String?, message: String?,
     }
     let array = namesOfMemberVaribale(cls: UIAlertAction.self)
     if array.contains(colorKey) {
-        cancelAction.setValue(UIColor.red, forKey: colorKey)
+        cancelAction.setValue(UIColor.black, forKey: colorKey)
     }
     alertController.addAction(cancelAction)
     let window = UIApplication.shared.delegate?.window

@@ -18,6 +18,21 @@ class BaseVC: UIViewController {
         initSubView()
         
         layoutSubView()
+        
+        //测试代码
+        testAlert()
+    }
+    
+    lazy var testLabel: UILabel = {
+        let label = UILabel()
+        label.text = "UILabel"
+        label.backgroundColor = .gray
+        label.frame = CGRect(x: 100, y: 100, width: 70, height: 20)
+        return label
+    }()
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        testLabel.dotValue = "58"
     }
     
     // MARK: - 初始化布局UI
@@ -27,6 +42,22 @@ class BaseVC: UIViewController {
     func layoutSubView()  {
         //由子类重写覆盖
     }
+    
+    //MARK: ----- 测试代码 -----
+    func testAlert() {
+        view.addSubview(testLabel)
+        testLabel.dotValue = "87"
+    }
+        
+//        setNavBarRightItem(infoArr: ["谈事"]) { _ in
+//            showAlertMultiple(title: "请闭上眼睛", message: "休息一下,马上回来...", otherBtnTitles: ["我要工作", "努力赚钱"], otherBtnClosure: { idx, title in
+//                debugLog("== 好好工作 ==idx=\(idx), title=\(title)");
+//
+//            }, cancelTitle: "好的") {
+//                debugLog("== 好的 ==");
+//            }
+//        }
+//    }
     
     ///公共配置
     func publicConfig() {

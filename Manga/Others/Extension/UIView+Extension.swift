@@ -9,6 +9,10 @@ import Foundation
 import UIKit
 import CoreGraphics
 
+///红点提示子视图
+let kDotLabelTag = 1949
+
+
 enum WXDrawLinePosition: Int {
     case top
     case left
@@ -23,7 +27,7 @@ extension UIView {
     }
     
     ///获取视图所在的控制器
-    func viewController() -> UIViewController? {
+    func currentViewController() -> UIViewController? {
         for view in sequence(first: self.superview, next: {$0?.superview}){
             if let responder = view?.next{
                 if responder.isKind(of: UIViewController.self){
@@ -139,6 +143,32 @@ extension UIView {
         return animation;
     }
     
+    ///红点提示
+    var dotValue: String? {
+        get {
+            let dotLabel = viewWithTag(kDotLabelTag) as? UILabel
+            return dotLabel?.text
+        }
+        set {
+            let dotLabel = (viewWithTag(kDotLabelTag) as? UILabel) ?? UILabel()
+            dotLabel.text = newValue
+            dotLabel.backgroundColor = .red
+            dotLabel.font = .boldSystemFont(ofSize: 12)
+            dotLabel.textAlignment = .center
+            dotLabel.textColor = .white
+            dotLabel.sizeToFit()
+            let size = dotLabel.bounds.size.width + 5
+            let selfX = bounds.size.width / 2
+            dotLabel.frame = CGRect(x: selfX, y: (-size / 2), width: size, height: size)
+            dotLabel.layer.cornerRadius = size / 2
+            dotLabel.layer.masksToBounds = true
+            dotLabel.clipsToBounds = true
+            addSubview(dotLabel)
+            dotLabel.text = newValue
+            layer.masksToBounds = false
+            clipsToBounds = false
+        }
+    }
     
     public typealias TapGestureClosure = @convention(block) (_ view: UIView) -> Void
     var tapGestureHandler:TapGestureClosure? {
