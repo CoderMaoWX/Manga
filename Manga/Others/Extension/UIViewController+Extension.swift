@@ -33,7 +33,9 @@ extension UIViewController {
     }
     
     fileprivate struct AssociatedKeys {
-        static var navBarButtonItemKey = "navBarButtonItemKey"
+        static var navBarItemTypeKey = "navBarItemTypeKey"
+        static var navBarLeftItemKey = "navBarLeftItemKey"
+        static var navBarRightItemKey = "navBarRightItemKey"
     }
     
     ///避免KVC设值异常
@@ -66,35 +68,40 @@ extension UIViewController {
     typealias NavBarItemActionClosure = @convention(block) (_ index: Int) -> ()
     ///添加左侧导航按钮
     func setNavBarLeftItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) {
-        let itemArr = createNavBarItems(object: info, actionClosure: actionClosure)
+        let itemArr = createNavBarItems(object: info, itemType:1, actionClosure: actionClosure)
         navigationItem.leftBarButtonItems = itemArr
     }
     
     ///添加右侧导航按钮
     func setNavBarRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) {
-        let itemArr = createNavBarItems(object: infoArr, actionClosure: actionClosure)
+        let itemArr = createNavBarItems(object: infoArr, itemType:2, actionClosure: actionClosure)
         navigationItem.rightBarButtonItems = itemArr
     }
 
     ///添加导航按钮
-    func createNavBarItems(object: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIBarButtonItem] {
+    func createNavBarItems(object: [Any],
+                           itemType: Int,
+                           actionClosure: @escaping NavBarItemActionClosure ) -> [UIBarButtonItem] {
         var barItemArr: [UIBarButtonItem] = []
         var index = -1
         
         for info in object {
-            let button = UIButton()
+            let button = UIButton(type: .system)
             if info is UIImage {
-                let image = info as! UIImage
+                var image = info as! UIImage
+                image = image.withRenderingMode(.alwaysOriginal)
                 button.setImage(image, for: .normal)
                 button.frame = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
                 
             } else if info is String {
                 button.setTitle((info as! String), for: .normal)
+                button.titleLabel?.font = .systemFont(ofSize: 14)
                 button.sizeToFit()
                 button.frame = CGRect(x: 0, y: 0, width: button.bounds.size.width, height: 30)
                 button.setTitleColor(UIColor.black, for: .normal)
                 
             }  else if info is NSAttributedString {
+                button.titleLabel?.font = .systemFont(ofSize: 14)
                 button.setAttributedTitle((info as! NSAttributedString), for: .normal)
                 button.sizeToFit()
                 button.frame = CGRect(x: 0, y: 0, width: button.bounds.size.width, height: 30)
@@ -107,18 +114,32 @@ extension UIViewController {
             index += 1
             button.tag = index
             
-            let dealObject: AnyObject = unsafeBitCast(actionClosure, to: AnyObject.self)
-            objc_setAssociatedObject(self, &AssociatedKeys.navBarButtonItemKey,dealObject,objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(button, &AssociatedKeys.navBarItemTypeKey, itemType, .OBJC_ASSOCIATION_ASSIGN)
             
+            let dealObject: AnyObject = unsafeBitCast(actionClosure, to: AnyObject.self)
+            if itemType == 1 {
+                objc_setAssociatedObject(self, &AssociatedKeys.navBarLeftItemKey, dealObject, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            } else {
+                objc_setAssociatedObject(self, &AssociatedKeys.navBarRightItemKey, dealObject, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            }
             let barItem = UIBarButtonItem(customView: button)
             let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-            barItemArr += [spaceItem, barItem]
+            spaceItem.width = 15
+            barItemArr .insert(contentsOf: [barItem, spaceItem], at: 0)
         }
         return barItemArr
     }
     
-    @objc func navBarItemAction(sender: AnyObject) {
-        let closureObject: AnyObject? = objc_getAssociatedObject(self, &AssociatedKeys.navBarButtonItemKey) as AnyObject?
+    @objc func navBarItemAction(sender: UIButton) {
+        let itemType: AnyObject? = objc_getAssociatedObject(self, &AssociatedKeys.navBarItemTypeKey) as AnyObject?
+        guard let type = itemType as? Int else { return }
+        
+        var closureObject: AnyObject?
+        if type == 1 {
+            closureObject = objc_getAssociatedObject(self, &AssociatedKeys.navBarLeftItemKey) as AnyObject?
+        } else {
+            closureObject = objc_getAssociatedObject(self, &AssociatedKeys.navBarRightItemKey) as AnyObject?
+        }
         guard closureObject != nil else { return }
         let closure = unsafeBitCast(closureObject, to: NavBarItemActionClosure.self)
         closure(sender.tag)

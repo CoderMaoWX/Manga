@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import CoreGraphics
+import SnapKit
 
 ///红点提示子视图
 let kDotLabelTag = 1949
@@ -150,23 +151,34 @@ extension UIView {
             return dotLabel?.text
         }
         set {
-            let dotLabel = (viewWithTag(kDotLabelTag) as? UILabel) ?? UILabel()
-            dotLabel.text = newValue
-            dotLabel.backgroundColor = .red
-            dotLabel.font = .boldSystemFont(ofSize: 12)
-            dotLabel.textAlignment = .center
-            dotLabel.textColor = .white
-            dotLabel.sizeToFit()
-            let size = dotLabel.bounds.size.width + 5
-            let selfX = bounds.size.width / 2
-            dotLabel.frame = CGRect(x: selfX, y: (-size / 2), width: size, height: size)
-            dotLabel.layer.cornerRadius = size / 2
-            dotLabel.layer.masksToBounds = true
-            dotLabel.clipsToBounds = true
-            addSubview(dotLabel)
-            dotLabel.text = newValue
-            layer.masksToBounds = false
-            clipsToBounds = false
+            if let text = newValue {
+                let dotLabel = (viewWithTag(kDotLabelTag) as? UILabel) ?? UILabel()
+                dotLabel.tag = kDotLabelTag
+                dotLabel.text = text
+                dotLabel.backgroundColor = .red
+                dotLabel.font = .boldSystemFont(ofSize: 12)
+                dotLabel.textAlignment = .center
+                dotLabel.textColor = .white
+                dotLabel.layer.masksToBounds = true
+                dotLabel.clipsToBounds = true
+                dotLabel.text = newValue
+                layer.masksToBounds = false
+                clipsToBounds = false
+                dotLabel.sizeToFit()
+                let dotH = dotLabel.bounds.size.height
+                var dotW = dotLabel.bounds.size.width + (newValue?.count ?? 0 > 1 ? 5 : 0)
+                if dotW < dotH {  dotW = dotH }
+                dotLabel.layer.cornerRadius = dotH / 2
+                addSubview(dotLabel)
+                dotLabel.snp.makeConstraints {
+                    $0.leading.equalTo(self.snp.trailing).offset(-dotW/2)
+                    $0.top.equalTo(self.snp.top).offset(-dotH/2)
+                    $0.size.equalTo(CGSize(width: dotW, height: dotH))
+                }
+            } else {
+                let dotLabel = viewWithTag(kDotLabelTag)
+                dotLabel?.removeFromSuperview()
+            }
         }
     }
     
