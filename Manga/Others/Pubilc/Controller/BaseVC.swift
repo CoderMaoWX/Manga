@@ -93,6 +93,7 @@ class BaseVC: UIViewController {
     //MARK: - 导航器销毁事件
     deinit {
         NotificationCenter.default.removeObserver(self)
+        debugLog("♻️♻️♻️ \(self.className) 已销毁 ♻️♻️♻️")
     }
     
 }

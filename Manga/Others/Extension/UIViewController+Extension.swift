@@ -39,7 +39,7 @@ extension UIViewController {
     }
     
     ///避免KVC设值异常
-    open override class func setValue(_ value: Any?, forUndefinedKey key: String) {
+    open override func setValue(_ value: Any?, forUndefinedKey key: String) {
         debugLog("❌❌❌ 警告:", "\(self.self)", "类没有实现该属性: ", key)
     }
     

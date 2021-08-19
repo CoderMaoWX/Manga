@@ -56,8 +56,8 @@ class WebVC: BaseVC {
     
     func configNavgationBar() {
         let image = UIImage(named: "nav_reload")?.withRenderingMode(.alwaysOriginal)
-        setNavBarRightItem(infoArr: [image as Any]) { _ in
-            self.webView.reload()
+        setNavBarRightItem(infoArr: [image as Any]) { [weak self] _ in
+            self?.webView.reload()
         }
     }
     
