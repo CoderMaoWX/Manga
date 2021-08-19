@@ -63,23 +63,37 @@ extension UIViewController {
     //MARK: ======== UIBarButtonItem ========
     
     typealias NavBarItemActionClosure = @convention(block) (_ index: Int) -> ()
-    ///添加左侧导航按钮
-    func setNavBarLeftItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) {
-        let itemArr = createNavBarItems(object: info, itemType:1, actionClosure: actionClosure)
-        navigationItem.leftBarButtonItems = itemArr
+    
+    /// 添加左侧导航按钮
+    /// - Parameters:
+    ///   - info: 数组装多个: String/UIImage
+    ///   - actionClosure: 按钮的回调事件
+    /// - Returns: 返回多个: UIButton
+    @discardableResult
+    func setNavBarLeftItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
+        let tuples = createNavBarItems(object: info, itemType:1, actionClosure: actionClosure)
+        navigationItem.leftBarButtonItems = tuples.0
+        return tuples.1
     }
     
-    ///添加右侧导航按钮
-    func setNavBarRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) {
-        let itemArr = createNavBarItems(object: infoArr, itemType:2, actionClosure: actionClosure)
-        navigationItem.rightBarButtonItems = itemArr
+    /// 添加右侧导航按钮
+    /// - Parameters:
+    ///   - infoArr: 数组装多个: String/UIImage
+    ///   - actionClosure: 按钮的回调事件
+    /// - Returns: 返回多个: UIButton
+    @discardableResult
+    func setNavBarRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
+        let tuples = createNavBarItems(object: infoArr, itemType:2, actionClosure: actionClosure)
+        navigationItem.rightBarButtonItems = tuples.0
+        return tuples.1
     }
 
     ///添加导航按钮
     func createNavBarItems(object: [Any],
                            itemType: Int,
-                           actionClosure: @escaping NavBarItemActionClosure ) -> [UIBarButtonItem] {
+                           actionClosure: @escaping NavBarItemActionClosure ) -> ([UIBarButtonItem], [UIButton]) {
         var barItemArr: [UIBarButtonItem] = []
+        var barButtonArr: [UIButton] = []
         var index = -1
         
         for info in object {
@@ -88,25 +102,27 @@ extension UIViewController {
                 var image = info as! UIImage
                 image = image.withRenderingMode(.alwaysOriginal)
                 button.setImage(image, for: .normal)
-                button.frame = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
                 
             } else if info is String {
                 button.setTitle((info as! String), for: .normal)
                 button.titleLabel?.font = .systemFont(ofSize: 14)
-                button.sizeToFit()
-                button.frame = CGRect(x: 0, y: 0, width: button.bounds.size.width, height: 30)
-                button.setTitleColor(UIColor.black, for: .normal)
                 
             }  else if info is NSAttributedString {
                 button.titleLabel?.font = .systemFont(ofSize: 14)
-                button.setAttributedTitle((info as! NSAttributedString), for: .normal)
-                button.sizeToFit()
-                button.frame = CGRect(x: 0, y: 0, width: button.bounds.size.width, height: 30)
-                button.setTitleColor(UIColor.black, for: .normal)
-            } else {
+                button.setAttributedTitle((info as! NSAttributedString), for: .normal)            } else {
                 continue
             }
-            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+            button.sizeToFit()
+            button.setTitleColor(UIColor.black, for: .normal)
+            let width = max(30, button.bounds.size.width)
+            let height = max(30, button.bounds.size.height)
+            button.frame = CGRect(x: 0, y: 0, width: width , height: height)
+            button.snp.makeConstraints {
+                $0.size.equalTo(CGSize(width: width, height: height))
+            }
+            //let leftSpace: CGFloat = (itemType == 1) ? -8 : 0 //设置偏移
+            //let rightSpace: CGFloat = (itemType == 1) ? 0 : -15
+            //button.contentEdgeInsets = UIEdgeInsets(top: 0, left: leftSpace, bottom: 0, right: rightSpace)
             button.addTarget(self, action: #selector(self.navBarItemAction), for: .touchUpInside)
             index += 1
             button.tag = index
@@ -122,9 +138,10 @@ extension UIViewController {
             let barItem = UIBarButtonItem(customView: button)
             let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
             spaceItem.width = 15
-            barItemArr .insert(contentsOf: [barItem, spaceItem], at: 0)
+            barItemArr.insert(contentsOf: [barItem], at: 0)
+            barButtonArr.append(button)
         }
-        return barItemArr
+        return (barItemArr, barButtonArr)
     }
     
     @objc func navBarItemAction(sender: UIButton) {

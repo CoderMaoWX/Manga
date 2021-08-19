@@ -90,11 +90,21 @@ extension Manga where Base: UIImageView {
 //MARK: =========== 扩展 ===========
 
 //MARK: - 全局打印日志方法
-func debugLog(_ message: Any..., file: String = #file, function: String = #function, lineNumber: Int = #line) {
+func debugLog(_ message: Any...,
+              file: String = #file,
+              function: String = #function,
+              lineNumber: Int = #line) {
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
         //debugLog("[\(fileName):funciton:\(function):line:\(lineNumber)]- \(message)")
-    print("[\(fileName): line:\(lineNumber)]", message)
+    
+        var appdengLog: String = ""
+        var idx = message.count
+        for log in message {
+            appdengLog += "\(log)" + ( (idx != 1) ? " " : "" )
+            idx -= 1
+        }
+        print("[\(fileName): line:\(lineNumber)]", appdengLog)
     #endif
 }
 

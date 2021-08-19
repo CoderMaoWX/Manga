@@ -23,16 +23,8 @@ class BaseVC: UIViewController {
         testAlert()
     }
     
-    lazy var testLabel: UILabel = {
-        let label = UILabel()
-        label.text = "UILabel"
-        label.backgroundColor = .gray
-        label.frame = CGRect(x: 100, y: 100, width: 70, height: 20)
-        return label
-    }()
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        showLoading(toView: view)
+//        showLoading(toView: view)
     }
     
     // MARK: - 初始化布局UI
@@ -45,18 +37,17 @@ class BaseVC: UIViewController {
     
     //MARK: ----- 测试代码 -----
     func testAlert() {
-        view.addSubview(testLabel)
-        testLabel.redDotValue = "58"
-        
-        setNavBarLeftItem(info: ["测试1"]) { _ in
+        setNavBarLeftItem(info: ["测试3"]) { _ in
             hideLoading(from: self.view)
         }
-        
-        setNavBarRightItem(infoArr: ["测试2", UIImage(named: "search_history_delete")! ] ) { idx in
-            debugLog("self.testLabel.dotValue \(idx)")
-            
+        let img1 = UIImage(named: "search_history_delete")!
+        let img2 = UIImage(named: "search_keyword_refresh")!
+
+        let btnArr = setNavBarRightItem(infoArr: [img1, img2] ) { idx in
+            debugLog("self.testLabel.dotValue", idx, "后缀")
             showToastText("测试一下Toast", toView: self.view)
         }
+        btnArr.first!.redDotValue = "18"
     }
         
 //        setNavBarRightItem(infoArr: ["谈事"]) { _ in
@@ -71,7 +62,7 @@ class BaseVC: UIViewController {
     
     ///公共配置
     func publicConfig() {
-        view.backgroundColor = .background
+        view.backgroundColor = .white
         edgesForExtendedLayout = .all
         extendedLayoutIncludesOpaqueBars = false
 
