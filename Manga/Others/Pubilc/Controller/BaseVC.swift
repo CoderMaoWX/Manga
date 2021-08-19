@@ -32,7 +32,7 @@ class BaseVC: UIViewController {
     }()
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        testLabel.dotValue = nil
+        testLabel.redDotValue = "123"
     }
     
     // MARK: - 初始化布局UI
@@ -46,14 +46,19 @@ class BaseVC: UIViewController {
     //MARK: ----- 测试代码 -----
     func testAlert() {
         view.addSubview(testLabel)
-        testLabel.dotValue = "58"
+        testLabel.redDotValue = "58"
         
         setNavBarLeftItem(info: ["测试1"]) { _ in
-            self.testLabel.dotValue = "139"
+            self.testLabel.redDotValue = "39"
         }
         
         setNavBarRightItem(infoArr: ["测试2", UIImage(named: "search_history_delete")! ] ) { idx in
             debugLog("self.testLabel.dotValue \(idx)")
+            if idx == 0 {
+                self.testLabel.redDotValue("139", offset: .zero)
+            } else {
+                self.testLabel.redDotValue(nil, offset: CGPoint(x: -10, y: -5))
+            }
         }
     }
         

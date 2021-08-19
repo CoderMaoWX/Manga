@@ -144,13 +144,18 @@ extension UIView {
         return animation;
     }
     
-    ///红点提示
-    var dotValue: String? {
+    ///设置/获取: 红点数字提示
+    var redDotValue: String? {
         get {
             let dotLabel = viewWithTag(kDotLabelTag) as? UILabel
             return dotLabel?.text
         }
         set {
+            if let number = Int(newValue ?? "0"), number == 0 {
+                let dotLabel = viewWithTag(kDotLabelTag)
+                dotLabel?.removeFromSuperview()
+                return
+            }
             if let text = newValue {
                 let dotLabel = (viewWithTag(kDotLabelTag) as? UILabel) ?? UILabel()
                 dotLabel.tag = kDotLabelTag
@@ -159,25 +164,42 @@ extension UIView {
                 dotLabel.font = .boldSystemFont(ofSize: 12)
                 dotLabel.textAlignment = .center
                 dotLabel.textColor = .white
-                dotLabel.layer.masksToBounds = true
-                dotLabel.clipsToBounds = true
-                dotLabel.text = newValue
-                layer.masksToBounds = false
-                clipsToBounds = false
+                dotLabel.text = (text.count > 2) ? "99+" : text
                 dotLabel.sizeToFit()
                 let dotH = dotLabel.bounds.size.height
-                var dotW = dotLabel.bounds.size.width + (newValue?.count ?? 0 > 1 ? 5 : 0)
+                var dotW = dotLabel.bounds.size.width + (text.count > 1 ? 5 : 0)
                 if dotW < dotH {  dotW = dotH }
                 dotLabel.layer.cornerRadius = dotH / 2
+                dotLabel.layer.masksToBounds = true
+                dotLabel.clipsToBounds = true
+                layer.masksToBounds = false
+                clipsToBounds = false
                 addSubview(dotLabel)
-                dotLabel.snp.makeConstraints {
+                dotLabel.snp.remakeConstraints {
                     $0.leading.equalTo(self.snp.trailing).offset(-dotW/2)
                     $0.top.equalTo(self.snp.top).offset(-dotH/2)
                     $0.size.equalTo(CGSize(width: dotW, height: dotH))
                 }
-            } else {
-                let dotLabel = viewWithTag(kDotLabelTag)
-                dotLabel?.removeFromSuperview()
+            }
+        }
+    }
+    
+    /// 设置: 红点数字提示
+    /// - Parameters:
+    ///   - number: 提示的数字
+    ///   - offset: 在控件右上角的基础上进行 偏移控制
+    func redDotValue(_ number: String?, offset: CGPoint) {
+        redDotValue = number
+        let dotLabel = viewWithTag(kDotLabelTag)
+        if let numberString = number, let dotLabel = dotLabel, dotLabel.superview != nil  {
+            dotLabel.sizeToFit()
+            let dotH = dotLabel.bounds.size.height
+            var dotW = dotLabel.bounds.size.width + (numberString.count > 1 ? 5 : 0)
+            if dotW < dotH {  dotW = dotH }
+            dotLabel.snp.remakeConstraints {
+                $0.leading.equalTo(self.snp.trailing).offset(-dotW/2 + offset.x)
+                $0.top.equalTo(self.snp.top).offset(-dotH/2 + offset.y)
+                $0.size.equalTo(CGSize(width: dotW, height: dotH))
             }
         }
     }

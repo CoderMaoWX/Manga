@@ -33,18 +33,15 @@ extension UIViewController {
     }
     
     fileprivate struct AssociatedKeys {
-        static var navBarItemTypeKey = "navBarItemTypeKey"
-        static var navBarLeftItemKey = "navBarLeftItemKey"
-        static var navBarRightItemKey = "navBarRightItemKey"
+        static var navBarItemTypeKey: Void?
+        static var navBarLeftItemKey: Void?
+        static var navBarRightItemKey: Void?
     }
     
     ///避免KVC设值异常
     open override class func setValue(_ value: Any?, forUndefinedKey key: String) {
         debugLog("❌❌❌ 警告:", "\(self.self)", "类没有实现该属性: ", key)
     }
-    
-    
-    
     
     ///模态一个半透明的视图。
     func presentTranslucentVC(tagrtVC: UIViewController, animated: Bool, completion: @escaping ()->()) {
@@ -110,7 +107,7 @@ extension UIViewController {
                 continue
             }
             button.contentEdgeInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
-            button.addTarget(self, action: #selector(navBarItemAction), for: .touchUpInside)
+            button.addTarget(self, action: #selector(self.navBarItemAction), for: .touchUpInside)
             index += 1
             button.tag = index
             
@@ -131,7 +128,7 @@ extension UIViewController {
     }
     
     @objc func navBarItemAction(sender: UIButton) {
-        let itemType: AnyObject? = objc_getAssociatedObject(self, &AssociatedKeys.navBarItemTypeKey) as AnyObject?
+        let itemType = objc_getAssociatedObject(sender, &AssociatedKeys.navBarItemTypeKey)
         guard let type = itemType as? Int else { return }
         
         var closureObject: AnyObject?
