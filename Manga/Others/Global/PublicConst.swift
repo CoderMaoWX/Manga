@@ -33,6 +33,11 @@ var kAppStoreDownloadURL: String {
 
 
 //MARK: - 常亮相关
+let kToastShowTime            = 1.5
+let kLoadingHUDTag            = 7987
+let kLoadingViewKey           = "kLoadingViewKey"
+
+
 
 
 //MARK: - ...
