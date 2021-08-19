@@ -20,11 +20,7 @@ class BaseVC: UIViewController {
         layoutSubView()
         
         //测试代码
-        testAlert()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        showLoading(toView: view)
+//        testAlert()
     }
     
     // MARK: - 初始化布局UI
@@ -37,28 +33,27 @@ class BaseVC: UIViewController {
     
     //MARK: ----- 测试代码 -----
     func testAlert() {
-        setNavBarLeftItem(info: ["测试3"]) { _ in
+        setNavBarLeftItem(info: ["测试"]) { _ in
             hideLoading(from: self.view)
-        }
-        let img1 = UIImage(named: "search_history_delete")!
-        let img2 = UIImage(named: "search_keyword_refresh")!
-
-        let btnArr = setNavBarRightItem(infoArr: [img1, img2] ) { idx in
-            debugLog("self.testLabel.dotValue", idx, "后缀")
-            showToastText("测试一下Toast", toView: self.view)
-        }
-        btnArr.first!.redDotValue = "18"
-    }
+            
+        }.first!.redDotValue = "18"
         
-//        setNavBarRightItem(infoArr: ["谈事"]) { _ in
-//            showAlertMultiple(title: "请闭上眼睛", message: "休息一下,马上回来...", otherBtnTitles: ["我要工作", "努力赚钱"], otherBtnClosure: { idx, title in
-//                debugLog("== 好好工作 ==idx=\(idx), title=\(title)");
-//
-//            }, cancelTitle: "好的") {
-//                debugLog("== 好的 ==");
-//            }
-//        }
-//    }
+        let img1 = UIImage(named: "search_keyword_refresh")!
+        let img2 = UIImage(named: "search_history_delete")!
+        setNavBarRightItem(infoArr: [img1, img2] ) { idx in
+            
+            showAlertMultiple(title: "请闭上眼睛",
+                              message: "休息一下,马上回来...",
+                              otherBtnTitles: ["去睡觉", "玩游戏"],
+                              otherBtnClosure: { idx, title in
+                showToastText("\(title)", toView: self.view)
+                debugLog("dotValue", idx)
+                                
+            }, cancelTitle: "好的") {
+                showToastText("好的", toView: self.view)
+            }
+        }
+    }
     
     ///公共配置
     func publicConfig() {

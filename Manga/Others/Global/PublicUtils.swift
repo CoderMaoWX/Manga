@@ -141,7 +141,7 @@ func createAttributedStr(textArr: [Any?],
                          colorArr: [UIColor],
                          spacing: CGFloat,
                          imgOffset: CGFloat = 12,
-                         alignment: NSTextAlignment) -> NSAttributedString? {
+                         alignment: NSTextAlignment) -> NSMutableAttributedString? {
     
     guard textArr.count > 0, fontArr.count > 0, colorArr.count > 0 else {
         return nil

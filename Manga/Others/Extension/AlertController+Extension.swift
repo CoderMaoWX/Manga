@@ -72,6 +72,7 @@ func showAlertMultiple(title: String?, message: String?,
 
 extension UIAlertController {
     
+    ///点击系统UIAlertController弹框背景移除弹框
     public func enableDismissAtOutside() {
         let subviews = UIApplication.shared.keyWindow?.subviews
         
