@@ -15,6 +15,8 @@
 		5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E926CA05FB00246D19 /* AlertController+Extension.swift */; };
 		583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583D452025CBF6A500C053F7 /* UCateModel.swift */; };
 		584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9625C3F27A00FA507C /* AppDelegate.swift */; };
+		58763FB926CF9D8000AA3985 /* WXNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */; };
+		58763FBB26CFB3F200AA3985 /* WXNetworkConstr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */; };
 		5887389825C5587C0049ECAD /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389725C5587C0049ECAD /* HomeVC.swift */; };
 		5887389B25C558C00049ECAD /* CateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389A25C558C00049ECAD /* CateVC.swift */; };
 		5887389E25C558D10049ECAD /* CommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389D25C558D10049ECAD /* CommunityVC.swift */; };
@@ -68,6 +70,8 @@
 		583D452025CBF6A500C053F7 /* UCateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UCateModel.swift; sourceTree = "<group>"; };
 		584D5D9325C3F27A00FA507C /* Manga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584D5D9625C3F27A00FA507C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkRequest.swift; sourceTree = "<group>"; };
+		58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkConstr.swift; sourceTree = "<group>"; };
 		5887389725C5587C0049ECAD /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		5887389A25C558C00049ECAD /* CateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CateVC.swift; sourceTree = "<group>"; };
 		5887389D25C558D10049ECAD /* CommunityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityVC.swift; sourceTree = "<group>"; };
@@ -266,7 +270,6 @@
 				58CDFB5026BA33F000056527 /* UIViewController+Extension.swift */,
 				58CDFB5126BA33F000056527 /* String+Extension.swift */,
 				58CDFB5226BA33F000056527 /* Dictionary+Extension.swift */,
-				58CDFB5426BA33F000056527 /* Array+Extension.swift */,
 				58CDFB5326BA33F000056527 /* UIScrollView+Extension.swift */,
 				5824E5DF26C6181600246D19 /* ListView+Extension.swift */,
 				5824E5E126C6183000246D19 /* TableView+Extension.swift */,
@@ -280,6 +283,8 @@
 			isa = PBXGroup;
 			children = (
 				58CDFB5626BA33F000056527 /* ApiClass.swift */,
+				58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */,
+				58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -478,6 +483,7 @@
 				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
 				5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */,
+				58763FB926CF9D8000AA3985 /* WXNetworkRequest.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,
 				5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */,
@@ -487,6 +493,7 @@
 				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,
 				5824E5E826C66D4200246D19 /* PublicUtils.swift in Sources */,
 				5899402B26BA39B20086C830 /* MonitorLoad.m in Sources */,
+				58763FBB26CFB3F200AA3985 /* WXNetworkConstr.swift in Sources */,
 				58CDFB7326BA33F100056527 /* UIScrollView+Extension.swift in Sources */,
 				58B812DB262D3D9400EB00C7 /* MineCenterHeaderView.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,
