@@ -7,6 +7,9 @@
 
 import Foundation
 
+let KWXRequestFailueTipMessage = "Loading failed, please try again later."
+let kWXRequestDataFromCacheKey = "WXNetwork_DataFromCacheKey"
+
 protocol WXNetworkMulticenter {
     
     /// 网络请求将要开始回调

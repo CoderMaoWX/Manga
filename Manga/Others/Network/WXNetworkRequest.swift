@@ -8,6 +8,12 @@
 import Foundation
 import Alamofire
 
+enum WXRequestMulticenterType: Int {
+    case WillStart
+    case WillStop
+    case DidCompletion
+}
+
 typealias WXNetworkResponseBlock = (WXResponseModel) -> ()
 typealias WXNetworkSuccessBlock = (Any) -> ()
 typealias WXNetworkFailureBlock = (Error) -> ()
@@ -86,9 +92,10 @@ class WXResponseModel: NSObject {
     var responseObject: AnyObject? = nil
     var responseDict: Dictionary<String, String>? = nil
     var responseMsg: String? = nil
-    var error: Error? = nil
+    var error: NSError? = nil
     var urlResponse: HTTPURLResponse? = nil
     var originalRequest: URLRequest? = nil
+    fileprivate (set) var apiUniquelyIp: String?  = nil
 }
 
 typealias WXCacheResponseClosure = (WXResponseModel) -> (Dictionary<String, String>)
@@ -169,15 +176,135 @@ class WXNetworkRequest: WXBaseRequest {
         return dat.timeIntervalSince1970 * 1000
     }
     
+    func judgeShowLoading(show: Bool) {
+        let config = WXNetworkConfig.shared.showRequestLaoding
+        guard config else { return }
+        if let loadingSuperView = loadingSuperView {
+            DispatchQueue.main.async {
+                if show {
+                    showLoading(toView: loadingSuperView)
+                } else {
+                    hideLoading(from: loadingSuperView)
+                }
+            }
+        }
+    }
+    
+    var configFailMessage: String {
+        return KWXRequestFailueTipMessage
+    }
+    
+    
     func configResponseModel(responseObj: AnyObject) -> WXResponseModel? {
         let rspModel = WXResponseModel()
-        rspModel.responseDuration  = getCurrentTimestamp() - self.requestDuration;
-//        rspModel.apiUniquelyIp     = self.apiUniquelyIp;
-//        rspModel.responseObject    = responseObj;
+        rspModel.responseDuration  = getCurrentTimestamp() - self.requestDuration
+        rspModel.apiUniquelyIp     = apiUniquelyIp
+        rspModel.responseObject    = responseObj
         
+        rspModel.originalRequest = requestDataTask?.originalRequest
         
+        if let urlResponse = requestDataTask?.response as? HTTPURLResponse {
+            rspModel.urlResponse = urlResponse
+        }
+        
+        if let error = responseObj as? Error {
+            rspModel.isSuccess     = false
+            rspModel.isCacheData   = false
+            rspModel.responseMsg   = configFailMessage
+            rspModel.responseCode  = error._code
+            rspModel.error = NSError(domain: configFailMessage, code: error._code, userInfo: nil)
+            
+        } else {
+            let responseDict = packagingResponseObj(responseObj: responseObj, responseModel: rspModel)
+            let config = WXNetworkConfig.shared
+            let responseCode = responseDict[config.statusKey]
+            let code = Int(responseCode ?? "0")!
+            rspModel.responseDict = responseDict
+            rspModel.responseCode = code
+            if let _ = responseCode, code == config.statusCode {
+                rspModel.isSuccess = true
+            }
+            
+            if let msg = responseDict[config.messageKey] {
+                rspModel.responseMsg = msg
+            }
+            
+            if rspModel.isSuccess {
+                
+            } else {
+                rspModel.responseMsg = rspModel.responseMsg ?? configFailMessage
+                rspModel.error = NSError(domain: rspModel.responseMsg!, code: code, userInfo: responseDict)
+            }
+        }
+        if rspModel.isCacheData == false {
+            handleMulticenter(type: .WillStop, responseModel: rspModel)
+        }
         return nil
         
     }
+    
+    func handleMulticenter(type: WXRequestMulticenterType, responseModel: WXResponseModel) {
+        
+        var delegate: WXNetworkMulticenter?
+        if let tmpDelegate = multicenterDelegate {
+            delegate = tmpDelegate
+        } else {
+            delegate = WXNetworkConfig.shared.globleMulticenterDelegate
+        }
+        switch type {
+        case .WillStart:
+            judgeShowLoading(show: true)
+            requestDuration = getCurrentTimestamp()
+            
+            delegate?.requestWillStart(request: self)
+            
+            if let requestAccessories = requestAccessories {
+                for accessory in requestAccessories {
+                    accessory.requestWillStart(request: self)
+                }
+            }
+            
+            
+        case .WillStop:
+
+
+        case .DidCompletion:
+
+        default:
+            break
+        }
+        
+        
+    }
+    
+    
+    func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> Dictionary<String, String> {
+        let config = WXNetworkConfig.shared
+        var responseDcit: [String : String] = [:]
+        
+        if responseObj is Dictionary<String, String> {
+            responseDcit += responseObj as! Dictionary<String, String>
+            
+            if let _ = responseDcit[kWXRequestDataFromCacheKey] {
+                responseDcit.removeValue(forKey: kWXRequestDataFromCacheKey)
+                responseModel.isCacheData = true
+                
+            } else if responseObj is Data {
+                let rspData = responseObj.mutableCopy()
+                if let rspData = rspData as? Data {
+                    responseModel.responseObject = rspData as AnyObject
+                }
+            } else {
+                //注意:不能直接赋值responseObj, 因为插件库那边会dataWithJSONObject打印会崩溃
+                //responseDcit[config.customModelKey] = [responseObj description];
+            }
+            //只要返回为非Error就包装一个公共的key, 防止页面当失败解析
+            if responseDcit[config.statusKey] == nil {
+                responseDcit[config.statusKey] = "\(config.statusCode)"
+            }
+        }
+        return responseDcit
+    }
+
     
 }

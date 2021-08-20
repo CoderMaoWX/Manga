@@ -57,6 +57,7 @@
 		58CDFB8926BA34E200056527 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB8626BA34E200056527 /* LaunchScreen.storyboard */; };
 		7075E033816A232E3D55CCF6 /* libPods-Manga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */; };
 		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
+		A39301BE26CFF6D4002EF3AB /* WXNetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39301BD26CFF6D4002EF3AB /* WXNetworkConfig.swift */; };
 		A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */; };
 /* End PBXBuildFile section */
 
@@ -115,6 +116,7 @@
 		58CDFB8726BA34E200056527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Manga.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A32CD80E25CC494A009A5C56 /* URankCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URankCCell.swift; sourceTree = "<group>"; };
+		A39301BD26CFF6D4002EF3AB /* WXNetworkConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkConfig.swift; sourceTree = "<group>"; };
 		A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwizzlingMethod.swift; sourceTree = "<group>"; };
 		C4DEF34117E1022E8F7858A7 /* Pods-Manga.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Manga.debug.xcconfig"; path = "Target Support Files/Pods-Manga/Pods-Manga.debug.xcconfig"; sourceTree = "<group>"; };
 		C7AFDB0A11E2C413F9EE7078 /* Pods-Manga.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Manga.release.xcconfig"; path = "Target Support Files/Pods-Manga/Pods-Manga.release.xcconfig"; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				58CDFB5626BA33F000056527 /* ApiClass.swift */,
 				58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */,
 				58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */,
+				A39301BD26CFF6D4002EF3AB /* WXNetworkConfig.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				5887389E25C558D10049ECAD /* CommunityVC.swift in Sources */,
 				58CDFB7126BA33F100056527 /* String+Extension.swift in Sources */,
 				58B4924E25CFDDF10052A97C /* UDetailCateCell.swift in Sources */,
+				A39301BE26CFF6D4002EF3AB /* WXNetworkConfig.swift in Sources */,
 				5887389825C5587C0049ECAD /* HomeVC.swift in Sources */,
 				58CDFB7426BA33F100056527 /* Array+Extension.swift in Sources */,
 				58CDFB6F26BA33F100056527 /* UIImage+Extension.swift in Sources */,
