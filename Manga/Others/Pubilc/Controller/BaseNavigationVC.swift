@@ -68,7 +68,7 @@ class BaseNavigationVC: UINavigationController {
         super.pushViewController(viewController, animated: animated)
         
         if animated {
-            DispatchQueue.jk.asyncDelay(0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self.prohibitPush = false
             }
         }
@@ -101,7 +101,7 @@ class BaseNavigationVC: UINavigationController {
             return nil
         }
         if animated {
-            DispatchQueue.jk.asyncDelay(0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self.prohibitPop = false
             }
         }

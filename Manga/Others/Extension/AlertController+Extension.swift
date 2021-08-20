@@ -69,13 +69,40 @@ func showAlertMultiple(title: String?, message: String?,
     return alertController
 }
 
+///显示AlertToast文案
+func showAlertToast(message: String) {
+    ///在主线程中显示UI
+    DispatchQueue.main.async {
+        let alertController = UIAlertController(title: nil, message: message)
+        
+        let replaceKey = "_attributedMessage"
+        let array = namesOfMemberVaribale(cls: UIAlertController.self)
+        if array.contains(replaceKey) {
+            let attributedMsg = NSMutableAttributedString(string: message)
+            
+            attributedMsg.addAttributes(
+                [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13),
+                 NSAttributedString.Key.foregroundColor : UIColor.black,   ],
+                range: NSRange(location: 0, length: attributedMsg.string.count))
+            
+            alertController.setValue(attributedMsg, forKey: replaceKey)
+        }
+        
+        let window = UIApplication.shared.delegate?.window
+        window??.rootViewController?.present(alertController, animated: true, completion: {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                alertController.dismiss(animated: true, completion: nil)
+            }
+        })
+    }
+}
 
 extension UIAlertController {
     
     ///点击系统UIAlertController弹框背景移除弹框
     public func enableDismissAtOutside() {
         let subviews = UIApplication.shared.keyWindow?.subviews
-        
         guard let _subviews = subviews, _subviews.count > 0 else {
             return
         }

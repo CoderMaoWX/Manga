@@ -230,7 +230,7 @@ func activityLoading(style: UIActivityIndicatorView.Style? = .gray, color: UICol
 /// 获取Loading弹框
 /// - Parameter parmater: (可传字段包装含有kLoadingViewKey的键值对)
 /// - Returns: Loading弹框父视图
-func fetchHUDSuperView(parmater: AnyObject) -> UIView {
+fileprivate func fetchHUDSuperView(parmater: AnyObject) -> UIView {
     if let loadingView =  parmater as? UIView {
         return loadingView
         
@@ -253,17 +253,21 @@ func fetchHUDSuperView(parmater: AnyObject) -> UIView {
 /// 隐藏指定视图上的loading框
 /// - Parameter view: 指定视图参数 (可传字段包装含有kLoadingViewKey的键值对)
 func hideLoading(from view: AnyObject, animation: Bool = true) {
-    let loadingSuperView = fetchHUDSuperView(parmater: view)
-    for tmpView in loadingSuperView.subviews where tmpView.tag == kLoadingHUDTag {
-        if animation {
-            UIView.animate(withDuration: 0.1) {
-                tmpView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-                tmpView.alpha = 0.0
-            } completion: { _ in
+    ///在主线程中显示UI
+    DispatchQueue.main.async {
+        
+        let loadingSuperView = fetchHUDSuperView(parmater: view)
+        for tmpView in loadingSuperView.subviews where tmpView.tag == kLoadingHUDTag {
+            if animation {
+                UIView.animate(withDuration: 0.1) {
+                    tmpView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                    tmpView.alpha = 0.0
+                } completion: { _ in
+                    tmpView.removeFromSuperview()
+                }
+            } else {
                 tmpView.removeFromSuperview()
             }
-        } else {
-            tmpView.removeFromSuperview()
         }
     }
 }
@@ -271,37 +275,41 @@ func hideLoading(from view: AnyObject, animation: Bool = true) {
 /// 指定视图上显示loading框 (可传字段包装含有kLoadingViewKey的键值对)
 /// - Parameter paramater: loading框的父视图, 如果传nil,则会在Window上显示
 func showLoading(toView paramater: AnyObject, animation: Bool = true) {
-    let loadingSuperView = fetchHUDSuperView(parmater: paramater)
-    hideLoading(from: paramater, animation: false)
-    
-    let oldToastView = loadingSuperView.viewWithTag(kLoadingHUDTag)
-    oldToastView?.removeFromSuperview()
-    
-    let maskBgView = UIView(frame: loadingSuperView.bounds)
-    maskBgView.backgroundColor = .clear
-    maskBgView.tag = kLoadingHUDTag
-    loadingSuperView.addSubview(maskBgView)
-    
-    let HUDSize: CGFloat = 72.0
-    let x = (maskBgView.bounds.size.width - HUDSize) / 2.0
-    let y = (maskBgView.bounds.size.height - HUDSize) / 2.0
-
-    let indicatorBg = UIView(frame: CGRect(x: x, y: y, width: HUDSize, height: HUDSize))
-    indicatorBg.backgroundColor = .init(white: 0, alpha: 0.7)
-    indicatorBg.layer.masksToBounds = true
-    indicatorBg.layer.cornerRadius = 12
-    maskBgView.addSubview(indicatorBg)
-    
-    let loadingView = activityLoading(style: .whiteLarge, color: .white)
-    loadingView.center = CGPoint(x: HUDSize/2, y: HUDSize/2)
-    indicatorBg.addSubview(loadingView)
-    
-    if animation {
-        maskBgView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-        maskBgView.alpha = 0.0
-        UIView.animate(withDuration: 0.1) {
-            maskBgView.transform = CGAffineTransform(scaleX: 1, y: 1)
-            maskBgView.alpha = 1.0
+    ///在主线程中显示UI
+    DispatchQueue.main.async {
+        
+        let loadingSuperView = fetchHUDSuperView(parmater: paramater)
+        hideLoading(from: paramater, animation: false)
+        
+        let oldToastView = loadingSuperView.viewWithTag(kLoadingHUDTag)
+        oldToastView?.removeFromSuperview()
+        
+        let maskBgView = UIView(frame: loadingSuperView.bounds)
+        maskBgView.backgroundColor = .clear
+        maskBgView.tag = kLoadingHUDTag
+        loadingSuperView.addSubview(maskBgView)
+        
+        let HUDSize: CGFloat = 72.0
+        let x = (maskBgView.bounds.size.width - HUDSize) / 2.0
+        let y = (maskBgView.bounds.size.height - HUDSize) / 2.0
+        
+        let indicatorBg = UIView(frame: CGRect(x: x, y: y, width: HUDSize, height: HUDSize))
+        indicatorBg.backgroundColor = .init(white: 0, alpha: 0.7)
+        indicatorBg.layer.masksToBounds = true
+        indicatorBg.layer.cornerRadius = 12
+        maskBgView.addSubview(indicatorBg)
+        
+        let loadingView = activityLoading(style: .whiteLarge, color: .white)
+        loadingView.center = CGPoint(x: HUDSize/2, y: HUDSize/2)
+        indicatorBg.addSubview(loadingView)
+        
+        if animation {
+            maskBgView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            maskBgView.alpha = 0.0
+            UIView.animate(withDuration: 0.1) {
+                maskBgView.transform = CGAffineTransform(scaleX: 1, y: 1)
+                maskBgView.alpha = 1.0
+            }
         }
     }
 }
@@ -313,61 +321,63 @@ func showLoading(toView paramater: AnyObject, animation: Bool = true) {
 func showToastText(_ message: String,
                    toView parmaters: AnyObject,
                    animation: Bool = true) {
-    let loadingSuperView = fetchHUDSuperView(parmater: parmaters)
-    hideLoading(from: parmaters, animation: false)
-    
-    let oldToastView = loadingSuperView.viewWithTag(kLoadingHUDTag)
-    oldToastView?.removeFromSuperview()
-    
-    //黑色半透明View
-    let blackView = UIView(frame: .zero)
-    blackView.tag = kLoadingHUDTag
-    blackView.backgroundColor = UIColor(r: 51, g: 51, b: 51, a: 0.9)
-    blackView.layer.cornerRadius = 4
-    blackView.layer.masksToBounds = true
-    loadingSuperView.addSubview(blackView)
-    
-    let horizontalMargin: CGFloat = 12.0 //水平方向间距
-    let verticalMargin: CGFloat = 15.0 //垂直方向间距
-    let maxTextWidth = kScreenWidth - horizontalMargin*4;
-    
-    
-    //提示文案
-    let messageLabel = UILabel(frame: .zero)
-    messageLabel.frame = CGRect(x: 0, y: 0, width: maxTextWidth, height: 0)
-    messageLabel.textColor = .white
-    messageLabel.font = .systemFont(ofSize: 14)
-    messageLabel.textAlignment = .center;
-    messageLabel.preferredMaxLayoutWidth = maxTextWidth;
-    messageLabel.numberOfLines = 0;
-    messageLabel.text = message;
-    messageLabel.sizeToFit()
-    let msgWidth = messageLabel.bounds.size.width
-    let msgHeight = messageLabel.bounds.size.height
-    messageLabel.frame = CGRect(x: 0, y: 0, width: min(msgWidth, maxTextWidth), height: msgHeight)
-    blackView.addSubview(messageLabel)
-    
-    let blackViewWidth = min(msgWidth + horizontalMargin*2, kScreenWidth - horizontalMargin*2)
-    let blackViewHeight = msgHeight + verticalMargin*2
-    blackView.frame = CGRect(x: 0, y: 0, width: blackViewWidth, height: blackViewHeight)
-    blackView.center = CGPoint(x: loadingSuperView.bounds.size.width/2, y: loadingSuperView.bounds.size.height / 2)
-    messageLabel.center = CGPoint(x: blackView.bounds.size.width/2, y: blackView.bounds.size.height/2)
-    
-    var time: Double = Double(message.count) / 6.0
-    time = max(kToastShowTime, time)
-    time = min(5, time)
-    
-    DispatchQueue.jk.asyncDelay(time) {
-    } _: {
-        if animation {
-            UIView.animate(withDuration: 0.1) {
-                blackView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-                blackView.alpha = 0.0
-            } completion: { _ in
+    ///在主线程中显示UI
+    DispatchQueue.main.async {
+        
+        let loadingSuperView = fetchHUDSuperView(parmater: parmaters)
+        hideLoading(from: parmaters, animation: false)
+        
+        let oldToastView = loadingSuperView.viewWithTag(kLoadingHUDTag)
+        oldToastView?.removeFromSuperview()
+        
+        //黑色半透明View
+        let blackView = UIView(frame: .zero)
+        blackView.tag = kLoadingHUDTag
+        blackView.backgroundColor = UIColor(r: 51, g: 51, b: 51, a: 0.9)
+        blackView.layer.cornerRadius = 4
+        blackView.layer.masksToBounds = true
+        loadingSuperView.addSubview(blackView)
+        
+        let horizontalMargin: CGFloat = 12.0 //水平方向间距
+        let verticalMargin: CGFloat = 15.0 //垂直方向间距
+        let maxTextWidth = kScreenWidth - horizontalMargin*4;
+        
+        //提示文案
+        let messageLabel = UILabel(frame: .zero)
+        messageLabel.frame = CGRect(x: 0, y: 0, width: maxTextWidth, height: 0)
+        messageLabel.textColor = .white
+        messageLabel.font = .systemFont(ofSize: 14)
+        messageLabel.textAlignment = .center;
+        messageLabel.preferredMaxLayoutWidth = maxTextWidth;
+        messageLabel.numberOfLines = 0;
+        messageLabel.text = message;
+        messageLabel.sizeToFit()
+        let msgWidth = messageLabel.bounds.size.width
+        let msgHeight = messageLabel.bounds.size.height
+        messageLabel.frame = CGRect(x: 0, y: 0, width: min(msgWidth, maxTextWidth), height: msgHeight)
+        blackView.addSubview(messageLabel)
+        
+        let blackViewWidth = min(msgWidth + horizontalMargin*2, kScreenWidth - horizontalMargin*2)
+        let blackViewHeight = msgHeight + verticalMargin*2
+        blackView.frame = CGRect(x: 0, y: 0, width: blackViewWidth, height: blackViewHeight)
+        blackView.center = CGPoint(x: loadingSuperView.bounds.size.width/2, y: loadingSuperView.bounds.size.height / 2)
+        messageLabel.center = CGPoint(x: blackView.bounds.size.width/2, y: blackView.bounds.size.height/2)
+        
+        var time: Double = Double(message.count) / 6.0
+        time = max(kToastShowTime, time)
+        time = min(5, time)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            if animation {
+                UIView.animate(withDuration: 0.1) {
+                    blackView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                    blackView.alpha = 0.0
+                } completion: { _ in
+                    blackView.removeFromSuperview()
+                }
+            } else {
                 blackView.removeFromSuperview()
             }
-        } else {
-            blackView.removeFromSuperview()
         }
     }
 }

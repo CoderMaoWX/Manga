@@ -20,7 +20,7 @@ class BaseVC: UIViewController {
         layoutSubView()
         
         //测试代码
-//        testAlert()
+        testAlert()
     }
     
     // MARK: - 初始化布局UI
@@ -35,6 +35,7 @@ class BaseVC: UIViewController {
     func testAlert() {
         setNavBarLeftItem(info: ["测试"]) { _ in
             hideLoading(from: self.view)
+            showAlertToast(message: "休息一下,马上回来,休息一下,马上回来")
             
         }.first!.redDotValue = "18"
         
