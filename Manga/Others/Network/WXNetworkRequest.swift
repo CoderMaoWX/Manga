@@ -281,12 +281,19 @@ class WXNetworkRequest: WXBaseRequest {
         rspModel.originalRequest = requestDataTask?.request
         rspModel.urlResponse = requestDataTask?.response
 
+        var code: Int = -1
         if let error = responseObj as? Error {
+            code = error._code
+        } else if let error = responseObj as? NSError {
+            code = error.code
+        }
+        
+        if code != -1 { //错误
             rspModel.isSuccess     = false
             rspModel.isCacheData   = false
             rspModel.responseMsg   = configFailMessage
-            rspModel.responseCode  = error._code
-            rspModel.error = NSError(domain: configFailMessage, code: error._code, userInfo: nil)
+            rspModel.responseCode  = code
+            rspModel.error = NSError(domain: configFailMessage, code: code, userInfo: nil)
             
         } else {
             let responseDict = packagingResponseObj(responseObj: responseObj, responseModel: rspModel)
