@@ -61,12 +61,10 @@ class BoutiqueVC: BaseVC {
         request.requestMethod = .get
         request.requestURL = url
         request.parameters = param
-        //request.loadingSuperView = view
-        request.customModelKeyPath = "data.returnData"
-        request.responseCustomModelCalss = BoutiqueListModel.self
+        request.parseKeyPathInfo = ["data.returnData.comicLists" : ComicListModel.self]
+        
         request.startRequest { [weak self] (responseModel) in
-            debugLog("主页请求响应: ", responseModel);
-            self?.comicLists = (responseModel.responseCustomModel as? BoutiqueListModel)?.comicLists ?? []
+            self?.comicLists = (responseModel.parseKeyPathModel as? [ComicListModel]) ?? []
             self?.collectionView.reloadData(autoEmptyViewInfo: self?.comicLists)
         }
     }

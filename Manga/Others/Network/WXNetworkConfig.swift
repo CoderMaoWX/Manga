@@ -15,9 +15,6 @@ final class WXNetworkConfig {
     var statusCode: Int = 200
     var messageKey: String = "msg"
     
-    ///需要解析Model时的全局key,(可选)
-    var customModelKeyPath: String? = nil
-    
     ///请求失败时的默认提示
     var requestFailDefaultMessage: String? = nil
     

@@ -99,7 +99,6 @@ class WXResponseModel: NSObject {
     var isCacheData: Bool = false
     var responseDuration: TimeInterval? = nil
     var responseCode: Int? = nil
-    var responseCustomModel: Convertible? = nil
     var parseKeyPathModel: AnyObject? = nil ///解析的数据: Model, [Model]
     var responseObject: AnyObject? = nil
     var responseDict: Dictionary<String, Any>? = nil
@@ -111,37 +110,36 @@ class WXResponseModel: NSObject {
     
     func configModel(requestApi: WXNetworkRequest, responseDict: Dictionary<String, Any>) {
         
-        guard let modelCalss = requestApi.responseCustomModelCalss else { return }
-        var customModelKeyPath = requestApi.customModelKeyPath
+        guard let keyPathInfo = requestApi.parseKeyPathInfo, keyPathInfo.count == 1 else { return }
         
-        if (customModelKeyPath ?? "").count == 0 {
-            customModelKeyPath = WXNetworkConfig.shared.customModelKeyPath
-        }
+        let parseKey: String = keyPathInfo.keys.first!
+        guard parseKey.count > 0 else { return }
         
-        if let modelKeyPath = customModelKeyPath, modelKeyPath.count > 0 {
-            var lastValueDict: Any?
+        let parseCalss = keyPathInfo.values.first
+        guard let modelCalss = parseCalss else { return }
+        
+        var lastValueDict: Any?
+        
+        if parseKey.contains(".") {
+            let keyPathArr =  parseKey.components(separatedBy: ".")
+            lastValueDict = responseDict
             
-            if modelKeyPath.contains(".") {
-                let keyPathArr =  modelKeyPath.components(separatedBy: ".")
-                lastValueDict = responseDict
-                
-                for modelKey in keyPathArr {
-                    if lastValueDict == nil {
-                        return
-                    } else {
-                        lastValueDict = fetchDictValue(respKey: modelKey, respValue: lastValueDict)
-                    }
+            for modelKey in keyPathArr {
+                if lastValueDict == nil {
+                    return
+                } else {
+                    lastValueDict = fetchDictValue(respKey: modelKey, respValue: lastValueDict)
                 }
-            } else {
-                lastValueDict = responseDict[modelKeyPath]
             }
-           
-            if let customModelValue = lastValueDict as? Dictionary<String, Any> {
-                responseCustomModel = customModelValue.kj.model(type: modelCalss)
-                
-            }  else if let modelObj = lastValueDict as? Array<Any> {
-                responseCustomModel = modelObj.kj.modelArray(type: modelCalss) as? Convertible
-            }
+        } else {
+            lastValueDict = responseDict[parseKey]
+        }
+       
+        if let customModelValue = lastValueDict as? Dictionary<String, Any> {
+            parseKeyPathModel = customModelValue.kj.model(type: modelCalss) as AnyObject
+            
+        }  else if let modelObj = lastValueDict as? Array<Any> {
+            parseKeyPathModel = modelObj.kj.modelArray(type: modelCalss) as AnyObject
         }
     }
     
@@ -167,12 +165,9 @@ class WXNetworkRequest: WXBaseRequest {
     ///请求成功时自定义响应缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时,底层则不缓存)
     var cacheResponseBlock: WXCacheResponseClosure? = nil
     
-    ///单独设置响应Model时的解析key, 否则使用单例中的全局解析 WXNetworkConfig.customModelKeyPath
-    var customModelKeyPath: String? = nil
-    
-    ///请求成功返回后解析成相应的Model返回
-    var responseCustomModelCalss: Convertible.Type? = nil
-    
+    ///请求成功返回后 根据[KeyPath:Class]解析成相应的Model返回
+    var parseKeyPathInfo: [String : Convertible.Type]? = nil
+
     ///请求转圈的父视图
     var loadingSuperView: UIView? = nil
     
