@@ -57,7 +57,7 @@ class CateVC: BaseVC {
         let loadURL: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
         
         SVProgressHUD.show()
-        request(loadURL, method: HTTPMethod.get, parameters: nil).responseJSON {
+        AF.request(loadURL, method: HTTPMethod.get, parameters: nil).responseJSON {
             [weak self](response) in
             SVProgressHUD.dismiss()
             

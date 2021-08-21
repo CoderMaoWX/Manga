@@ -80,7 +80,7 @@ class CommunityVC: BaseVC {
         dict["sort_type"] = "hot"
         
         //let param: [String : Any] = ["sexType" : 1]
-        request(url, parameters: dict).responseJSON {
+        AF.request(url, parameters: dict).responseJSON {
             [weak self] (resultData) in
             
             switch resultData.result {

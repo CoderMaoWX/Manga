@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import YYCache
 
 final class WXNetworkConfig {
     
@@ -15,13 +16,21 @@ final class WXNetworkConfig {
     var messageKey: String = "msg"
     
     ///需要解析Model时的全局key,(可选)
-    var customModelKey: String? = nil
+    var customModelKeyPath: String? = nil
     
     ///请求失败时的默认提示
     var requestFailDefaultMessage: String? = nil
     
     ///全局网络请求拦截类
     var urlSessionProtocolClasses: Any.Type? = nil
+    
+    ///取请求缓存时用到的YYChache对象
+    let networkDiskCache: YYDiskCache = {
+        let userDocument = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first ?? ""
+        let directryPath = (userDocument as NSString).appendingPathComponent(kWXNetworkResponseCacheKey)
+        return YYDiskCache.init(path: directryPath)!
+    }()
+    
     
     ///请求遇到相应Code时触发通知: [ "notificationName" : 200 ]
     var errorCodeNotifyDict: Dictionary<String, Int>? = nil
@@ -71,18 +80,18 @@ final class WXNetworkConfig {
     ///单利对象
     static let shared = WXNetworkConfig()
     private init() {
-        closeUrlResponsePrintfLog = true
+        closeUrlResponsePrintfLog = false
         closeStatisticsPrintfLog = true
     }
     
     ///清除所有缓存
     func clearWXNetworkAllRequestCache() {
-        
+        networkDiskCache.removeAllObjects()
     }
     
     ///清除指定缓存
     func clearWXNetworkCacheOfRequest(serverApi: WXNetworkRequest) {
-        
+        networkDiskCache.removeObject(forKey: serverApi.cacheKey)
     }
 }
 

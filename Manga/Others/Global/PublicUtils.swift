@@ -253,21 +253,17 @@ fileprivate func fetchHUDSuperView(parmater: AnyObject) -> UIView {
 /// 隐藏指定视图上的loading框
 /// - Parameter view: 指定视图参数 (可传字段包装含有kLoadingViewKey的键值对)
 func hideLoading(from view: AnyObject, animation: Bool = true) {
-    ///在主线程中显示UI
-    DispatchQueue.main.async {
-        
-        let loadingSuperView = fetchHUDSuperView(parmater: view)
-        for tmpView in loadingSuperView.subviews where tmpView.tag == kLoadingHUDTag {
-            if animation {
-                UIView.animate(withDuration: 0.1) {
-                    tmpView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-                    tmpView.alpha = 0.0
-                } completion: { _ in
-                    tmpView.removeFromSuperview()
-                }
-            } else {
+    let loadingSuperView = fetchHUDSuperView(parmater: view)
+    for tmpView in loadingSuperView.subviews where tmpView.tag == kLoadingHUDTag {
+        if animation {
+            UIView.animate(withDuration: 0.1) {
+                tmpView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                tmpView.alpha = 0.0
+            } completion: { _ in
                 tmpView.removeFromSuperview()
             }
+        } else {
+            tmpView.removeFromSuperview()
         }
     }
 }

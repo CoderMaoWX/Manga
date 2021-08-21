@@ -115,17 +115,18 @@ let reachabilityNetwork: NetworkReachabilityManager? = {
 
 ///开启网络监听, 网络变化回调
 func networkListen() {
-    reachabilityNetwork?.listener = { status in
+    let status = reachabilityNetwork?.startListening(onUpdatePerforming: { status in
         switch status {
-        case .reachable(.wwan):
+        case .reachable(.cellular):
             debugLog("主人,检测到您正在使用移动数据,请注意流量变化")
+        
         case .notReachable:
             debugLog("主人,检测到您网络连接失败,请检查网络")
+        
         default:
             debugLog("网络连接变化: \(status)")
             break
         }
-    }
-    let status = reachabilityNetwork?.startListening()
+    })
     debugLog("监听网络: \(String(describing: status))")
 }

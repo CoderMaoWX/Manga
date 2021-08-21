@@ -11,9 +11,9 @@ import Foundation
 extension Date: JKPOPCompatible {}
 /// 时间戳的类型
 public enum JKTimestampType: Int {
-    // 秒
+    /// 秒
     case second
-    // 毫秒
+    /// 毫秒
     case millisecond
 }
 
@@ -76,19 +76,29 @@ public extension JKPOP where Base == Date {
         return Calendar.current.component(.second, from: self.base)
     }
     
-    // MARK: 1.9、从 Date 获取 毫秒
+    // MARK: 1.10、从 Date 获取 毫秒
     /// 从 Date 获取 毫秒
     var nanosecond: Int {
         return Calendar.current.component(.nanosecond, from: self.base)
     }
     
-    // MARK: 1.10、从日期获取 星期(英文)
+    // MARK: 1.11、从日期获取 星期(英文)
     /// 从日期获取 星期
     var weekday: String {
         return DateFormatter(format: "EEEE").string(from: self.base)
     }
     
-    // MARK: 1.11、从日期获取 月(英文)
+    // MARK: 1.12、从日期获取 星期(中文)
+    var weekdayStringFromDate: String {
+        let weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
+        var calendar = Calendar(identifier: .gregorian)
+        let timeZone = TimeZone(identifier: "Asia/Shanghai")
+        calendar.timeZone = timeZone!
+        let theComponents = calendar.dateComponents([.weekday], from: self.base as Date)
+        return  weekdays[theComponents.weekday! - 1]
+    }
+    
+    // MARK: 1.13、从日期获取 月(英文)
     /// 从日期获取 月(英文)
     var monthAsString: String {
         return DateFormatter(format: "MMMM").string(from: self.base)
@@ -106,8 +116,8 @@ public enum JKTimeBarType {
 }
 public extension JKPOP where Base == Date {
     
-    // MARK: 2.1、时间戳 按照对应的格式 转化为 对应时间的字符串，支持10位 和 13位 
-    /// 时间戳 按照对应的格式 转化为 对应时间的字符串，支持10位 和 13位 如：1603849053 按照 "yyyy-MM-dd HH:mm:ss" 转化后为：2020-10-28 09:37:33
+    // MARK: 2.1、时间戳(支持10位和13位)按照对应的格式 转化为 对应时间的字符串
+    /// 时间戳(支持10位和13位)按照对应的格式 转化为 对应时间的字符串 如：1603849053 按照 "yyyy-MM-dd HH:mm:ss" 转化后为：2020-10-28 09:37:33
     /// - Parameters:
     ///   - timestamp: 时间戳
     ///   - format: 格式
@@ -122,8 +132,8 @@ public extension JKPOP where Base == Date {
         return dateFormatter.string(from: date)
     }
     
-    // MARK: 2.2、时间戳 转 Date, 支持 10 位 和 13 位
-    /// 时间戳 转 Date, 支持 10 位 和 13 位
+    // MARK: 2.2、时间戳(支持 10 位 和 13 位) 转 Date
+    /// 时间戳(支持 10 位 和 13 位) 转 Date
     /// - Parameter timestamp: 时间戳
     /// - Returns: 返回 Date
     static func timestampToFormatterDate(timestamp: String) -> Date {
@@ -134,17 +144,44 @@ public extension JKPOP where Base == Date {
             return Date()
             #endif
         }
-        guard let timestampDouble = timestamp.jk.toDouble() else {
+        guard let timestampInt = timestamp.jk.toInt() else {
             #if DEBUG
             fatalError("时间戳位有问题")
             #else
             return Date()
             #endif
         }
-        let timestampValue = timestamp.count == 10 ? timestampDouble : timestampDouble / 1000
+        let timestampValue = timestamp.count == 10 ? timestampInt : timestampInt / 1000
         // 时间戳转为Date
-        let date = Date(timeIntervalSince1970: timestampValue)
+        let date = Date(timeIntervalSince1970: TimeInterval(timestampValue))
         return date
+    }
+    
+    /// 根据本地时区转换
+    private static func getNowDateFromatAnDate(_ anyDate: Date?) -> Date? {
+        // 设置源日期时区
+        let sourceTimeZone = NSTimeZone(abbreviation: "UTC")
+        // 或GMT
+        // 设置转换后的目标日期时区
+        let destinationTimeZone = NSTimeZone.local as NSTimeZone
+        // 得到源日期与世界标准时间的偏移量
+        var sourceGMTOffset: Int? = nil
+        if let aDate = anyDate {
+            sourceGMTOffset = sourceTimeZone?.secondsFromGMT(for: aDate)
+        }
+        // 目标日期与本地时区的偏移量
+        var destinationGMTOffset: Int? = nil
+        if let aDate = anyDate {
+            destinationGMTOffset = destinationTimeZone.secondsFromGMT(for: aDate)
+        }
+        // 得到时间偏移量的差值
+        let interval = TimeInterval((destinationGMTOffset ?? 0) - (sourceGMTOffset ?? 0))
+        // 转为现在时间
+        var destinationDateNow: Date? = nil
+        if let aDate = anyDate {
+            destinationDateNow = Date(timeInterval: interval, since: aDate)
+        }
+        return destinationDateNow
     }
     
     // MARK: 2.3、Date 转换为相应格式的时间字符串，如 Date 转为 2020-10-28
@@ -158,7 +195,7 @@ public extension JKPOP where Base == Date {
         return dateFormatter.string(from: self.base)
     }
     
-    // MARK: 2.4、带格式的时间转 时间戳，支持返回 13位 和 10位的时间戳
+    // MARK: 2.4、带格式的时间转 时间戳，支持返回 13位 和 10位的时间戳，时间字符串和时间格式必须保持一致
     /// 带格式的时间转 时间戳，支持返回 13位 和 10位的时间戳，时间字符串和时间格式必须保持一致
     /// - Parameters:
     ///   - timeString: 时间字符串，如：2020-10-26 16:52:41
@@ -166,15 +203,22 @@ public extension JKPOP where Base == Date {
     ///   - timestampType: 返回的时间戳类型，默认是秒 10 为的时间戳字符串
     /// - Returns: 返回转化后的时间戳
     static func formatterTimeStringToTimestamp(timesString: String, formatter: String, timestampType: JKTimestampType = .second) -> String {
-        let date = formatterTimeStringToDate(timesString: timesString, formatter: formatter)
+        let dateFormatter = DateFormatter(format: formatter)
+        guard let date = dateFormatter.date(from: timesString) else {
+            #if DEBUG
+            fatalError("时间有问题")
+            #else
+            return ""
+            #endif
+        }
         if timestampType == .second {
             return "\(Int(date.timeIntervalSince1970))"
         }
         return "\(Int((date.timeIntervalSince1970) * 1000))"
     }
     
-    // MARK: 2.5、带格式的时间转 Date，支持返回 13位 和 10位的时间戳
-    /// 带格式的时间转 Date，支持返回 13位 和 10位的时间戳
+    // MARK: 2.5、带格式的时间转 Date
+    /// 带格式的时间转 Date
     /// - Parameters:
     ///   - timesString: 时间字符串
     ///   - formatter: 格式
@@ -188,6 +232,11 @@ public extension JKPOP where Base == Date {
             return Date()
             #endif
         }
+        /*
+        guard let resultDate = getNowDateFromatAnDate(date) else {
+            return Date()
+        }
+        */
         return date
     }
     
@@ -239,6 +288,12 @@ public extension JKPOP where Base == Date {
         let interval = timestampType == .second ? CLongLong(Int(self.base.timeIntervalSince1970)) : CLongLong(round(self.base.timeIntervalSince1970 * 1000))
         return "\(interval)"
     }
+    
+    // 转成当前时区的日期
+    func dateFromGMT() -> Date {
+        let secondFromGMT: TimeInterval = TimeInterval(TimeZone.current.secondsFromGMT(for: self.base))
+        return self.base.addingTimeInterval(secondFromGMT)
+    }
 }
 
 // MARK:- 三、前天、昨天、今天、明天、后天、是否同一年同一月同一天 的判断
@@ -246,32 +301,30 @@ public extension JKPOP where Base == Date {
     
     // MARK: 3.1、今天的日期
     /// 今天的日期
-    var todayDate: Date {
-        return Date()
-    }
+    static let todayDate: Date = Date()
     
-    // MARK: 3.2、昨天的日期
+    // MARK: 3.2、昨天的日期（相对于date的昨天日期）
     /// 昨天的日期
-    var yesterDayDate: Date? {
-        return adding(day: -1)
+    static var yesterDayDate: Date? {
+        return Calendar.current.date(byAdding: DateComponents(day: -1), to: Date())
     }
     
     // MARK: 3.3、明天的日期
     /// 明天的日期
-    var tomorrowDate: Date? {
-        return adding(day: 1)
+    static var tomorrowDate: Date? {
+        return Calendar.current.date(byAdding: DateComponents(day: 1), to: Date())
     }
     
     // MARK: 3.4、前天的日期
     /// 前天的日期
-    var theDayBeforYesterDayDate: Date? {
-        return adding(day: -2)
+    static var theDayBeforYesterDayDate: Date? {
+        return Calendar.current.date(byAdding: DateComponents(day: -2), to: Date())
     }
     
     // MARK: 3.5、后天的日期
     /// 后天的日期
-    var theDayAfterYesterDayDate: Date? {
-        return adding(day: 2)
+    static var theDayAfterYesterDayDate: Date? {
+        return Calendar.current.date(byAdding: DateComponents(day: 2), to: Date())
     }
     
     // MARK: 3.6、是否为今天（只比较日期，不比较时分秒）
@@ -285,7 +338,7 @@ public extension JKPOP where Base == Date {
     /// 是否为昨天
     var isYesterday: Bool {
         // 1.先拿到昨天的 date
-        guard let date = Base().jk.yesterDayDate else {
+        guard let date = Base.jk.yesterDayDate else {
             return false
         }
         // 2.比较当前的日期和昨天的日期
@@ -296,7 +349,7 @@ public extension JKPOP where Base == Date {
     /// 是否为前天
     var isTheDayBeforeYesterday: Bool  {
         // 1.先拿到前天的 date
-        guard let date = Base().jk.theDayBeforYesterDayDate else {
+        guard let date = Base.jk.theDayBeforYesterDayDate else {
             return false
         }
         // 2.比较当前的日期和昨天的日期
@@ -343,6 +396,18 @@ public extension JKPOP where Base == Date {
         return (com.day == comToday.day &&
             com.month == comToday.month &&
             com.year == comToday.year )
+    }
+    
+    // MARK: 3.12、是否为本周
+    /// 是否为本周
+    /// - Returns: 是否为本周
+    var isThisWeek: Bool {
+        let calendar = Calendar.current
+        // 当前时间
+        let nowComponents = calendar.dateComponents([.weekday, .month, .year], from: Date())
+        // self
+        let selfComponents = calendar.dateComponents([.weekday,.month,.year], from: self.base as Date)
+        return (selfComponents.year == nowComponents.year) && (selfComponents.month == nowComponents.month) && (selfComponents.weekday == nowComponents.weekday)
     }
 }
 

@@ -7,6 +7,8 @@
 
 import Foundation
 import Alamofire
+import JKSwiftExtension
+import KakaJSON
 
 enum WXRequestMulticenterType: Int {
     case WillStart
@@ -15,8 +17,8 @@ enum WXRequestMulticenterType: Int {
 }
 
 typealias WXNetworkResponseBlock = (WXResponseModel) -> ()
-typealias WXNetworkSuccessBlock = (Any) -> ()
-typealias WXNetworkFailureBlock = (Error) -> ()
+typealias WXNetworkSuccessBlock = (AnyObject) -> ()
+typealias WXNetworkFailureBlock = (AnyObject) -> ()
 
 class WXBaseRequest: NSObject {
     ///请求Method类型
@@ -24,39 +26,43 @@ class WXBaseRequest: NSObject {
     ///请求地址
     var requestURL: String = ""
     ///请求参数
-    var parameters: Dictionary<String, String>? = nil
+    var parameters: Dictionary<String, Any>? = nil
     ///请求超时，默认30s
     var timeOut: Int = 30
     ///请求自定义头信息
     var requestHeaderDict: Dictionary<String, String>? = nil
-    ///底层最终的请求参数 (页面上可实现<WXPackParameters>协议来实现重新包装请求参数)
-    private(set) var finalParameters: Dictionary<String, String>? = nil
     ///请求任务对象
-    private(set) var requestDataTask: URLSessionDataTask? = nil
-    ///求Session对象
-    private(set) var urlSession: URLSession? = nil
+    private(set) var requestDataTask: DataRequest? = nil
     
-//    fileprivate var setupHttpSessionManager:  = <#value#>
-    
-    lazy var manager: SessionManager = {
-        let config: URLSessionConfiguration = URLSessionConfiguration.default
-        let serverTrustPolicies: [String: ServerTrustPolicy] = [
-            ///正式环境的证书配置,修改成自己项目的正式url
-            "www.baidu.com": .pinCertificates(
-                certificates: ServerTrustPolicy.certificates(),
-                validateCertificateChain: true,
-                validateHost: true
-            ),
-            ///测试环境的证书配置,不验证证书,无脑通过
-            "192.168.1.213:8002": .disableEvaluation
-            ]
-        //config.httpAdditionalHeaders = ewHttpHeaders
-        config.timeoutIntervalForRequest = TimeInterval(timeOut)
-        //根据config创建manager
-        return SessionManager(configuration: config,
-                                 delegate: SessionDelegate(),
-                                 serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies))
+    ///底层最终的请求参数 (页面上可实现<WXPackParameters>协议来实现重新包装请求参数)
+    lazy var finalParameters: Dictionary<String, Any>? = {
+        var parameters = parameters
+        if conforms(to: WXPackParameters.self) {
+            parameters = (self as? WXPackParameters)?.parametersWillTransformFromOriginParamete(parameters: parameters)
+        }
+        return parameters
     }()
+
+//    lazy var manager: Session = {
+//        let config: URLSessionConfiguration = URLSessionConfiguration.default
+//        let serverTrustPolicies: [String: ServerTrustPolicy] = [
+//            ///正式环境的证书配置,修改成自己项目的正式url
+//            "www.baidu.com": .pinCertificates(
+//                certificates: ServerTrustPolicy.certificates(),
+//                validateCertificateChain: true,
+//                validateHost: true
+//            ),
+//            ///测试环境的证书配置,不验证证书,无脑通过
+//            "192.168.1.213:8002": .disableEvaluation
+//            ]
+//        //config.httpAdditionalHeaders = ewHttpHeaders
+//        config.timeoutIntervalForRequest = TimeInterval(timeOut)
+//        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+//        //根据config创建manager
+//        return Session(configuration: config,
+//                                 delegate: SessionDelegate(),
+//                                 serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies))
+//    }()
     
     /// 网络请求方法 (不做任何额外处理的原始Alamofire请求，页面上不建议直接用，请使用子类请求方法)
     /// - Parameters:
@@ -64,21 +70,26 @@ class WXBaseRequest: NSObject {
     ///   - failureClosure: 请求失败回调
     /// - Returns: 求Session对象
     @discardableResult
-    func baseRequestBlock(successClosure: @escaping WXNetworkSuccessBlock,
-                          failureClosure: @escaping WXNetworkFailureBlock ) -> DataRequest {
-        return manager.request(requestURL,
-                               method: requestMethod,
-                               parameters: parameters,
-                               headers: requestHeaderDict).responseJSON { response in
-                                
-                                switch response.result {
-                                case .success(let json):
-                                    successClosure(json)
-                                    
-                                case .failure(let error):
-                                    failureClosure(error)
-                                }
-                               }
+    func baseRequestBlock(successClosure: WXNetworkSuccessBlock?,
+                          failureClosure: WXNetworkFailureBlock? ) -> DataRequest {
+
+        let dataRequest = AF.request(requestURL,
+                                     method: requestMethod,
+                                     parameters: finalParameters,
+                                     headers: HTTPHeaders(requestHeaderDict ?? [:])).responseJSON { response in
+            switch response.result {
+            case .success(let json):
+                if let successClosure = successClosure {
+                    successClosure(json as AnyObject)
+                }
+            case .failure(let error):
+                if let failureClosure = failureClosure {
+                    failureClosure(error as AnyObject)
+                }
+            }
+           }
+        requestDataTask = dataRequest
+        return dataRequest
     }
 }
 
@@ -88,17 +99,62 @@ class WXResponseModel: NSObject {
     var isCacheData: Bool = false
     var responseDuration: TimeInterval? = nil
     var responseCode: Int? = nil
-    var responseCustomModel: AnyObject? = nil
+    var responseCustomModel: Convertible? = nil
     var responseObject: AnyObject? = nil
-    var responseDict: Dictionary<String, String>? = nil
+    var responseDict: Dictionary<String, Any>? = nil
     var responseMsg: String? = nil
     var error: NSError? = nil
     var urlResponse: HTTPURLResponse? = nil
     var originalRequest: URLRequest? = nil
     fileprivate (set) var apiUniquelyIp: String?  = nil
+    
+    
+    func fetchDictValue(respKey: String, respValue: Any?) -> Any? {
+        if let respDict = respValue as? Dictionary<String, Any> {
+            for (dictKey, dictValue) in respDict {
+                if respKey == dictKey {
+                    return dictValue
+                }
+            }
+        }
+        return respValue
+    }
+    
+    func configModel(requestApi: WXNetworkRequest, responseDict: Dictionary<String, Any>) {
+        
+        guard let modelCalss = requestApi.responseCustomModelCalss else { return }
+        var customModelKeyPath = requestApi.customModelKeyPath
+        
+        if customModelKeyPath == nil {
+            customModelKeyPath = WXNetworkConfig.shared.customModelKeyPath
+            
+        } else if let modelKey = customModelKeyPath, modelKey.count == 0 {
+            customModelKeyPath = WXNetworkConfig.shared.customModelKeyPath
+        }
+        
+        if let customModelKeyPath = customModelKeyPath, customModelKeyPath.count > 0, customModelKeyPath.contains(".") {
+            let customModelKeyPathArray =  customModelKeyPath.components(separatedBy: ".")
+            
+            var lastValueDict: Any? = responseDict[customModelKeyPathArray.first!]
+            
+            for modelKey in customModelKeyPathArray {
+                if lastValueDict == nil {
+                    return
+                } else {
+                    lastValueDict = fetchDictValue(respKey: modelKey, respValue: lastValueDict)
+                }
+            }
+            if let customModelValue = lastValueDict as? Dictionary<String, Any> {
+                responseCustomModel = customModelValue.kj.model(type: modelCalss)
+                
+            }  else if let modelObj = lastValueDict as? Array<Any> {
+                responseCustomModel = modelObj.kj.modelArray(type: modelCalss) as? Convertible
+            }
+        }
+    }
 }
 
-typealias WXCacheResponseClosure = (WXResponseModel) -> (Dictionary<String, String>)
+typealias WXCacheResponseClosure = (WXResponseModel) -> (Dictionary<String, Any>?)
 
 class WXNetworkRequest: WXBaseRequest {
     
@@ -106,13 +162,13 @@ class WXNetworkRequest: WXBaseRequest {
     var autoCacheResponse: Bool = false
     
     ///请求成功时自定义响应缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时,底层则不缓存)
-    var cacheResponseClosure: WXCacheResponseClosure? = nil
+    var cacheResponseBlock: WXCacheResponseClosure? = nil
     
-    ///单独设置响应Model时的解析key, 否则使用单例中的全局解析 WXNetworkConfig.customModelKey
-    var customModelKey: String? = nil
+    ///单独设置响应Model时的解析key, 否则使用单例中的全局解析 WXNetworkConfig.customModelKeyPath
+    var customModelKeyPath: String? = nil
     
     ///请求成功返回后解析成相应的Model返回
-    var responseCustomModelCalss: Any.Type? = nil
+    var responseCustomModelCalss: Convertible.Type? = nil
     
     ///请求转圈的父视图
     var loadingSuperView: UIView? = nil
@@ -128,33 +184,38 @@ class WXNetworkRequest: WXBaseRequest {
     ///如: (请求HUD, 加解密, 自定义打印, 上传统计)
     var requestAccessories: [WXNetworkMulticenter]? = nil
     
-    
     ///以下为私有属性,外部可以忽略
     
     fileprivate (set) var retryCount: Int = 0
-    fileprivate (set) var cacheKey: String = ""
     fileprivate (set) var apiUniquelyIp: String = ""
     fileprivate (set) var requestDuration: Double = 0
-    fileprivate (set) var responseDelegate: WXNetworkDelegate? = nil
-    fileprivate (set) var parmatersJsonString: String = ""
     fileprivate (set) var managerRequestKey: String = ""
-    fileprivate (set) var configResponseCallback: WXNetworkResponseBlock? = nil
     
     @discardableResult
-    func startRequest(responseBlock: WXNetworkResponseBlock) -> DataRequest? {
+    func startRequest(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
         guard let _ = URL(string: requestURL) else {
             debugLog("\n❌❌❌无效的请求地址= \(requestURL)")
-            
-            
+            configResponseBlock(responseBlock: responseBlock, responseObj: nil)
             return nil
         }
+        let networkBlock: (AnyObject) -> () = { responseObj in
+            self.configResponseBlock(responseBlock: responseBlock, responseObj: responseObj)
+        }
+        if checkRequestInCache() {
+            readRequestCacheWithBlock(fetchCacheBlock: networkBlock)
+        }
+        handleMulticenter(type: .WillStart, responseModel: WXResponseModel())
         
+        let dataRequest = baseRequestBlock(successClosure: networkBlock, failureClosure: networkBlock)
         
-        return nil
+        if WXNetworkConfig.shared.closeUrlResponsePrintfLog == false {
+            debugLog("\n👉👉👉页面已发出请求=", requestURL)
+        }
+        return dataRequest
     }
     
     func configResponseBlock(responseBlock: @escaping WXNetworkResponseBlock, responseObj: AnyObject?) {
-        if responseObj == nil {
+        if responseObj != nil {
             if let retryCountWhenFailure = retryCountWhenFailure,
                retryCount < retryCountWhenFailure,
                let error = responseObj as? Error,
@@ -163,11 +224,25 @@ class WXNetworkRequest: WXBaseRequest {
                     self.retryCount += 1
                     self.startRequest(responseBlock: responseBlock)
                 }
+            } else {
+                let responseModel = configResponseModel(responseObj: responseObj!)
+                responseBlock(responseModel)
+                handleMulticenter(type: .DidCompletion, responseModel: responseModel)
             }
-            
-            
         } else {
-            
+            let error = NSError(domain: configFailMessage, code: -444, userInfo: nil)
+            let responseModel = configResponseModel(responseObj: error)
+            responseBlock(responseModel)
+            handleMulticenter(type: .DidCompletion, responseModel: responseModel)
+        }
+    }
+    
+    func checkPostNotification(responseModel: WXResponseModel) {
+        let notifyDict = WXNetworkConfig.shared.errorCodeNotifyDict
+        if let responseCode = responseModel.responseCode, let notifyDict = notifyDict {
+            for (key, value) in notifyDict where responseCode == value {
+                NotificationCenter.default.post(name: NSNotification.Name(key), object: responseModel)
+            }
         }
     }
     
@@ -180,12 +255,10 @@ class WXNetworkRequest: WXBaseRequest {
         let config = WXNetworkConfig.shared.showRequestLaoding
         guard config else { return }
         if let loadingSuperView = loadingSuperView {
-            DispatchQueue.main.async {
-                if show {
-                    showLoading(toView: loadingSuperView)
-                } else {
-                    hideLoading(from: loadingSuperView)
-                }
+            if show {
+                showLoading(toView: loadingSuperView)
+            } else {
+                hideLoading(from: loadingSuperView)
             }
         }
     }
@@ -194,19 +267,15 @@ class WXNetworkRequest: WXBaseRequest {
         return KWXRequestFailueTipMessage
     }
     
-    
-    func configResponseModel(responseObj: AnyObject) -> WXResponseModel? {
+    func configResponseModel(responseObj: AnyObject) -> WXResponseModel {
         let rspModel = WXResponseModel()
         rspModel.responseDuration  = getCurrentTimestamp() - self.requestDuration
         rspModel.apiUniquelyIp     = apiUniquelyIp
         rspModel.responseObject    = responseObj
         
-        rspModel.originalRequest = requestDataTask?.originalRequest
-        
-        if let urlResponse = requestDataTask?.response as? HTTPURLResponse {
-            rspModel.urlResponse = urlResponse
-        }
-        
+        rspModel.originalRequest = requestDataTask?.request
+        rspModel.urlResponse = requestDataTask?.response
+
         if let error = responseObj as? Error {
             rspModel.isSuccess     = false
             rspModel.isCacheData   = false
@@ -218,19 +287,17 @@ class WXNetworkRequest: WXBaseRequest {
             let responseDict = packagingResponseObj(responseObj: responseObj, responseModel: rspModel)
             let config = WXNetworkConfig.shared
             let responseCode = responseDict[config.statusKey]
-            let code = Int(responseCode ?? "0")!
+            let code = Int((responseCode as? String) ?? "0")!
             rspModel.responseDict = responseDict
             rspModel.responseCode = code
             if let _ = responseCode, code == config.statusCode {
                 rspModel.isSuccess = true
             }
-            
             if let msg = responseDict[config.messageKey] {
-                rspModel.responseMsg = msg
+                rspModel.responseMsg = msg as? String
             }
-            
             if rspModel.isSuccess {
-                
+                rspModel.configModel(requestApi: self, responseDict: responseDict)
             } else {
                 rspModel.responseMsg = rspModel.responseMsg ?? configFailMessage
                 rspModel.error = NSError(domain: rspModel.responseMsg!, code: code, userInfo: responseDict)
@@ -239,8 +306,7 @@ class WXNetworkRequest: WXBaseRequest {
         if rspModel.isCacheData == false {
             handleMulticenter(type: .WillStop, responseModel: rspModel)
         }
-        return nil
-        
+        return rspModel
     }
     
     func handleMulticenter(type: WXRequestMulticenterType, responseModel: WXResponseModel) {
@@ -264,26 +330,98 @@ class WXNetworkRequest: WXBaseRequest {
                 }
             }
             
-            
         case .WillStop:
-
-
+            if WXNetworkConfig.shared.closeUrlResponsePrintfLog == false {
+                let logHeader = WXNetworkPlugin.appendingPrintfLogHeader(request: self, responseModel: responseModel)
+                let logFooter = WXNetworkPlugin.appendingPrintfLogFooter(responseModel: responseModel)
+                debugLog("\(logHeader)", "\(logFooter)");
+            }
+            
+            delegate?.requestWillStop(request: self, responseModel: responseModel)
+            
+            if let requestAccessories = requestAccessories {
+                for accessory in requestAccessories {
+                    accessory.requestWillStop(request: self, responseModel: responseModel)
+                }
+            }
+            
         case .DidCompletion:
-
-        default:
-            break
+            judgeShowLoading(show: false)
+            checkPostNotification(responseModel: responseModel)
+            WXNetworkPlugin.uploadNetworkResponseJson(request: self, responseModel: responseModel)
+            
+            delegate?.requestDidCompletion(request: self, responseModel: responseModel)
+            
+            if let requestAccessories = requestAccessories {
+                for accessory in requestAccessories {
+                    accessory.requestDidCompletion(request: self, responseModel: responseModel)
+                }
+            }
+            // save as much as possible at the end
+            if responseModel.isCacheData == false {
+                saveResponseObjToCache(responseModel: responseModel)
+            }
         }
-        
-        
     }
     
+    //MARK: - DealWithCache
     
-    func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> Dictionary<String, String> {
+    lazy var cacheKey: String = {
+        if cacheResponseBlock != nil || autoCacheResponse {
+            return managerRequestKey.jk.md5Encrypt()
+        }
+        return ""
+    }()
+    
+    func checkRequestInCache() -> Bool {
+        if cacheResponseBlock != nil || autoCacheResponse {
+            let networkCache = WXNetworkConfig.shared.networkDiskCache
+            if networkCache.containsObject(forKey: cacheKey) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func readRequestCacheWithBlock(fetchCacheBlock: @escaping (AnyObject) -> ()) {
+        if cacheResponseBlock != nil || autoCacheResponse {
+            let networkCache = WXNetworkConfig.shared.networkDiskCache
+            
+            networkCache.object(forKey: cacheKey) { key, cacheObject in
+                guard let cacheObject = cacheObject, var cacheDcit = cacheObject as? Dictionary<String, Any> else { return }
+                cacheDcit[kWXRequestDataFromCacheKey] = true
+                if Thread.isMainThread {
+                    fetchCacheBlock(cacheDcit as AnyObject)
+                } else {
+                    DispatchQueue.main.async {
+                        fetchCacheBlock(cacheDcit as AnyObject)
+                    }
+                }
+            }
+        }
+    }
+    
+    func saveResponseObjToCache(responseModel: WXResponseModel) {
+        if let cacheBlock = cacheResponseBlock {
+            let customResponseObject = cacheBlock(responseModel)
+            if let saveCache = customResponseObject {
+                let networkCache = WXNetworkConfig.shared.networkDiskCache
+                networkCache.setObject(saveCache as NSCoding, forKey: cacheKey)
+            }
+        } else if autoCacheResponse {
+            if let responseObject = responseModel.responseObject {
+                let networkCache = WXNetworkConfig.shared.networkDiskCache
+                networkCache.setObject(responseObject as? NSCoding, forKey: cacheKey)
+            }
+        }
+    }
+    
+    func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> Dictionary<String, Any> {
         let config = WXNetworkConfig.shared
-        var responseDcit: [String : String] = [:]
+        var responseDcit: [String : Any] = [:]
         
-        if responseObj is Dictionary<String, String> {
-            responseDcit += responseObj as! Dictionary<String, String>
+        if responseObj is Dictionary<String, Any> {
+            responseDcit += responseObj as! Dictionary<String, Any>
             
             if let _ = responseDcit[kWXRequestDataFromCacheKey] {
                 responseDcit.removeValue(forKey: kWXRequestDataFromCacheKey)
@@ -296,7 +434,7 @@ class WXNetworkRequest: WXBaseRequest {
                 }
             } else {
                 //注意:不能直接赋值responseObj, 因为插件库那边会dataWithJSONObject打印会崩溃
-                //responseDcit[config.customModelKey] = [responseObj description];
+                //responseDcit[config.customModelKeyPath] = [responseObj description];
             }
             //只要返回为非Error就包装一个公共的key, 防止页面当失败解析
             if responseDcit[config.statusKey] == nil {

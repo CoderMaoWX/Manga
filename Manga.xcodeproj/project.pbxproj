@@ -17,6 +17,7 @@
 		584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9625C3F27A00FA507C /* AppDelegate.swift */; };
 		58763FB926CF9D8000AA3985 /* WXNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */; };
 		58763FBB26CFB3F200AA3985 /* WXNetworkConstr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */; };
+		58763FBD26D0841100AA3985 /* WXNetworkPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FBC26D0841100AA3985 /* WXNetworkPlugin.swift */; };
 		5887389825C5587C0049ECAD /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389725C5587C0049ECAD /* HomeVC.swift */; };
 		5887389B25C558C00049ECAD /* CateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389A25C558C00049ECAD /* CateVC.swift */; };
 		5887389E25C558D10049ECAD /* CommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389D25C558D10049ECAD /* CommunityVC.swift */; };
@@ -73,6 +74,7 @@
 		584D5D9625C3F27A00FA507C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkRequest.swift; sourceTree = "<group>"; };
 		58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkConstr.swift; sourceTree = "<group>"; };
+		58763FBC26D0841100AA3985 /* WXNetworkPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkPlugin.swift; sourceTree = "<group>"; };
 		5887389725C5587C0049ECAD /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		5887389A25C558C00049ECAD /* CateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CateVC.swift; sourceTree = "<group>"; };
 		5887389D25C558D10049ECAD /* CommunityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityVC.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 				58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */,
 				58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */,
 				A39301BD26CFF6D4002EF3AB /* WXNetworkConfig.swift */,
+				58763FBC26D0841100AA3985 /* WXNetworkPlugin.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				58A4C11E25E1084600C1DAB5 /* UComicCHead.swift in Sources */,
 				58CDFB7526BA33F100056527 /* ApiClass.swift in Sources */,
 				5824E5E626C655DB00246D19 /* PublicFrame.swift in Sources */,
+				58763FBD26D0841100AA3985 /* WXNetworkPlugin.swift in Sources */,
 				5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */,
 				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
@@ -647,7 +651,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P8FFNR95EQ;
 				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -670,7 +674,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P8FFNR95EQ;
 				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

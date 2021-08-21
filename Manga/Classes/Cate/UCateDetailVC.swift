@@ -51,7 +51,7 @@ class UCateDetailVC: BaseVC {
         if argName.count > 0 { param["argName"] = argName }
         param["argValue"] = argValue
         
-        request(loadURL, parameters: param).responseJSON {
+        AF.request(loadURL, parameters: param).responseJSON {
             [weak self](returnData) in
             
             switch returnData.result {

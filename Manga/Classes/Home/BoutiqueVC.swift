@@ -52,24 +52,22 @@ class BoutiqueVC: BaseVC {
     }
 
     func loadData() {
+        WXNetworkConfig.shared.showRequestLaoding = true
+        
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
-        request(url, parameters: param).responseJSON {
-            [weak self] (resultData) in
-            
-            switch resultData.result {
-            case .success(let json):
-                debugLog("主页请求成功响应Json", JSON(json));
-                let dataDict = JSON(json)["data"]["returnData"].dictionaryObject                
-                let listModel = model(from: dataDict!, BoutiqueListModel.self)
-                self?.comicLists = listModel.comicLists ?? []
-                self?.collectionView.reloadData(autoEmptyViewInfo: self?.comicLists)
-                break
-            case .failure(let error):
-                debugLog("主页请求失败:", error)
-                self?.collectionView.reloadData(autoEmptyViewInfo: nil)
-                break
-            }
+        
+        let request = WXNetworkRequest()
+        request.requestMethod = .get
+        request.requestURL = url
+        request.parameters = param
+        //request.loadingSuperView = view
+        request.customModelKeyPath = "data.returnData"
+        request.responseCustomModelCalss = BoutiqueListModel.self
+        request.startRequest { [weak self] (responseModel) in
+            debugLog("主页请求响应: ", responseModel);
+            self?.comicLists = (responseModel.responseCustomModel as? BoutiqueListModel)?.comicLists ?? []
+            self?.collectionView.reloadData(autoEmptyViewInfo: self?.comicLists)
         }
     }
 }

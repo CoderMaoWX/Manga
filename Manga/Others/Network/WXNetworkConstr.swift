@@ -7,8 +7,19 @@
 
 import Foundation
 
+let KWXRequestAbsoluteDateFormatterKey = "yyyy-MM-dd-HHmmssSSS"
+let KWXUploadAppsFlyerStatisticsKey = "KWXUploadAppsFlyerStatisticsKey"
+let kWXNetworkResponseCacheKey = "kWXNetworkResponseCacheKey"
 let KWXRequestFailueTipMessage = "Loading failed, please try again later."
 let kWXRequestDataFromCacheKey = "WXNetwork_DataFromCacheKey"
+
+@objc protocol WXPackParameters {
+    
+    /// 外部可包装最终网络底层最终请求参数
+    /// - Parameter parameters: 默认外部传进来的<parameters>
+    /// - return 网络底层最终的请求参数
+    func parametersWillTransformFromOriginParamete(parameters: Dictionary<String, Any>?) -> Dictionary<String, Any>
+}
 
 protocol WXNetworkMulticenter {
     

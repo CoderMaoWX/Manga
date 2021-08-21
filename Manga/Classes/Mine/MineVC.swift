@@ -78,7 +78,7 @@ class MineVC: BaseVC {
         dict["sort_type"] = "hot"
         
         SVProgressHUD.show()
-        request(url, parameters: dict).responseJSON {
+        AF.request(url, parameters: dict).responseJSON {
             [weak self] (resultData) in
             SVProgressHUD.dismiss()
             

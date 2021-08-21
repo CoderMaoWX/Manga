@@ -4,7 +4,7 @@ source 'https://cdn.cocoapods.org/'
 inhibit_all_warnings! #屏蔽所有warning
 use_modular_headers!
 
-platform :ios, '9.0'
+platform :ios, '10.0'
 
 target 'Manga' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -40,5 +40,7 @@ target 'Manga' do
   pod 'EmptyDataSet-Swift'
   
   pod 'JKSwiftExtension'
+  
+  pod 'YYCache'
 
 end
