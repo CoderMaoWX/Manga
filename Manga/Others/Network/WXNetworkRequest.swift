@@ -108,18 +108,6 @@ class WXResponseModel: NSObject {
     var originalRequest: URLRequest? = nil
     fileprivate (set) var apiUniquelyIp: String?  = nil
     
-    
-    func fetchDictValue(respKey: String, respValue: Any?) -> Any? {
-        if let respDict = respValue as? Dictionary<String, Any> {
-            for (dictKey, dictValue) in respDict {
-                if respKey == dictKey {
-                    return dictValue
-                }
-            }
-        }
-        return respValue
-    }
-    
     func configModel(requestApi: WXNetworkRequest, responseDict: Dictionary<String, Any>) {
         
         guard let modelCalss = requestApi.responseCustomModelCalss else { return }
@@ -132,18 +120,24 @@ class WXResponseModel: NSObject {
             customModelKeyPath = WXNetworkConfig.shared.customModelKeyPath
         }
         
-        if let customModelKeyPath = customModelKeyPath, customModelKeyPath.count > 0, customModelKeyPath.contains(".") {
-            let customModelKeyPathArray =  customModelKeyPath.components(separatedBy: ".")
+        if let customModelKeyPath = customModelKeyPath, customModelKeyPath.count > 0 {
+            var lastValueDict: Any?
             
-            var lastValueDict: Any? = responseDict[customModelKeyPathArray.first!]
-            
-            for modelKey in customModelKeyPathArray {
-                if lastValueDict == nil {
-                    return
-                } else {
-                    lastValueDict = fetchDictValue(respKey: modelKey, respValue: lastValueDict)
+            if customModelKeyPath.contains(".") {
+                let customModelKeyPathArray =  customModelKeyPath.components(separatedBy: ".")
+                lastValueDict = responseDict[customModelKeyPathArray.first!]
+                
+                for modelKey in customModelKeyPathArray {
+                    if lastValueDict == nil {
+                        return
+                    } else {
+                        lastValueDict = fetchDictValue(respKey: modelKey, respValue: lastValueDict)
+                    }
                 }
+            } else {
+                lastValueDict = responseDict[customModelKeyPath]
             }
+           
             if let customModelValue = lastValueDict as? Dictionary<String, Any> {
                 responseCustomModel = customModelValue.kj.model(type: modelCalss)
                 
@@ -151,6 +145,17 @@ class WXResponseModel: NSObject {
                 responseCustomModel = modelObj.kj.modelArray(type: modelCalss) as? Convertible
             }
         }
+    }
+    
+    func fetchDictValue(respKey: String, respValue: Any?) -> Any? {
+        if let respDict = respValue as? Dictionary<String, Any> {
+            for (dictKey, dictValue) in respDict {
+                if respKey == dictKey {
+                    return dictValue
+                }
+            }
+        }
+        return nil
     }
 }
 
