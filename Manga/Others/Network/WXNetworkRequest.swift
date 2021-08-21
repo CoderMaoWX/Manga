@@ -100,6 +100,7 @@ class WXResponseModel: NSObject {
     var responseDuration: TimeInterval? = nil
     var responseCode: Int? = nil
     var responseCustomModel: Convertible? = nil
+    var parseKeyPathModel: AnyObject? = nil ///解析的数据: Model, [Model]
     var responseObject: AnyObject? = nil
     var responseDict: Dictionary<String, Any>? = nil
     var responseMsg: String? = nil
@@ -113,21 +114,18 @@ class WXResponseModel: NSObject {
         guard let modelCalss = requestApi.responseCustomModelCalss else { return }
         var customModelKeyPath = requestApi.customModelKeyPath
         
-        if customModelKeyPath == nil {
-            customModelKeyPath = WXNetworkConfig.shared.customModelKeyPath
-            
-        } else if let modelKey = customModelKeyPath, modelKey.count == 0 {
+        if (customModelKeyPath ?? "").count == 0 {
             customModelKeyPath = WXNetworkConfig.shared.customModelKeyPath
         }
         
-        if let customModelKeyPath = customModelKeyPath, customModelKeyPath.count > 0 {
+        if let modelKeyPath = customModelKeyPath, modelKeyPath.count > 0 {
             var lastValueDict: Any?
             
-            if customModelKeyPath.contains(".") {
-                let customModelKeyPathArray =  customModelKeyPath.components(separatedBy: ".")
-                lastValueDict = responseDict[customModelKeyPathArray.first!]
+            if modelKeyPath.contains(".") {
+                let keyPathArr =  modelKeyPath.components(separatedBy: ".")
+                lastValueDict = responseDict
                 
-                for modelKey in customModelKeyPathArray {
+                for modelKey in keyPathArr {
                     if lastValueDict == nil {
                         return
                     } else {
@@ -135,7 +133,7 @@ class WXResponseModel: NSObject {
                     }
                 }
             } else {
-                lastValueDict = responseDict[customModelKeyPath]
+                lastValueDict = responseDict[modelKeyPath]
             }
            
             if let customModelValue = lastValueDict as? Dictionary<String, Any> {

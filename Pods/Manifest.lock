@@ -61,7 +61,7 @@ DEPENDENCIES:
   - YYCache
 
 SPEC REPOS:
-  https://cdn.cocoapods.org/:
+  trunk:
     - Alamofire
     - EmptyDataSet-Swift
     - FDFullscreenPopGesture
@@ -107,6 +107,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: 67823dcc1f680cd76ce99b5fb2a99a1846ff7d1d
+PODFILE CHECKSUM: 5b5e34ee23bfc9ad1a50f0242ce79f080cc73885
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2
