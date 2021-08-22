@@ -108,7 +108,7 @@ class WXResponseModel: NSObject {
     var originalRequest: URLRequest? = nil
     fileprivate (set) var apiUniquelyIp: String?  = nil
     
-    func configModel(requestApi: WXNetworkRequest, responseDict: Dictionary<String, Any>) {
+    fileprivate func configModel(requestApi: WXNetworkRequest, responseDict: Dictionary<String, Any>) {
         
         guard let keyPathInfo = requestApi.parseKeyPathInfo, keyPathInfo.count == 1 else { return }
         
@@ -143,7 +143,7 @@ class WXResponseModel: NSObject {
         }
     }
     
-    func fetchDictValue(respKey: String, respValue: Any?) -> Any? {
+    fileprivate func fetchDictValue(respKey: String, respValue: Any?) -> Any? {
         if let respDict = respValue as? Dictionary<String, Any> {
             for (dictKey, dictValue) in respDict {
                 if respKey == dictKey {
@@ -183,11 +183,13 @@ class WXNetworkRequest: WXBaseRequest {
     var requestAccessories: [WXNetworkMulticenter]? = nil
     
     ///以下为私有属性,外部可以忽略
-    
-    fileprivate (set) var retryCount: Int = 0
-    fileprivate (set) var apiUniquelyIp: String = ""
-    fileprivate (set) var requestDuration: Double = 0
-    fileprivate (set) var managerRequestKey: String = ""
+    fileprivate var retryCount: Int = 0
+    fileprivate var apiUniquelyIp: String = ""
+    fileprivate var requestDuration: Double = 0
+
+    fileprivate lazy var managerRequestKey: String = {
+        return "\(requestURL)/\(finalParameters?.toJSON() ?? "")"
+    }()
     
     @discardableResult
     func startRequest(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
@@ -212,7 +214,7 @@ class WXNetworkRequest: WXBaseRequest {
         return dataRequest
     }
     
-    func configResponseBlock(responseBlock: @escaping WXNetworkResponseBlock, responseObj: AnyObject?) {
+    fileprivate func configResponseBlock(responseBlock: @escaping WXNetworkResponseBlock, responseObj: AnyObject?) {
         if responseObj != nil {
             if let retryCountWhenFailure = retryCountWhenFailure,
                retryCount < retryCountWhenFailure,
@@ -235,7 +237,7 @@ class WXNetworkRequest: WXBaseRequest {
         }
     }
     
-    func checkPostNotification(responseModel: WXResponseModel) {
+    fileprivate func checkPostNotification(responseModel: WXResponseModel) {
         let notifyDict = WXNetworkConfig.shared.errorCodeNotifyDict
         if let responseCode = responseModel.responseCode, let notifyDict = notifyDict {
             for (key, value) in notifyDict where responseCode == value {
@@ -244,12 +246,12 @@ class WXNetworkRequest: WXBaseRequest {
         }
     }
     
-    func getCurrentTimestamp() -> Double {
+    fileprivate func getCurrentTimestamp() -> Double {
         let dat = NSDate.init(timeIntervalSinceNow: 0)
         return dat.timeIntervalSince1970 * 1000
     }
     
-    func judgeShowLoading(show: Bool) {
+    fileprivate func judgeShowLoading(show: Bool) {
         let config = WXNetworkConfig.shared.showRequestLaoding
         guard config else { return }
         if let loadingSuperView = loadingSuperView {
@@ -261,11 +263,11 @@ class WXNetworkRequest: WXBaseRequest {
         }
     }
     
-    var configFailMessage: String {
+    fileprivate var configFailMessage: String {
         return KWXRequestFailueTipMessage
     }
     
-    func configResponseModel(responseObj: AnyObject) -> WXResponseModel {
+    fileprivate func configResponseModel(responseObj: AnyObject) -> WXResponseModel {
         let rspModel = WXResponseModel()
         rspModel.responseDuration  = getCurrentTimestamp() - self.requestDuration
         rspModel.apiUniquelyIp     = apiUniquelyIp
@@ -282,8 +284,6 @@ class WXNetworkRequest: WXBaseRequest {
         }
         
         if code != -1 { //错误
-            rspModel.isSuccess     = false
-            rspModel.isCacheData   = false
             rspModel.responseMsg   = configFailMessage
             rspModel.responseCode  = code
             rspModel.error = NSError(domain: configFailMessage, code: code, userInfo: nil)
@@ -314,7 +314,7 @@ class WXNetworkRequest: WXBaseRequest {
         return rspModel
     }
     
-    func handleMulticenter(type: WXRequestMulticenterType, responseModel: WXResponseModel) {
+    fileprivate func handleMulticenter(type: WXRequestMulticenterType, responseModel: WXResponseModel) {
         
         var delegate: WXNetworkMulticenter?
         if let tmpDelegate = multicenterDelegate {
@@ -336,12 +336,7 @@ class WXNetworkRequest: WXBaseRequest {
             }
             
         case .WillStop:
-            if WXNetworkConfig.shared.closeUrlResponsePrintfLog == false {
-                let logHeader = WXNetworkPlugin.appendingPrintfLogHeader(request: self, responseModel: responseModel)
-                let logFooter = WXNetworkPlugin.appendingPrintfLogFooter(responseModel: responseModel)
-                debugLog("\(logHeader)", "\(logFooter)");
-            }
-            
+            printfResponseLog(responseModel: responseModel)
             delegate?.requestWillStop(request: self, responseModel: responseModel)
             
             if let requestAccessories = requestAccessories {
@@ -363,10 +358,21 @@ class WXNetworkRequest: WXBaseRequest {
                 }
             }
             // save as much as possible at the end
-            if responseModel.isCacheData == false {
+            if responseModel.isCacheData {
+                printfResponseLog(responseModel: responseModel)
+            } else {
                 saveResponseObjToCache(responseModel: responseModel)
             }
         }
+    }
+    
+    fileprivate func printfResponseLog(responseModel: WXResponseModel) {
+        #if DEBUG
+        guard WXNetworkConfig.shared.closeUrlResponsePrintfLog == false else { return }
+        let logHeader = WXNetworkPlugin.appendingPrintfLogHeader(request: self, responseModel: responseModel)
+        let logFooter = WXNetworkPlugin.appendingPrintfLogFooter(responseModel: responseModel)
+        debugLog("\(logHeader + logFooter)");
+        #endif
     }
     
     //MARK: - DealWithCache
@@ -378,7 +384,7 @@ class WXNetworkRequest: WXBaseRequest {
         return ""
     }()
     
-    func checkRequestInCache() -> Bool {
+    fileprivate func checkRequestInCache() -> Bool {
         if cacheResponseBlock != nil || autoCacheResponse {
             let networkCache = WXNetworkConfig.shared.networkDiskCache
             if networkCache.containsObject(forKey: cacheKey) {
@@ -388,7 +394,7 @@ class WXNetworkRequest: WXBaseRequest {
         return false
     }
     
-    func readRequestCacheWithBlock(fetchCacheBlock: @escaping (AnyObject) -> ()) {
+    fileprivate func readRequestCacheWithBlock(fetchCacheBlock: @escaping (AnyObject) -> ()) {
         if cacheResponseBlock != nil || autoCacheResponse {
             let networkCache = WXNetworkConfig.shared.networkDiskCache
             
@@ -406,7 +412,7 @@ class WXNetworkRequest: WXBaseRequest {
         }
     }
     
-    func saveResponseObjToCache(responseModel: WXResponseModel) {
+    fileprivate func saveResponseObjToCache(responseModel: WXResponseModel) {
         if let cacheBlock = cacheResponseBlock {
             let customResponseObject = cacheBlock(responseModel)
             if let saveCache = customResponseObject {
@@ -414,14 +420,14 @@ class WXNetworkRequest: WXBaseRequest {
                 networkCache.setObject(saveCache as NSCoding, forKey: cacheKey)
             }
         } else if autoCacheResponse {
-            if let responseObject = responseModel.responseObject {
+            if let responseObject = responseModel.responseObject, responseObject is Dictionary<String, Any> {
                 let networkCache = WXNetworkConfig.shared.networkDiskCache
                 networkCache.setObject(responseObject as? NSCoding, forKey: cacheKey)
             }
         }
     }
     
-    func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> Dictionary<String, Any> {
+    fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> Dictionary<String, Any> {
         let config = WXNetworkConfig.shared
         var responseDcit: [String : Any] = [:]
         
@@ -448,6 +454,5 @@ class WXNetworkRequest: WXBaseRequest {
         }
         return responseDcit
     }
-
     
 }
