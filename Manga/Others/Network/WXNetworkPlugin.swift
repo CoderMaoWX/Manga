@@ -14,7 +14,7 @@ class WXNetworkPlugin {
     /// - Parameters:
     ///   - request: 响应模型
     ///   - responseModel: 请求对象
-    static func uploadNetworkResponseJson(request: WXNetworkRequest,
+    static func uploadNetworkResponseJson(request: WXRequestApi,
                                    responseModel: WXResponseModel) {
         if responseModel.isCacheData { return }
         let configu = WXNetworkConfig.shared
@@ -71,7 +71,7 @@ class WXNetworkPlugin {
     ///   - request: 响应模型
     ///   - responseModel: 请求对象
     /// - Returns: 日志头部字符串
-    static func appendingPrintfLogHeader(request: WXNetworkRequest,
+    static func appendingPrintfLogHeader(request: WXRequestApi,
                                   responseModel: WXResponseModel) -> String {
         let isSuccess   = responseModel.isSuccess
         let isCacheData = responseModel.isCacheData

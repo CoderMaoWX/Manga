@@ -54,7 +54,7 @@ class BoutiqueVC: BaseVC {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         
-        let request = WXNetworkRequest()
+        let request = WXRequestApi()
         request.requestMethod = .get
         request.requestURL = url
         request.parameters = param

@@ -17,7 +17,7 @@
 		5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5846C87D26D36C4300CEF2FC /* TestViewController.swift */; };
 		5846C88026D36C4300CEF2FC /* TestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5846C87E26D36C4300CEF2FC /* TestViewController.xib */; };
 		584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9625C3F27A00FA507C /* AppDelegate.swift */; };
-		58763FB926CF9D8000AA3985 /* WXNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */; };
+		58763FB926CF9D8000AA3985 /* WXRequestApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FB826CF9D8000AA3985 /* WXRequestApi.swift */; };
 		58763FBB26CFB3F200AA3985 /* WXNetworkConstr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */; };
 		58763FBD26D0841100AA3985 /* WXNetworkPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FBC26D0841100AA3985 /* WXNetworkPlugin.swift */; };
 		5887389825C5587C0049ECAD /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389725C5587C0049ECAD /* HomeVC.swift */; };
@@ -76,7 +76,7 @@
 		5846C87E26D36C4300CEF2FC /* TestViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestViewController.xib; sourceTree = "<group>"; };
 		584D5D9325C3F27A00FA507C /* Manga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584D5D9625C3F27A00FA507C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkRequest.swift; sourceTree = "<group>"; };
+		58763FB826CF9D8000AA3985 /* WXRequestApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXRequestApi.swift; sourceTree = "<group>"; };
 		58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkConstr.swift; sourceTree = "<group>"; };
 		58763FBC26D0841100AA3985 /* WXNetworkPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkPlugin.swift; sourceTree = "<group>"; };
 		5887389725C5587C0049ECAD /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -291,7 +291,7 @@
 			isa = PBXGroup;
 			children = (
 				58CDFB5626BA33F000056527 /* ApiClass.swift */,
-				58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */,
+				58763FB826CF9D8000AA3985 /* WXRequestApi.swift */,
 				A39301BD26CFF6D4002EF3AB /* WXNetworkConfig.swift */,
 				58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */,
 				58763FBC26D0841100AA3985 /* WXNetworkPlugin.swift */,
@@ -498,7 +498,7 @@
 				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
 				5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */,
-				58763FB926CF9D8000AA3985 /* WXNetworkRequest.swift in Sources */,
+				58763FB926CF9D8000AA3985 /* WXRequestApi.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,
 				5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */,

@@ -26,21 +26,21 @@ protocol WXNetworkMulticenter {
     
     /// 网络请求将要开始回调
     /// - Parameter request: 请求对象
-    func requestWillStart(request: WXNetworkRequest)
+    func requestWillStart(request: WXRequestApi)
     
     
     /// 网络请求回调将要停止 (包括成功或失败)
     /// - Parameters:
     ///   - request: 请求对象
     ///   - responseModel: 响应对象
-    func requestWillStop(request: WXNetworkRequest, responseModel: WXResponseModel)
+    func requestWillStop(request: WXRequestApi, responseModel: WXResponseModel)
     
     
     /// 网络请求已经回调完成 (包括成功或失败)
     /// - Parameters:
     ///   - request: 请求对象
     ///   - responseModel: 响应对象
-    func requestDidCompletion(request: WXNetworkRequest, responseModel: WXResponseModel)
+    func requestDidCompletion(request: WXRequestApi, responseModel: WXResponseModel)
     
 }
 
@@ -51,5 +51,5 @@ protocol WXNetworkDelegate {
     /// - Parameters:
     ///   - request: 请求对象
     ///   - responseModel: 响应对象
-    func wxResponseWithRequest(request: WXNetworkRequest, responseModel: WXResponseModel)
+    func wxResponseWithRequest(request: WXRequestApi, responseModel: WXResponseModel)
 }

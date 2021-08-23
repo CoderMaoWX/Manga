@@ -1,5 +1,5 @@
 //
-//  WXNetworkRequest.swift
+//  WXRequestApi.swift
 //  Manga
 //
 //  Created by 610582 on 2021/8/20.
@@ -20,7 +20,7 @@ enum WXRequestMulticenterType: Int {
 class WXResponseModel: NSObject {
     /**
      * 是否请求成功
-     * 优先使用 WXNetworkRequest.successKeyCodeMap,
+     * 优先使用 WXRequestApi.successKeyCodeMap,
      * 否则使用WXNetworkConfig.successKeyCodeMap标识来判断是否请求成功
      ***/
     var isSuccess: Bool = false
@@ -48,7 +48,7 @@ class WXResponseModel: NSObject {
     fileprivate (set) var apiUniquelyIp: String?  = nil
     
     ///解析响应数据的数据模型 (支持KeyPath匹配)
-    fileprivate func parseResponseKeyPathModel(requestApi: WXNetworkRequest,
+    fileprivate func parseResponseKeyPathModel(requestApi: WXRequestApi,
                                                   responseDict: Dictionary<String, Any>) {
         guard let keyPathInfo = requestApi.parseKeyPathMap, keyPathInfo.count == 1 else { return }
         
@@ -109,7 +109,7 @@ class WXBaseRequest: NSObject {
     ///请求自定义头信息
     var requestHeaderDict: Dictionary<String, String>? = nil
     ///请求任务对象
-    private(set) var requestDataTask: DataRequest? = nil
+    private (set) var requestDataTask: DataRequest? = nil
     
     ///底层最终的请求参数 (页面上可实现<WXPackParameters>协议来实现重新包装请求参数)
     lazy var finalParameters: Dictionary<String, Any>? = {
@@ -171,7 +171,7 @@ class WXBaseRequest: NSObject {
 
 typealias WXCacheResponseClosure = (WXResponseModel) -> (Dictionary<String, Any>?)
 
-class WXNetworkRequest: WXBaseRequest {
+class WXRequestApi: WXBaseRequest {
     
     ///请求成功时是否自动缓存响应数据, 默认不缓存
     var autoCacheResponse: Bool = false
@@ -493,6 +493,38 @@ class WXNetworkRequest: WXBaseRequest {
             responseDcit["response"] = response
         }
         return responseDcit
+    }
+    
+}
+
+
+class WXBatchRequestApi {
+    
+    ///全部请求对象, 响应时按添加顺序返回
+    var requestArray: [WXRequestApi]? = nil
+    
+    ///isAllDone
+    fileprivate (set) var isAllDone: Bool = false
+    
+    ///全部响应数据,按请求Api的添加顺序返回
+    var responseDataArray: [WXResponseModel]? = nil
+    
+    /// 取消所有请求
+    func cancelAllRequest() {
+        
+    }
+    
+    typealias WXNetworkBatchBlock = (WXBatchRequestApi) -> ()
+    
+    
+    /// 批量网络请求: (实例方法:Block回调方式)
+    /// - Parameters:
+    ///   - responseBlock: 请求全部完成后的响应block回调
+    ///   - waitAllDone: 是否等待全部请求完成才回调, 否则回调多次
+    func startRequest(responseBlock: WXNetworkBatchBlock, waitAllDone: Bool = true) {
+        
+        
+        
     }
     
 }

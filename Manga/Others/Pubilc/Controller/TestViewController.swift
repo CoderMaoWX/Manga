@@ -65,7 +65,7 @@ class TestViewController: UIViewController {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         
-        let api = WXNetworkRequest()
+        let api = WXRequestApi()
         api.requestMethod = .get
         api.requestURL = url
         api.parameters = param
