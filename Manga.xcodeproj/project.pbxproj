@@ -14,6 +14,8 @@
 		5824E5E826C66D4200246D19 /* PublicUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E726C66D4200246D19 /* PublicUtils.swift */; };
 		5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E926CA05FB00246D19 /* AlertController+Extension.swift */; };
 		583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583D452025CBF6A500C053F7 /* UCateModel.swift */; };
+		5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5846C87D26D36C4300CEF2FC /* TestViewController.swift */; };
+		5846C88026D36C4300CEF2FC /* TestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5846C87E26D36C4300CEF2FC /* TestViewController.xib */; };
 		584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9625C3F27A00FA507C /* AppDelegate.swift */; };
 		58763FB926CF9D8000AA3985 /* WXNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */; };
 		58763FBB26CFB3F200AA3985 /* WXNetworkConstr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */; };
@@ -70,6 +72,8 @@
 		5824E5E726C66D4200246D19 /* PublicUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUtils.swift; sourceTree = "<group>"; };
 		5824E5E926CA05FB00246D19 /* AlertController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertController+Extension.swift"; sourceTree = "<group>"; };
 		583D452025CBF6A500C053F7 /* UCateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UCateModel.swift; sourceTree = "<group>"; };
+		5846C87D26D36C4300CEF2FC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		5846C87E26D36C4300CEF2FC /* TestViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestViewController.xib; sourceTree = "<group>"; };
 		584D5D9325C3F27A00FA507C /* Manga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584D5D9625C3F27A00FA507C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXNetworkRequest.swift; sourceTree = "<group>"; };
@@ -311,6 +315,8 @@
 				58CDFB5A26BA33F000056527 /* WebVC.swift */,
 				58CDFB5B26BA33F000056527 /* BaseNavigationVC.swift */,
 				58CDFB5C26BA33F000056527 /* TabBarController.swift */,
+				5846C87D26D36C4300CEF2FC /* TestViewController.swift */,
+				5846C87E26D36C4300CEF2FC /* TestViewController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -409,6 +415,7 @@
 				58B812DC262D3D9400EB00C7 /* MineCenterHeaderView.xib in Resources */,
 				58CDFB7D26BA33F100056527 /* Assets.xcassets in Resources */,
 				58CDFB8926BA34E200056527 /* LaunchScreen.storyboard in Resources */,
+				5846C88026D36C4300CEF2FC /* TestViewController.xib in Resources */,
 				58A821B9260ADFA2002F7689 /* TrendInfoCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -496,6 +503,7 @@
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,
 				5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */,
 				58A821BC260AE125002F7689 /* TrendModel.swift in Sources */,
+				5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */,
 				58CDFB7926BA33F100056527 /* TabBarController.swift in Sources */,
 				A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */,
 				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,
