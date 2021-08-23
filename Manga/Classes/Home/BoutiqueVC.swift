@@ -58,8 +58,8 @@ class BoutiqueVC: BaseVC {
         request.requestMethod = .get
         request.requestURL = url
         request.parameters = param
-        request.successKeyCodeInfo = ["code" : 1]
-        request.parseKeyPathInfo = ["data.returnData.comicLists" : ComicListModel.self]
+        request.successKeyCodeMap = ["code" : 1]
+        request.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
         
         request.startRequest { [weak self] (responseModel) in
             self?.comicLists = (responseModel.parseKeyPathModel as? [ComicListModel]) ?? []

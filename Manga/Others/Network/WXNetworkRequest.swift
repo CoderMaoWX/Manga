@@ -20,8 +20,8 @@ enum WXRequestMulticenterType: Int {
 class WXResponseModel: NSObject {
     /**
      * 是否请求成功
-     * 优先使用 WXNetworkRequest.successKeyCodeInfo,
-     * 否则使用WXNetworkConfig.successKeyCodeInfo标识来判断是否请求成功
+     * 优先使用 WXNetworkRequest.successKeyCodeMap,
+     * 否则使用WXNetworkConfig.successKeyCodeMap标识来判断是否请求成功
      ***/
     var isSuccess: Bool = false
     ///本次响应Code码
@@ -48,8 +48,9 @@ class WXResponseModel: NSObject {
     fileprivate (set) var apiUniquelyIp: String?  = nil
     
     ///解析响应数据的数据模型 (支持KeyPath匹配)
-    fileprivate func parseResponseKeyPathModel(requestApi: WXNetworkRequest, responseDict: Dictionary<String, Any>) {
-        guard let keyPathInfo = requestApi.parseKeyPathInfo, keyPathInfo.count == 1 else { return }
+    fileprivate func parseResponseKeyPathModel(requestApi: WXNetworkRequest,
+                                                  responseDict: Dictionary<String, Any>) {
+        guard let keyPathInfo = requestApi.parseKeyPathMap, keyPathInfo.count == 1 else { return }
         
         let parseKey: String = keyPathInfo.keys.first!
         guard parseKey.count > 0 else { return }
@@ -148,7 +149,6 @@ class WXBaseRequest: NSObject {
     @discardableResult
     func baseRequestBlock(successClosure: WXNetworkSuccessBlock?,
                           failureClosure: WXNetworkFailureBlock? ) -> DataRequest {
-
         let dataRequest = AF.request(requestURL,
                                      method: requestMethod,
                                      parameters: finalParameters,
@@ -179,17 +179,17 @@ class WXNetworkRequest: WXBaseRequest {
     ///请求成功时自定义响应缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时,底层则不缓存)
     var cacheResponseBlock: WXCacheResponseClosure? = nil
     
-    ///自定义请求成功标识
-    var successKeyCodeInfo: [String : Int]? = nil
+    ///自定义请求成功映射Key/Value
+    var successKeyCodeMap: [String : Int]? = nil
     
-    ///设置请求成功时解析数据模型的key: (支持KeyPath匹配, 解析的模型在 WXResponseModel.parseKeyPathModel 返回
-    var parseKeyPathInfo: [String : Convertible.Type]? = nil
+    ///请求成功时解析数据模型映射:KeyPath/Model: (支持KeyPath匹配, 解析的模型在 WXResponseModel.parseKeyPathModel 返回
+    var parseKeyPathMap: [String : Convertible.Type]? = nil
 
     ///请求转圈的父视图
     var loadingSuperView: UIView? = nil
     
     ///请求失败之后重新请求次数, (每次重试时间隔3秒)
-    var retryCountWhenFailure: Int? = nil
+    var retryCountWhenFail: Int? = nil
     
     ///网络请求过程多链路回调<将要开始, 将要停止, 已经完成>
     /// 注意: 如果没有实现此代理则会回调单例中的全局代理<globleMulticenterDelegate>
@@ -203,10 +203,6 @@ class WXNetworkRequest: WXBaseRequest {
     fileprivate var retryCount: Int = 0
     fileprivate var apiUniquelyIp: String = ""
     fileprivate var requestDuration: Double = 0
-
-    fileprivate lazy var managerRequestKey: String = {
-        return "\(requestURL)/\(finalParameters?.toJSON() ?? "")"
-    }()
     
     @discardableResult
     func startRequest(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
@@ -244,8 +240,8 @@ class WXNetworkRequest: WXBaseRequest {
         }
         
         if responseObj != nil {
-            if let retryCountWhenFailure = retryCountWhenFailure,
-               retryCount < retryCountWhenFailure,
+            if let retryCountWhenFail = retryCountWhenFail,
+               retryCount < retryCountWhenFail,
                let error = responseObj as? Error, error._code != -999 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     self.retryCount += 1
@@ -286,7 +282,7 @@ class WXNetworkRequest: WXBaseRequest {
             rspModel.responseDict = responseDict
             
             let config = WXNetworkConfig.shared
-            if let successKeyCode = self.successKeyCodeInfo ?? config.successKeyCodeInfo, successKeyCode.count == 1 {
+            if let successKeyCode = self.successKeyCodeMap ?? config.successKeyCodeMap, successKeyCode.count == 1 {
                 let setKey: String = successKeyCode.keys.first!
                 let setCode: Int = successKeyCode.values.first!
                 
@@ -416,7 +412,7 @@ class WXNetworkRequest: WXBaseRequest {
     
     lazy var cacheKey: String = {
         if cacheResponseBlock != nil || autoCacheResponse {
-            return managerRequestKey.jk.md5Encrypt()
+            return (requestURL + (finalParameters?.toJSON() ?? "") ).jk.md5Encrypt()
         }
         return ""
     }()
@@ -483,7 +479,7 @@ class WXNetworkRequest: WXBaseRequest {
                 }
             }
             //只要返回为非Error就包装一个公共的key, 防止页面当失败解析
-            // if let successKeyCode = self.successKeyCodeInfo ?? config.successKeyCodeInfo, successKeyCode.count == 1 {
+            // if let successKeyCode = self.successKeyCodeMap ?? config.successKeyCodeMap, successKeyCode.count == 1 {
             //     let setKey: String = successKeyCode.keys.first!
             //     let setCode: Int = successKeyCode.values.first!
             //     responseDcit[setKey] = "\(setCode)"

@@ -10,10 +10,10 @@ import YYCache
 
 final class WXNetworkConfig {
     
-    ///全局定义请求成功标识
-    var successKeyCodeInfo: [String : Int]? = ["status" : 200]
+    ///约定全局请求成功映射: key/value
+    var successKeyCodeMap: [String : Int]? = ["status" : 200]
     
-    ///全局定义请求提示key, 和失败时的默认提示
+    ///约定全局请求提示key, 和失败时的默认提示文案
     var messageTipKeyAndFailInfo: [String : String]? = ["msg" : KWXRequestFailueTipMessage]
     
     ///全局网络请求拦截类

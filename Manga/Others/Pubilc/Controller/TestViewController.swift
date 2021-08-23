@@ -55,26 +55,27 @@ class TestViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //testAlert()
-        //testloadData()
-        testType()
+        testloadData()
+//        testType()
     }
     
     func testloadData() {
         WXNetworkConfig.shared.showRequestLaoding = true
         
-        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew-99"
+        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         
-        let request = WXNetworkRequest()
-        request.requestMethod = .get
-        request.requestURL = url
-        request.parameters = param
-        request.retryCountWhenFailure = 3
-//        request.successKeyCodeInfo = ["code" : 1]
-        request.parseKeyPathInfo = ["data.returnData.comicLists" : ComicListModel.self]
+        let api = WXNetworkRequest()
+        api.requestMethod = .get
+        api.requestURL = url
+        api.parameters = param
+        api.retryCountWhenFail = 3
+        api.successKeyCodeMap = ["code" : 1]
+        api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
         
-        request.startRequest { [weak self] (responseModel) in
+        api.startRequest { [weak self] (responseModel) in
             debugLog(responseModel);
+//            responseModel.parseKeyPathModel
         }
     }
     
