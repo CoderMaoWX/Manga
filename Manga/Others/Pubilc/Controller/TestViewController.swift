@@ -8,16 +8,55 @@
 
 import UIKit
 
-class TestViewController: UIViewController {
+//class A_Class<T> {
+//    var property: T? = nil
+//    var b_class: B_Class<T>? = nil
+//
+//    func a_class_method<T>(property: T) {
+//        let bClass = B_Class<T>()
+//        b_class = bClass.b_class_method()
+//    }
+//}
+//
+//class B_Class<T> {
+//    var c_class: C_Class<T>? = nil
+//
+//    func b_class_method() -> Self {
+//        return self
+//    }
+//}
+//
+//class C_Class<T> {
+//    var property: T? = nil
+//
+//}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //testAlert()
-        testloadData()
+
+
+class TestViewController: UIViewController {
+    
+    func testType() {
+        //let dType: ComicListModel.Type = ComicListModel.self
+        
+//        let myBook = Book()
+//        let person = ZhangSan<Book>()
+//
+//        let something1 = person.buySome(number: type(of: myBook))
+//        let something2 = person.sallSome(number: 10)
+//        something2
+//        person.book
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         testloadData()
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        //testAlert()
+        //testloadData()
+        testType()
     }
     
     func testloadData() {
