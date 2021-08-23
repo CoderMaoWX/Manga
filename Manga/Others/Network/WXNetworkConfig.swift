@@ -10,30 +10,20 @@ import YYCache
 
 final class WXNetworkConfig {
     
-    ///各站自定义请求成功标识
-    var statusKey: String = "status"
-    var statusCode: Int = 200
-    var messageKey: String = "msg"
+    ///全局定义请求成功标识
+    var successKeyCodeInfo: [String : Int]? = ["status" : 200]
     
-    ///请求失败时的默认提示
-    var requestFailDefaultMessage: String? = nil
+    ///全局定义请求提示key, 和失败时的默认提示
+    var messageTipKeyAndFailInfo: [String : String]? = ["msg" : KWXRequestFailueTipMessage]
     
     ///全局网络请求拦截类
     var urlSessionProtocolClasses: Any.Type? = nil
     
-    ///取请求缓存时用到的YYChache对象
-    let networkDiskCache: YYDiskCache = {
-        let userDocument = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first ?? ""
-        let directryPath = (userDocument as NSString).appendingPathComponent(kWXNetworkResponseCacheKey)
-        return YYDiskCache.init(path: directryPath)!
-    }()
-    
-    
     ///请求遇到相应Code时触发通知: [ "notificationName" : 200 ]
-    var errorCodeNotifyDict: Dictionary<String, Int>? = nil
+    var codeNotifyDict: Dictionary<String, Int>? = nil
     
     /**
-     * 是否需要全局管理 网络请求过程多通道回调<将要开始, 将要完成, 已经完成>
+     * 是否需要全局管理 网络请求过程多链路回调<将要开始, 将要完成, 已经完成>
      * 注意: 此代理与请求对象中的<multicenterDelegate>代理互斥, 两者都实现时只会回调请求对象中的代理
      */
     var globleMulticenterDelegate: WXNetworkMulticenter? = nil
@@ -73,6 +63,13 @@ final class WXNetworkConfig {
      * (如果是统计日志发出的请求则请在请求参数中带有key: KWXUploadAppsFlyerStatisticsKey)
      * */
     var closeStatisticsPrintfLog: Bool = false
+    
+    ///取请求缓存时用到的YYChache对象
+    let networkDiskCache: YYDiskCache = {
+        let userDocument = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first ?? ""
+        let directryPath = (userDocument as NSString).appendingPathComponent(kWXNetworkResponseCacheKey)
+        return YYDiskCache.init(path: directryPath)!
+    }()
 
     ///单利对象
     static let shared = WXNetworkConfig()

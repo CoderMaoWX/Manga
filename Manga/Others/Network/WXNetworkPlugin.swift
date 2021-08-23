@@ -55,7 +55,7 @@ class WXNetworkPlugin {
         uploadInfo["timestamp"]        = formatter.string(from: Date())
         uploadInfo["url"]              = request.requestURL
         uploadInfo["request"]          = requestJson
-        uploadInfo["requestHeader"]    = responseModel.originalRequest?.allHTTPHeaderFields ?? [:]
+        uploadInfo["requestHeader"]    = responseModel.urlRequest?.allHTTPHeaderFields ?? [:]
         uploadInfo["response"]         = responseModel.responseDict ?? [:]
         uploadInfo["responseHeader"]   = responseModel.urlResponse?.allHeaderFields ?? [:]
         
@@ -77,11 +77,12 @@ class WXNetworkPlugin {
         let isCacheData = responseModel.isCacheData
         let requestJson = (request.finalParameters ?? [:]).toJSON() ?? ""
         let hostTitle = WXNetworkConfig.shared.networkHostTitle ?? ""
-        let requestHeadersInfo = responseModel.originalRequest?.allHTTPHeaderFields ?? [:]
+        let requestHeaders = responseModel.urlRequest?.allHTTPHeaderFields ?? [:]
+        let requestHeadersString = (requestHeaders.count > 0) ? "\n\n请求头信息=\(requestHeaders.toJSON()!)" : ""
         let successFlag = isCacheData ? "❤️❤️❤️" : (isSuccess ? "✅✅✅" : "❌❌❌")
         let statusString  = isCacheData ? "本地缓存数据成功" : (isSuccess ? "网络数据成功" : "网络数据失败");
         
-        let logBody = "\n\(successFlag)请求接口地址\(hostTitle)= \(request.requestURL)\n请求参数json=\n\(requestJson)\n\n请求头信息= \(requestHeadersInfo.toJSON()!)\n\n\(statusString)返回=\n"
+        let logBody = "\n\(successFlag)请求接口地址\(hostTitle)= \(request.requestURL)\n请求参数json=\n\(requestJson)\(requestHeadersString)\n\n\(statusString)返回=\n"
         return logBody
     }
 

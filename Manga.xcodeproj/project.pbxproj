@@ -288,8 +288,8 @@
 			children = (
 				58CDFB5626BA33F000056527 /* ApiClass.swift */,
 				58763FB826CF9D8000AA3985 /* WXNetworkRequest.swift */,
-				58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */,
 				A39301BD26CFF6D4002EF3AB /* WXNetworkConfig.swift */,
+				58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */,
 				58763FBC26D0841100AA3985 /* WXNetworkPlugin.swift */,
 			);
 			path = Network;

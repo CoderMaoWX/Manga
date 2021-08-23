@@ -21,6 +21,7 @@ let kWXRequestDataFromCacheKey = "WXNetwork_DataFromCacheKey"
     func parametersWillTransformFromOriginParamete(parameters: Dictionary<String, Any>?) -> Dictionary<String, Any>
 }
 
+///网络请求过程多链路回调
 protocol WXNetworkMulticenter {
     
     /// 网络请求将要开始回调

@@ -20,7 +20,9 @@ class BaseVC: UIViewController {
         layoutSubView()
         
         //测试代码
-        testAlert()
+//        testAlert()
+        
+//        testloadData()
     }
     
     // MARK: - 初始化布局UI
@@ -29,6 +31,23 @@ class BaseVC: UIViewController {
     }
     func layoutSubView()  {
         //由子类重写覆盖
+    }
+    
+    func testloadData() {
+        WXNetworkConfig.shared.showRequestLaoding = true
+        
+        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
+        let param: [String : Any] = ["sexType" : 1]
+        
+        let request = WXNetworkRequest()
+        request.requestMethod = .get
+        request.requestURL = url
+        request.parameters = param
+        request.parseKeyPathInfo = ["data.returnData.comicLists" : ComicListModel.self]
+        
+        request.startRequest { [weak self] (responseModel) in
+            debugLog(responseModel);
+        }
     }
     
     //MARK: ----- 测试代码 -----

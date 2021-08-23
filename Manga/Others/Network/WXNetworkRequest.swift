@@ -95,20 +95,33 @@ class WXBaseRequest: NSObject {
 
 ///包装的响应数据
 class WXResponseModel: NSObject {
+    // TODO: 是否请求成功, 如果请求Request中有设置成功标记
     var isSuccess: Bool = false
-    var isCacheData: Bool = false
-    var responseDuration: TimeInterval? = nil
+    ///本次响应Code码
     var responseCode: Int? = nil
-    var parseKeyPathModel: AnyObject? = nil ///解析的数据: Model, [Model]
-    var responseObject: AnyObject? = nil
-    var responseDict: Dictionary<String, Any>? = nil
+    ///本次响应的提示信息
     var responseMsg: String? = nil
+    ///本次数据是否为缓存
+    var isCacheData: Bool = false
+    ///请求耗时(毫秒)
+    var responseDuration: TimeInterval? = nil
+    ///解析数据模型: 支持KeyPath匹配, 返回 Model对象 或者数组模型 [Model]
+    var parseKeyPathModel: AnyObject? = nil
+    ///本次响应的原始数据: NSDictionary, UIImage, NSData ...
+    var responseObject: AnyObject? = nil
+    ///本次响应的字典数据
+    var responseDict: Dictionary<String, Any>? = nil
+    ///错误信息
     var error: NSError? = nil
+    ///原始响应
     var urlResponse: HTTPURLResponse? = nil
-    var originalRequest: URLRequest? = nil
+    ///原始请求
+    var urlRequest: URLRequest? = nil
+    
     fileprivate (set) var apiUniquelyIp: String?  = nil
     
-    fileprivate func configModel(requestApi: WXNetworkRequest, responseDict: Dictionary<String, Any>) {
+    ///解析响应数据的数据模型 (支持KeyPath匹配)
+    fileprivate func parseResponseKeyPathModel(requestApi: WXNetworkRequest, responseDict: Dictionary<String, Any>) {
         
         guard let keyPathInfo = requestApi.parseKeyPathInfo, keyPathInfo.count == 1 else { return }
         
@@ -159,13 +172,16 @@ typealias WXCacheResponseClosure = (WXResponseModel) -> (Dictionary<String, Any>
 
 class WXNetworkRequest: WXBaseRequest {
     
-    ///请求成功时是否需要自动缓存响应数据, 默认不缓存
+    ///请求成功时是否自动缓存响应数据, 默认不缓存
     var autoCacheResponse: Bool = false
     
     ///请求成功时自定义响应缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时,底层则不缓存)
     var cacheResponseBlock: WXCacheResponseClosure? = nil
     
-    ///请求成功返回后 根据[KeyPath:Class]解析成相应的Model返回
+    ///自定义请求成功标识
+    var successKeyCodeInfo: [String : Int]? = nil
+    
+    ///设置请求成功时解析数据模型的key: (支持KeyPath匹配, 解析的模型在 WXResponseModel.parseKeyPathModel 返回
     var parseKeyPathInfo: [String : Convertible.Type]? = nil
 
     ///请求转圈的父视图
@@ -174,7 +190,7 @@ class WXNetworkRequest: WXBaseRequest {
     ///请求失败之后重新请求次数, (每次重试时间隔3秒)
     var retryCountWhenFailure: Int? = nil
     
-    ///网络请求过程多通道回调<将要开始, 将要停止, 已经完成>
+    ///网络请求过程多链路回调<将要开始, 将要停止, 已经完成>
     /// 注意: 如果没有实现此代理则会回调单例中的全局代理<globleMulticenterDelegate>
     var multicenterDelegate: WXNetworkMulticenter? = nil
     
@@ -237,8 +253,9 @@ class WXNetworkRequest: WXBaseRequest {
         }
     }
     
+    ///检查是否需要发出通知
     fileprivate func checkPostNotification(responseModel: WXResponseModel) {
-        let notifyDict = WXNetworkConfig.shared.errorCodeNotifyDict
+        let notifyDict = WXNetworkConfig.shared.codeNotifyDict
         if let responseCode = responseModel.responseCode, let notifyDict = notifyDict {
             for (key, value) in notifyDict where responseCode == value {
                 NotificationCenter.default.post(name: NSNotification.Name(key), object: responseModel)
@@ -252,8 +269,7 @@ class WXNetworkRequest: WXBaseRequest {
     }
     
     fileprivate func judgeShowLoading(show: Bool) {
-        let config = WXNetworkConfig.shared.showRequestLaoding
-        guard config else { return }
+        guard WXNetworkConfig.shared.showRequestLaoding else { return }
         if let loadingSuperView = loadingSuperView {
             if show {
                 showLoading(toView: loadingSuperView)
@@ -263,49 +279,63 @@ class WXNetworkRequest: WXBaseRequest {
         }
     }
     
+    ///失败默认提示
     fileprivate var configFailMessage: String {
+        if let msgTipKeyOrFailInfo = WXNetworkConfig.shared.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
+            return msgTipKeyOrFailInfo.values.first ?? KWXRequestFailueTipMessage
+        }
         return KWXRequestFailueTipMessage
     }
     
+    ///配置数据响应回调模型
     fileprivate func configResponseModel(responseObj: AnyObject) -> WXResponseModel {
         let rspModel = WXResponseModel()
         rspModel.responseDuration  = getCurrentTimestamp() - self.requestDuration
         rspModel.apiUniquelyIp     = apiUniquelyIp
         rspModel.responseObject    = responseObj
         
-        rspModel.originalRequest = requestDataTask?.request
+        rspModel.urlRequest = requestDataTask?.request
         rspModel.urlResponse = requestDataTask?.response
 
-        var code: Int = -1
+        var errorCode: Int? = nil
         if let error = responseObj as? Error {
-            code = error._code
+            errorCode = error._code
         } else if let error = responseObj as? NSError {
-            code = error.code
+            errorCode = error.code
         }
         
-        if code != -1 { //错误
+        if errorCode != nil { //错误
             rspModel.responseMsg   = configFailMessage
-            rspModel.responseCode  = code
-            rspModel.error = NSError(domain: configFailMessage, code: code, userInfo: nil)
+            rspModel.responseCode  = errorCode
+            rspModel.error = NSError(domain: configFailMessage, code: errorCode!, userInfo: nil)
             
         } else {
             let responseDict = packagingResponseObj(responseObj: responseObj, responseModel: rspModel)
-            let config = WXNetworkConfig.shared
-            let responseCode = responseDict[config.statusKey]
-            let code = Int((responseCode as? String) ?? "0")!
             rspModel.responseDict = responseDict
-            rspModel.responseCode = code
-            if let _ = responseCode, code == config.statusCode {
-                rspModel.isSuccess = true
+            
+            let config = WXNetworkConfig.shared
+            if let successKeyCode = self.successKeyCodeInfo ?? config.successKeyCodeInfo, successKeyCode.count == 1 {
+                let setKey: String = successKeyCode.keys.first!
+                let setCode: Int = successKeyCode.values.first!
+                
+                if let responseCode = responseDict[setKey], let rspCode = responseCode as? Int {
+                    rspModel.isSuccess = (setCode == rspCode)
+                    rspModel.responseCode = rspCode
+                }
             }
-            if let msg = responseDict[config.messageKey] {
-                rspModel.responseMsg = msg as? String
+            if let msgTipKeyOrFailInfo = config.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
+                if let msg = responseDict[ (msgTipKeyOrFailInfo.keys.first!) ] {
+                    rspModel.responseMsg = msg as? String
+                } else {
+                    rspModel.responseMsg = msgTipKeyOrFailInfo.values.first ?? configFailMessage
+                }
             }
             if rspModel.isSuccess {
-                rspModel.configModel(requestApi: self, responseDict: responseDict)
+                rspModel.parseResponseKeyPathModel(requestApi: self, responseDict: responseDict)
             } else {
-                rspModel.responseMsg = rspModel.responseMsg ?? configFailMessage
-                rspModel.error = NSError(domain: rspModel.responseMsg!, code: code, userInfo: responseDict)
+                let domain = rspModel.responseMsg ?? configFailMessage
+                let code = rspModel.responseCode ?? -444
+                rspModel.error = NSError(domain: domain, code: code, userInfo: responseDict)
             }
         }
         if rspModel.isCacheData == false {
@@ -314,6 +344,7 @@ class WXNetworkRequest: WXBaseRequest {
         return rspModel
     }
     
+    ///网络请求过程多链路回调
     fileprivate func handleMulticenter(type: WXRequestMulticenterType, responseModel: WXResponseModel) {
         
         var delegate: WXNetworkMulticenter?
@@ -366,6 +397,7 @@ class WXNetworkRequest: WXBaseRequest {
         }
     }
     
+    ///打印网络响应日志到控制台
     fileprivate func printfResponseLog(responseModel: WXResponseModel) {
         #if DEBUG
         guard WXNetworkConfig.shared.closeUrlResponsePrintfLog == false else { return }
@@ -384,6 +416,7 @@ class WXNetworkRequest: WXBaseRequest {
         return ""
     }()
     
+    ///检查接口本地需要有缓存
     fileprivate func checkRequestInCache() -> Bool {
         if cacheResponseBlock != nil || autoCacheResponse {
             let networkCache = WXNetworkConfig.shared.networkDiskCache
@@ -394,6 +427,7 @@ class WXNetworkRequest: WXBaseRequest {
         return false
     }
     
+    ///读取接口本地缓存数据
     fileprivate func readRequestCacheWithBlock(fetchCacheBlock: @escaping (AnyObject) -> ()) {
         if cacheResponseBlock != nil || autoCacheResponse {
             let networkCache = WXNetworkConfig.shared.networkDiskCache
@@ -412,6 +446,7 @@ class WXNetworkRequest: WXBaseRequest {
         }
     }
     
+    ///保存接口响应数据到本地缓存
     fileprivate func saveResponseObjToCache(responseModel: WXResponseModel) {
         if let cacheBlock = cacheResponseBlock {
             let customResponseObject = cacheBlock(responseModel)
@@ -428,9 +463,7 @@ class WXNetworkRequest: WXBaseRequest {
     }
     
     fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> Dictionary<String, Any> {
-        let config = WXNetworkConfig.shared
         var responseDcit: [String : Any] = [:]
-        
         if responseObj is Dictionary<String, Any> {
             responseDcit += responseObj as! Dictionary<String, Any>
             
@@ -443,14 +476,24 @@ class WXNetworkRequest: WXBaseRequest {
                 if let rspData = rspData as? Data {
                     responseModel.responseObject = rspData as AnyObject
                 }
-            } else {
-                //注意:不能直接赋值responseObj, 因为插件库那边会dataWithJSONObject打印会崩溃
-                //responseDcit[config.customModelKeyPath] = [responseObj description];
             }
             //只要返回为非Error就包装一个公共的key, 防止页面当失败解析
-            if responseDcit[config.statusKey] == nil {
-                responseDcit[config.statusKey] = "\(config.statusCode)"
+            // if let successKeyCode = self.successKeyCodeInfo ?? config.successKeyCodeInfo, successKeyCode.count == 1 {
+            //     let setKey: String = successKeyCode.keys.first!
+            //     let setCode: Int = successKeyCode.values.first!
+            //     responseDcit[setKey] = "\(setCode)"
+            // }
+            
+        } else if let jsonString = responseObj as? String { // jsonString -> Dictionary
+            if let data = (try? JSONSerialization.jsonObject(
+                            with: jsonString.data(using: String.Encoding.utf8,
+                                                  allowLossyConversion: true)!,
+                            options: JSONSerialization.ReadingOptions.mutableContainers)) as? Dictionary<String, Any> {
+                return data
             }
+            
+        } else if let response = responseObj.description {
+            responseDcit["response"] = response
         }
         return responseDcit
     }

@@ -19,8 +19,8 @@ class TabBarController: UITabBarController {
     func setupViewController() {
         setupChildVC(childVC: BaseVC(),
                      title: "测试",
-                     imageName: "tabbar_item_default_2",
-                     selImageName: "tabbar_item_selected_2")
+                     imageName: "",
+                     selImageName: "")
         
         setupChildVC(childVC: HomeVC(),
                      title: "精选",

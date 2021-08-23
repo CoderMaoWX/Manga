@@ -37,7 +37,6 @@ class BoutiqueVC: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         collectionView.addRefreshKit(startHeader: true, headerClosure:  { [weak self] in
             self?.loadData()
         })
@@ -61,11 +60,13 @@ class BoutiqueVC: BaseVC {
         request.requestMethod = .get
         request.requestURL = url
         request.parameters = param
+        request.successKeyCodeInfo = ["code" : 1]
         request.parseKeyPathInfo = ["data.returnData.comicLists" : ComicListModel.self]
         
         request.startRequest { [weak self] (responseModel) in
             self?.comicLists = (responseModel.parseKeyPathModel as? [ComicListModel]) ?? []
             self?.collectionView.reloadData(autoEmptyViewInfo: self?.comicLists)
+            debugLog(responseModel);
         }
     }
 }
