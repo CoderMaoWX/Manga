@@ -54,10 +54,7 @@ class BoutiqueVC: BaseVC {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         
-        let request = WXRequestApi()
-        request.requestMethod = .get
-        request.requestURL = url
-        request.parameters = param
+        let request = WXRequestApi(url, method: .get, parameters: param)
         request.successKeyCodeMap = ["code" : 1]
         request.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
         

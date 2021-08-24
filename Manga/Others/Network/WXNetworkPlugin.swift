@@ -59,9 +59,7 @@ class WXNetworkPlugin {
         uploadInfo["response"]         = responseModel.responseDict ?? [:]
         uploadInfo["responseHeader"]   = responseModel.urlResponse?.allHeaderFields ?? [:]
         
-        let baseRequest = WXBaseRequest()
-        baseRequest.requestURL = uploadLogUrl
-        baseRequest.parameters = uploadInfo
+        let baseRequest = WXBaseRequest(uploadLogUrl, method: .post, parameters: uploadInfo)
         baseRequest.baseRequestBlock(successClosure: nil, failureClosure: nil)
     }
 

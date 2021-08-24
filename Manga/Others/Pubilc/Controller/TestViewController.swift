@@ -46,16 +46,21 @@ class TestViewController: UIViewController {
 //        something2
 //        person.book
         
+        var parseKeyPathMap: [String : AnyClass]? = nil
+        parseKeyPathMap = ["name" : TestViewController.self]
+//        parseKeyPathMap
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        testloadData()
+        debugLog(self)
+        debugLog(type(of: self))
+        debugLog(TestViewController.Type.self)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //testAlert()
-        testloadData()
+          //testAlert()
+        testloadData2()
 //        testType()
     }
     
@@ -65,17 +70,30 @@ class TestViewController: UIViewController {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         
-        let api = WXRequestApi()
-        api.requestMethod = .get
-        api.requestURL = url
-        api.parameters = param
+        let api = WXRequestApi(url, method: .get, parameters: param)
         api.retryCountWhenFail = 3
         api.successKeyCodeMap = ["code" : 1]
         api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
         
-        api.startRequest { [weak self] (responseModel) in
+        api.startRequest { responseModel in
             debugLog(responseModel);
 //            responseModel.parseKeyPathModel
+        }
+    }
+    
+    func testloadData2() {
+        let url0 = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
+        let para0: [String : Any] = ["sexType" : 1]
+        let api0 = WXRequestApi(url0, method: .get, parameters: para0)
+        
+        
+        let url1 = "http://123.207.32.32:8000/home/multidata"
+        let api1 = WXRequestApi(url1, method: .get)
+        
+        
+        let api = WXBatchRequestApi(requestArray: [api0, api1] )
+        api.startRequest { batchApi in
+            debugLog("批量请求", batchApi.responseDataArray);
         }
     }
     

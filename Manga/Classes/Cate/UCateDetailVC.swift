@@ -60,7 +60,7 @@ class UCateDetailVC: BaseVC {
                 debugLog("详情页请求成功:" , dataDict as Any)
                 let listModel = model(from: (dataDict as! NSDictionary), ComicListModel.self)
                 self?.dataArray = listModel?.comics ?? []
-                self?.tableView.reloadData()
+                self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
                 break
                 
             case .failure(let error):

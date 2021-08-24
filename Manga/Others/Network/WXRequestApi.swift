@@ -10,100 +10,26 @@ import Alamofire
 import JKSwiftExtension
 import KakaJSON
 
+typealias DictionaryStrAny = Dictionary<String, Any>
+
 enum WXRequestMulticenterType: Int {
     case WillStart
     case WillStop
     case DidCompletion
 }
 
-///包装的响应数据
-class WXResponseModel: NSObject {
-    /**
-     * 是否请求成功
-     * 优先使用 WXRequestApi.successKeyCodeMap,
-     * 否则使用WXNetworkConfig.successKeyCodeMap标识来判断是否请求成功
-     ***/
-    var isSuccess: Bool = false
-    ///本次响应Code码
-    var responseCode: Int? = nil
-    ///本次响应的提示信息
-    var responseMsg: String? = nil
-    ///本次数据是否为缓存
-    var isCacheData: Bool = false
-    ///请求耗时(毫秒)
-    var responseDuration: TimeInterval? = nil
-    ///解析数据的模型: 可KeyPath匹配, 返回 Model对象 或者数组模型 [Model]
-    var parseKeyPathModel: AnyObject? = nil
-    ///本次响应的原始数据: NSDictionary, UIImage, NSData ...
-    var responseObject: AnyObject? = nil
-    ///本次响应的字典数据
-    var responseDict: Dictionary<String, Any>? = nil
-    ///错误信息
-    var error: NSError? = nil
-    ///原始响应
-    var urlResponse: HTTPURLResponse? = nil
-    ///原始请求
-    var urlRequest: URLRequest? = nil
-    
-    fileprivate (set) var apiUniquelyIp: String?  = nil
-    
-    ///解析响应数据的数据模型 (支持KeyPath匹配)
-    fileprivate func parseResponseKeyPathModel(requestApi: WXRequestApi,
-                                                  responseDict: Dictionary<String, Any>) {
-        guard let keyPathInfo = requestApi.parseKeyPathMap, keyPathInfo.count == 1 else { return }
-        
-        let parseKey: String = keyPathInfo.keys.first!
-        guard parseKey.count > 0 else { return }
-        let parseCalss = keyPathInfo.values.first
-        guard let modelCalss = parseCalss else { return }
-        
-        var lastValueDict: Any?
-        if parseKey.contains(".") {
-            let keyPathArr =  parseKey.components(separatedBy: ".")
-            lastValueDict = responseDict
-            
-            for modelKey in keyPathArr {
-                if lastValueDict == nil {
-                    return
-                } else {
-                    lastValueDict = findSuitableDict(respKey: modelKey, respValue: lastValueDict)
-                }
-            }
-        } else {
-            lastValueDict = responseDict[parseKey]
-        }
-        if let customModelValue = lastValueDict as? Dictionary<String, Any> {
-            parseKeyPathModel = customModelValue.kj.model(type: modelCalss) as AnyObject
-            
-        }  else if let modelObj = lastValueDict as? Array<Any> {
-            parseKeyPathModel = modelObj.kj.modelArray(type: modelCalss) as AnyObject
-        }
-    }
+//MARK: - 请求基础对象
 
-    ///寻找最合适的解析: 字典/数组
-    fileprivate func findSuitableDict(respKey: String, respValue: Any?) -> Any? {
-        if let respDict = respValue as? Dictionary<String, Any> {
-            for (dictKey, dictValue) in respDict {
-                if respKey == dictKey {
-                    return dictValue
-                }
-            }
-        }
-        return nil
-    }
-}
-
+///请求基础对象, 外部上不建议直接用，请使用子类请求方法
 typealias WXNetworkResponseBlock = (WXResponseModel) -> ()
-typealias WXNetworkSuccessBlock = (AnyObject) -> ()
-typealias WXNetworkFailureBlock = (AnyObject) -> ()
 
 class WXBaseRequest: NSObject {
     ///请求Method类型
-    var requestMethod: HTTPMethod = .post
+    private (set) var requestMethod: HTTPMethod = .post
     ///请求地址
-    var requestURL: String = ""
+    private (set) var requestURL: String = ""
     ///请求参数
-    var parameters: Dictionary<String, Any>? = nil
+    private (set) var parameters: DictionaryStrAny? = nil
     ///请求超时，默认30s
     var timeOut: Int = 30
     ///请求自定义头信息
@@ -111,8 +37,15 @@ class WXBaseRequest: NSObject {
     ///请求任务对象
     private (set) var requestDataTask: DataRequest? = nil
     
+    required init(_ requestURL: String, method: HTTPMethod = .post, parameters: DictionaryStrAny? = nil) {
+        super.init()
+        self.requestMethod = method
+        self.requestURL = requestURL
+        self.parameters = parameters
+    }
+    
     ///底层最终的请求参数 (页面上可实现<WXPackParameters>协议来实现重新包装请求参数)
-    lazy var finalParameters: Dictionary<String, Any>? = {
+    lazy var finalParameters: DictionaryStrAny? = {
         var parameters = parameters
         if conforms(to: WXPackParameters.self) {
             parameters = (self as? WXPackParameters)?.parametersWillTransformFromOriginParamete(parameters: parameters)
@@ -147,8 +80,8 @@ class WXBaseRequest: NSObject {
     ///   - failureClosure: 请求失败回调
     /// - Returns: 求Session对象
     @discardableResult
-    func baseRequestBlock(successClosure: WXNetworkSuccessBlock?,
-                          failureClosure: WXNetworkFailureBlock? ) -> DataRequest {
+    func baseRequestBlock(successClosure: ((AnyObject) -> ())?,
+                          failureClosure: ((AnyObject) -> ())? ) -> DataRequest {
         let dataRequest = AF.request(requestURL,
                                      method: requestMethod,
                                      parameters: finalParameters,
@@ -169,15 +102,16 @@ class WXBaseRequest: NSObject {
     }
 }
 
-typealias WXCacheResponseClosure = (WXResponseModel) -> (Dictionary<String, Any>?)
+//MARK: - 单个请求对象
 
+///单个请求对象, 功能根据需求可多种自定义
 class WXRequestApi: WXBaseRequest {
     
     ///请求成功时是否自动缓存响应数据, 默认不缓存
     var autoCacheResponse: Bool = false
     
     ///请求成功时自定义响应缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时,底层则不缓存)
-    var cacheResponseBlock: WXCacheResponseClosure? = nil
+    var cacheResponseBlock: ((WXResponseModel) -> (DictionaryStrAny?))? = nil
     
     ///自定义请求成功映射Key/Value
     var successKeyCodeMap: [String : Int]? = nil
@@ -201,8 +135,14 @@ class WXRequestApi: WXBaseRequest {
     
     ///以下为私有属性,外部可以忽略
     fileprivate var retryCount: Int = 0
-    fileprivate var apiUniquelyIp: String = ""
     fileprivate var requestDuration: Double = 0
+    fileprivate lazy var apiUniquelyIp: String = {
+        return "\(self)"
+    }()
+    
+    required init(_ requestURL: String, method: HTTPMethod = .post, parameters: DictionaryStrAny? = nil) {
+        super.init(requestURL, method: method, parameters: parameters)
+    }
     
     @discardableResult
     func startRequest(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
@@ -434,7 +374,7 @@ class WXRequestApi: WXBaseRequest {
             let networkCache = WXNetworkConfig.shared.networkDiskCache
             
             networkCache.object(forKey: cacheKey) { key, cacheObject in
-                guard let cacheObject = cacheObject, var cacheDcit = cacheObject as? Dictionary<String, Any> else { return }
+                guard let cacheObject = cacheObject, var cacheDcit = cacheObject as? DictionaryStrAny else { return }
                 cacheDcit[kWXRequestDataFromCacheKey] = true
                 if Thread.isMainThread {
                     fetchCacheBlock(cacheDcit as AnyObject)
@@ -456,17 +396,17 @@ class WXRequestApi: WXBaseRequest {
                 networkCache.setObject(saveCache as NSCoding, forKey: cacheKey)
             }
         } else if autoCacheResponse {
-            if let responseObject = responseModel.responseObject, responseObject is Dictionary<String, Any> {
+            if let responseObject = responseModel.responseObject, responseObject is DictionaryStrAny {
                 let networkCache = WXNetworkConfig.shared.networkDiskCache
                 networkCache.setObject(responseObject as? NSCoding, forKey: cacheKey)
             }
         }
     }
     
-    fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> Dictionary<String, Any> {
+    fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> DictionaryStrAny {
         var responseDcit: [String : Any] = [:]
-        if responseObj is Dictionary<String, Any> {
-            responseDcit += responseObj as! Dictionary<String, Any>
+        if responseObj is DictionaryStrAny {
+            responseDcit += responseObj as! DictionaryStrAny
             
             if let _ = responseDcit[kWXRequestDataFromCacheKey] {
                 responseDcit.removeValue(forKey: kWXRequestDataFromCacheKey)
@@ -486,7 +426,7 @@ class WXRequestApi: WXBaseRequest {
             // }
             
         } else if let jsonString = responseObj as? String { // jsonString -> Dictionary
-            if let data = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? Dictionary<String, Any> {
+            if let data = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? DictionaryStrAny {
                 return data
             }
         } else if let response = responseObj.description {
@@ -497,34 +437,169 @@ class WXRequestApi: WXBaseRequest {
     
 }
 
+//MARK: - 批量请求对象
 
+///批量请求对象, 可以
 class WXBatchRequestApi {
     
-    ///全部请求对象, 响应时按添加顺序返回
-    var requestArray: [WXRequestApi]? = nil
-    
-    ///isAllDone
-    fileprivate (set) var isAllDone: Bool = false
+    ///全部请求是否都请求完成了
+    var isAllSuccess: Bool = false
     
     ///全部响应数据,按请求Api的添加顺序返回
-    var responseDataArray: [WXResponseModel]? = nil
+    var responseDataArray: [WXResponseModel] = []
     
-    /// 取消所有请求
-    func cancelAllRequest() {
-        
+    ///全部请求对象, 响应时按添加顺序返回
+    fileprivate (set) var requestArray: [WXRequestApi]
+    
+    fileprivate var requestCount: Int = 0
+    fileprivate var waitAllSuccess: Bool = false
+    fileprivate var hasMarkBatchFailure: Bool = false
+    fileprivate var batchRequest: WXBatchRequestApi? = nil
+    fileprivate var responseBatchBlock: ((WXBatchRequestApi) -> ())? = nil
+    fileprivate var responseInfoDict: Dictionary<String, WXResponseModel> = [:]
+    
+    required init(requestArray: [WXRequestApi]) {
+        self.requestArray = requestArray
+        requestCount = requestArray.count;
     }
     
-    typealias WXNetworkBatchBlock = (WXBatchRequestApi) -> ()
-    
+    ///根据请求获取指定的响应数据
+    func responseForRequest(request: WXRequestApi) -> WXResponseModel {
+        return responseInfoDict[request.apiUniquelyIp] ?? WXResponseModel()
+    }
     
     /// 批量网络请求: (实例方法:Block回调方式)
     /// - Parameters:
     ///   - responseBlock: 请求全部完成后的响应block回调
     ///   - waitAllDone: 是否等待全部请求完成才回调, 否则回调多次
-    func startRequest(responseBlock: WXNetworkBatchBlock, waitAllDone: Bool = true) {
-        
-        
-        
+    func startRequest(responseBlock: @escaping (WXBatchRequestApi) -> (),
+                      waitAllDone: Bool = true) {
+        batchRequest = self
+        waitAllSuccess = waitAllDone
+        responseBatchBlock = responseBlock
+        for api in requestArray {
+            
+            api.startRequest { responseModel in
+                if responseModel.isSuccess == false,
+                   self.waitAllSuccess == false,
+                   self.hasMarkBatchFailure == false {
+                    
+                    self.hasMarkBatchFailure = true
+                    for requestApi in self.requestArray {
+                        if requestApi.apiUniquelyIp == responseModel.apiUniquelyIp {
+                            requestApi.requestDataTask?.cancel()
+                        }
+                    }
+                }
+                self.handleBatchResponse(responseModel: responseModel)
+            }
+        }
     }
     
+    fileprivate func handleBatchResponse(responseModel: WXResponseModel) {
+        if responseModel.isCacheData == false {
+            requestCount -= 1
+        }
+        responseInfoDict[responseModel.apiUniquelyIp] = responseModel
+        guard requestCount <= 0 else { return }
+        
+        isAllSuccess = !hasMarkBatchFailure
+        var responseArray: [WXResponseModel] = []
+        
+        for requestApi in requestArray {
+            if let responseObj = responseInfoDict[ requestApi.apiUniquelyIp ] {
+                responseArray.append(responseObj)
+            }
+            // 请求最终回调
+            responseDataArray = responseArray;
+            if let responseBatchBlock = responseBatchBlock {
+                responseBatchBlock(self)
+            }
+            batchRequest = nil
+        }
+    }
+    
+    /// 取消所有请求
+    func cancelAllRequest() {
+        
+    }
+}
+
+//MARK: - 请求响应对象
+
+///包装的响应数据
+class WXResponseModel: NSObject {
+    /**
+     * 是否请求成功
+     * 优先使用 WXRequestApi.successKeyCodeMap,
+     * 否则使用WXNetworkConfig.successKeyCodeMap标识来判断是否请求成功
+     ***/
+    var isSuccess: Bool = false
+    ///本次响应Code码
+    var responseCode: Int? = nil
+    ///本次响应的提示信息
+    var responseMsg: String? = nil
+    ///本次数据是否为缓存
+    var isCacheData: Bool = false
+    ///请求耗时(毫秒)
+    var responseDuration: TimeInterval? = nil
+    ///解析数据的模型: 可KeyPath匹配, 返回 Model对象 或者数组模型 [Model]
+    var parseKeyPathModel: AnyObject? = nil
+    ///本次响应的原始数据: NSDictionary, UIImage, NSData ...
+    var responseObject: AnyObject? = nil
+    ///本次响应的字典数据
+    var responseDict: DictionaryStrAny? = nil
+    ///错误信息
+    var error: NSError? = nil
+    ///原始响应
+    var urlResponse: HTTPURLResponse? = nil
+    ///原始请求
+    var urlRequest: URLRequest? = nil
+    
+    fileprivate (set) var apiUniquelyIp: String = "\(String(describing: self))"
+    
+    ///解析响应数据的数据模型 (支持KeyPath匹配)
+    fileprivate func parseResponseKeyPathModel(requestApi: WXRequestApi,
+                                                  responseDict: DictionaryStrAny) {
+        guard let keyPathInfo = requestApi.parseKeyPathMap, keyPathInfo.count == 1 else { return }
+        
+        let parseKey: String = keyPathInfo.keys.first!
+        guard parseKey.count > 0 else { return }
+        let parseCalss = keyPathInfo.values.first
+        guard let modelCalss = parseCalss else { return }
+        
+        var lastValueDict: Any?
+        if parseKey.contains(".") {
+            let keyPathArr =  parseKey.components(separatedBy: ".")
+            lastValueDict = responseDict
+            
+            for modelKey in keyPathArr {
+                if lastValueDict == nil {
+                    return
+                } else {
+                    lastValueDict = findSuitableDict(respKey: modelKey, respValue: lastValueDict)
+                }
+            }
+        } else {
+            lastValueDict = responseDict[parseKey]
+        }
+        if let customModelValue = lastValueDict as? DictionaryStrAny {
+            parseKeyPathModel = customModelValue.kj.model(type: modelCalss) as AnyObject
+            
+        }  else if let modelObj = lastValueDict as? Array<Any> {
+            parseKeyPathModel = modelObj.kj.modelArray(type: modelCalss) as AnyObject
+        }
+    }
+
+    ///寻找最合适的解析: 字典/数组
+    fileprivate func findSuitableDict(respKey: String, respValue: Any?) -> Any? {
+        if let respDict = respValue as? DictionaryStrAny {
+            for (dictKey, dictValue) in respDict {
+                if respKey == dictKey {
+                    return dictValue
+                }
+            }
+        }
+        return nil
+    }
 }
