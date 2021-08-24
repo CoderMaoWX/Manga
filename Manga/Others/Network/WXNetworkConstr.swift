@@ -7,11 +7,16 @@
 
 import Foundation
 
-let KWXRequestAbsoluteDateFormatterKey = "yyyy-MM-dd-HHmmssSSS"
 let KWXUploadAppsFlyerStatisticsKey = "KWXUploadAppsFlyerStatisticsKey"
 let kWXNetworkResponseCacheKey = "kWXNetworkResponseCacheKey"
 let KWXRequestFailueTipMessage = "Loading failed, please try again later."
 let kWXRequestDataFromCacheKey = "WXNetwork_DataFromCacheKey"
+
+enum WXRequestMulticenterType: Int {
+    case WillStart
+    case WillStop
+    case DidCompletion
+}
 
 @objc protocol WXPackParameters {
     

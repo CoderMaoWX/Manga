@@ -12,11 +12,6 @@ import KakaJSON
 
 typealias DictionaryStrAny = Dictionary<String, Any>
 
-enum WXRequestMulticenterType: Int {
-    case WillStart
-    case WillStop
-    case DidCompletion
-}
 
 //MARK: - 请求基础对象
 
@@ -205,17 +200,21 @@ class WXRequestApi: WXBaseRequest {
         rspModel.urlResponse = requestDataTask?.response
 
         var code: Int? = nil
+        var domain: String = configFailMessage
         if let error = responseObj as? Error {
             code = error._code
+            domain = error._domain
         } else if let error = responseObj as? NSError {
             code = error.code
+            domain = error.domain
         } else if responseObj == nil {
             code = -444
         }
+        
         if let errorCode = code { //has Error
-            rspModel.responseMsg   = configFailMessage
+            rspModel.responseMsg   = domain
             rspModel.responseCode  = errorCode
-            rspModel.error = NSError(domain: configFailMessage, code: errorCode, userInfo: nil)
+            rspModel.error = NSError(domain: domain, code: errorCode, userInfo: nil)
             
         } else {
             let responseDict = packagingResponseObj(responseObj: responseObj!, responseModel: rspModel)
@@ -253,8 +252,8 @@ class WXRequestApi: WXBaseRequest {
     }
     
     ///网络请求过程多链路回调
-    fileprivate func handleMulticenter(type: WXRequestMulticenterType, responseModel: WXResponseModel) {
-        
+    fileprivate func handleMulticenter(type: WXRequestMulticenterType,
+                                       responseModel: WXResponseModel) {
         var delegate: WXNetworkMulticenter?
         if let tmpDelegate = multicenterDelegate {
             delegate = tmpDelegate
@@ -442,25 +441,23 @@ class WXRequestApi: WXBaseRequest {
 ///批量请求对象, 可以
 class WXBatchRequestApi {
     
-    ///全部请求是否都请求完成了
+    ///是否全部请求都请求成功了
     var isAllSuccess: Bool = false
     
-    ///全部响应数据,按请求Api的添加顺序返回
+    ///全部响应数据,如果waitAllDone=false,则按请求Api的添加顺序返回, 否则不保证顺序
     var responseDataArray: [WXResponseModel] = []
     
     ///全部请求对象, 响应时按添加顺序返回
     fileprivate (set) var requestArray: [WXRequestApi]
     
     fileprivate var requestCount: Int = 0
-    fileprivate var waitAllSuccess: Bool = false
-    fileprivate var hasMarkBatchFailure: Bool = false
-    fileprivate var batchRequest: WXBatchRequestApi? = nil
+    fileprivate var hasMarkBatchFail: Bool = false
+    fileprivate var batchRequest: WXBatchRequestApi? = nil //避免提前释放当前对象
     fileprivate var responseBatchBlock: ((WXBatchRequestApi) -> ())? = nil
     fileprivate var responseInfoDict: Dictionary<String, WXResponseModel> = [:]
     
     required init(requestArray: [WXRequestApi]) {
         self.requestArray = requestArray
-        requestCount = requestArray.count;
     }
     
     ///根据请求获取指定的响应数据
@@ -474,24 +471,28 @@ class WXBatchRequestApi {
     ///   - waitAllDone: 是否等待全部请求完成才回调, 否则回调多次
     func startRequest(responseBlock: @escaping (WXBatchRequestApi) -> (),
                       waitAllDone: Bool = true) {
+        
+        responseDataArray.removeAll()
+        requestCount = requestArray.count
+        hasMarkBatchFail = false
         batchRequest = self
-        waitAllSuccess = waitAllDone
         responseBatchBlock = responseBlock
         for api in requestArray {
             
             api.startRequest { responseModel in
-                if responseModel.isSuccess == false,
-                   self.waitAllSuccess == false,
-                   self.hasMarkBatchFailure == false {
-                    
-                    self.hasMarkBatchFailure = true
-                    for requestApi in self.requestArray {
-                        if requestApi.apiUniquelyIp == responseModel.apiUniquelyIp {
-                            requestApi.requestDataTask?.cancel()
-                        }
-                    }
+                if responseModel.isSuccess == false {
+                    self.hasMarkBatchFail = true
                 }
-                self.handleBatchResponse(responseModel: responseModel)
+                if waitAllDone {
+                    self.handleBatchResponse(responseModel: responseModel)
+                } else { //回调多次
+                    self.isAllSuccess = !self.hasMarkBatchFail
+                    self.responseDataArray.append(responseModel)
+                    if let responseBatchBlock = self.responseBatchBlock {
+                        responseBatchBlock(self)
+                    }
+                    self.batchRequest = nil
+                }
             }
         }
     }
@@ -503,25 +504,29 @@ class WXBatchRequestApi {
         responseInfoDict[responseModel.apiUniquelyIp] = responseModel
         guard requestCount <= 0 else { return }
         
-        isAllSuccess = !hasMarkBatchFailure
+        isAllSuccess = !hasMarkBatchFail
         var responseArray: [WXResponseModel] = []
         
         for requestApi in requestArray {
             if let responseObj = responseInfoDict[ requestApi.apiUniquelyIp ] {
                 responseArray.append(responseObj)
             }
-            // 请求最终回调
-            responseDataArray = responseArray;
-            if let responseBatchBlock = responseBatchBlock {
-                responseBatchBlock(self)
-            }
-            batchRequest = nil
         }
+        // 请求最终回调
+        responseDataArray = responseArray;
+        if let responseBatchBlock = responseBatchBlock {
+            responseBatchBlock(self)
+        }
+        batchRequest = nil
     }
     
     /// 取消所有请求
     func cancelAllRequest() {
         
+    }
+    
+    deinit {
+        debugLog("WXBatchRequestApi 销毁了")
     }
 }
 

@@ -7,6 +7,7 @@
 //  测试类
 
 import UIKit
+import Alamofire
 
 //class A_Class<T> {
 //    var property: T? = nil
@@ -35,33 +36,51 @@ import UIKit
 
 class TestViewController: UIViewController {
     
-    func testType() {
-        //let dType: ComicListModel.Type = ComicListModel.self
-        
-//        let myBook = Book()
-//        let person = ZhangSan<Book>()
-//
-//        let something1 = person.buySome(number: type(of: myBook))
-//        let something2 = person.sallSome(number: 10)
-//        something2
-//        person.book
-        
-        var parseKeyPathMap: [String : AnyClass]? = nil
-        parseKeyPathMap = ["name" : TestViewController.self]
-//        parseKeyPathMap
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        debugLog(self)
-        debugLog(type(of: self))
-        debugLog(TestViewController.Type.self)
+        testloadData2()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-          //testAlert()
-        testloadData2()
+//         testAlert()
+//        testloadData()
 //        testType()
+    }
+    
+    func testloadData2() {
+        let url0 = "https://httpbin.org/anything"
+        //let para0: [String : Any] = ["name" : "张三"]
+        let api0 = WXRequestApi(url0, method: .get, parameters: nil)
+        
+        
+        let url1 = "http://123.207.32.32:8000/home/multidata"
+        let api1 = WXRequestApi(url1, method: .get)
+        
+        
+        let api = WXBatchRequestApi(requestArray: [api0, api1] )
+//        api.startRequest { batchApi in
+//            debugLog("批量请求", batchApi.responseDataArray)
+//        }
+        
+        api.startRequest(responseBlock: { batchApi in
+            debugLog("批量请求", batchApi.responseDataArray)
+        }, waitAllDone: false)
+    }
+    
+    func testAFMethod() {
+        let url = "https://httpbin.org/image"
+        AF.request(url,
+                   method: .get,
+                   parameters: nil,
+                   headers: ["accept" : "image/webp"]).responseJSON { response in
+                    switch response.result {
+                    case .success(let json):
+                        debugLog(json)
+                    case .failure(let error):
+                        debugLog(error)
+                    }
+                   }
     }
     
     func testloadData() {
@@ -81,20 +100,20 @@ class TestViewController: UIViewController {
         }
     }
     
-    func testloadData2() {
-        let url0 = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
-        let para0: [String : Any] = ["sexType" : 1]
-        let api0 = WXRequestApi(url0, method: .get, parameters: para0)
+    func testType() {
+    //        debugLog(self)
+    //        debugLog(type(of: self))
+    //        debugLog(TestViewController.Type.self)
         
-        
-        let url1 = "http://123.207.32.32:8000/home/multidata"
-        let api1 = WXRequestApi(url1, method: .get)
-        
-        
-        let api = WXBatchRequestApi(requestArray: [api0, api1] )
-        api.startRequest { batchApi in
-            debugLog("批量请求", batchApi.responseDataArray);
-        }
+        //let dType: ComicListModel.Type = ComicListModel.self
+//        let myBook = Book()
+//        let person = ZhangSan<Book>()
+//        let something1 = person.buySome(number: type(of: myBook))
+//        let something2 = person.sallSome(number: 10)
+//        something2
+//        person.book
+        var parseKeyPathMap: [String : AnyClass]? = nil
+        parseKeyPathMap = ["name" : TestViewController.self]
     }
     
     //MARK: ----- 测试代码 -----
@@ -121,15 +140,5 @@ class TestViewController: UIViewController {
             }
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

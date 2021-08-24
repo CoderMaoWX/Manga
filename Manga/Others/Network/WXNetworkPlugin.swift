@@ -36,7 +36,7 @@ class WXNetworkPlugin {
         
         let version = bundleInfo?["CFBundleShortVersionString"] ?? bundleInfo?[kCFBundleVersionKey as String] ?? ""
         
-        let formatter = DateFormatter(format: KWXRequestAbsoluteDateFormatterKey)
+        let formatter = DateFormatter(format: "yyyy-MM-dd-HHmmssSSS")
         formatter.timeZone = NSTimeZone.local
         
         let logHeader = appendingPrintfLogHeader(request: request, responseModel: responseModel)
