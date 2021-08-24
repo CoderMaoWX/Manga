@@ -441,7 +441,7 @@ class WXRequestApi: WXBaseRequest {
 ///批量请求对象, 可以
 class WXBatchRequestApi {
     
-    ///是否全部请求都请求成功了
+    ///全部请求是否都成功了
     var isAllSuccess: Bool = false
     
     ///全部响应数据,如果waitAllDone=false,则按请求Api的添加顺序返回, 否则不保证顺序
