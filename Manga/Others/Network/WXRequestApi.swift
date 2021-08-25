@@ -158,9 +158,9 @@ class WXRequestApi: WXBaseRequest {
         
         if WXNetworkConfig.shared.closeUrlResponsePrintfLog == false {
             if retryCount == 0 {
-                debugLog("\n👉👉👉已发出网络请求=", requestURL)
+                debugLog("👉👉👉已发出网络请求=", requestURL)
             } else {
-                debugLog("\n👉👉👉请求失败,第 \(retryCount) 次尝试重新请求=", requestURL)
+                debugLog("👉👉👉请求失败,第 \(retryCount) 次尝试重新请求=", requestURL)
             }
         }
         return dataRequest

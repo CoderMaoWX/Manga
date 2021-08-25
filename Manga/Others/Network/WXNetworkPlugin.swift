@@ -71,7 +71,7 @@ class WXNetworkPlugin {
     /// - Returns: 日志头部字符串
     static func appendingPrintfLogHeader(request: WXRequestApi,
                                   responseModel: WXResponseModel) -> String {
-        let isSuccess   = responseModel.isSuccess
+        let isSuccess   = (responseModel.responseDict == nil) ? false : true
         let isCacheData = responseModel.isCacheData
         let requestJson = (request.finalParameters ?? [:]).toJSON() ?? ""
         let hostTitle = WXNetworkConfig.shared.networkHostTitle ?? ""
@@ -89,16 +89,14 @@ class WXNetworkPlugin {
     /// - Parameter responseModel: 响应模型
     /// - Returns: 日志头部字符串
     static func appendingPrintfLogFooter(responseModel: WXResponseModel) -> String {
-        if responseModel.isSuccess {
-            var responseJson = responseModel.responseDict?.description
-            if let responseDict = responseModel.responseDict {
-                let jsonData = try? JSONSerialization.data(withJSONObject: responseDict, options: .prettyPrinted)
-                
-                if let jsonData = jsonData {
-                    responseJson = String(data: jsonData, encoding: .utf8)
-                }
+        if let responseDict = responseModel.responseDict {
+            let jsonData = try? JSONSerialization.data(withJSONObject: responseDict, options: .prettyPrinted)
+            
+            var responseJson = responseDict.description
+            if let jsonData = jsonData {
+                responseJson = String(data: jsonData, encoding: .utf8) ?? responseJson
             }
-            return responseJson ?? ""
+            return responseJson
         } else {
             return responseModel.error?.description ?? ""
         }

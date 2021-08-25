@@ -35,10 +35,6 @@ import Alamofire
 
 
 class TestViewController: UIViewController {
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        testloadData2()
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,25 +43,27 @@ class TestViewController: UIViewController {
 //        testType()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        testloadData2()
+    }
+    
     func testloadData2() {
         let url0 = "https://httpbin.org/anything"
         //let para0: [String : Any] = ["name" : "张三"]
         let api0 = WXRequestApi(url0, method: .get, parameters: nil)
+        api0.autoCacheResponse = true
         
         
-        let url1 = "http://123.207.32.32:8000/home/multidata"
+        //let url1 = "http://123.207.32.32:8000/home/multidata"
+        let url1 = "https://httpbin.org/delay/5"
         let api1 = WXRequestApi(url1, method: .get)
         api1.autoCacheResponse = true
         
         
-        let api = WXBatchRequestApi(requestArray: [ api1] )
-//        api.startRequest { batchApi in
-//            debugLog("批量请求", batchApi.responseDataArray)
-//        }
-        
+        let api = WXBatchRequestApi(requestArray: [api0, api1] )
         api.startRequest(responseBlock: { batchApi in
             debugLog("批量请求", batchApi.responseDataArray)
-        }, waitAllDone: false)
+        }, waitAllDone: true)
     }
     
     func testAFMethod() {
