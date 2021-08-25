@@ -32,8 +32,6 @@ import Alamofire
 //
 //}
 
-
-
 class TestViewController: UIViewController {
 
     override func viewDidLoad() {
@@ -44,26 +42,30 @@ class TestViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        testloadData2()
+    
+//        testloadData2()
     }
     
+    //MARK: ----- 测试代码 -----
+    
     func testloadData2() {
-        let url0 = "https://httpbin.org/anything"
-        //let para0: [String : Any] = ["name" : "张三"]
+        let url0 = "http://123.207.32.32:8000/home/multidata"
         let api0 = WXRequestApi(url0, method: .get, parameters: nil)
+        api0.successKeyCodeMap = ["returnCode" : "SUCCESS"]
         api0.autoCacheResponse = true
         
         
         //let url1 = "http://123.207.32.32:8000/home/multidata"
         let url1 = "https://httpbin.org/delay/5"
+        //let para0: [String : Any] = ["name" : "张三"]
         let api1 = WXRequestApi(url1, method: .get)
         api1.autoCacheResponse = true
         
         
         let api = WXBatchRequestApi(requestArray: [api0, api1] )
         api.startRequest(responseBlock: { batchApi in
-            debugLog("批量请求", batchApi.responseDataArray)
-        }, waitAllDone: true)
+            debugLog("批量请求回调", batchApi.responseDataArray)
+        }, waitAllDone: false)
     }
     
     func testAFMethod() {
@@ -89,7 +91,7 @@ class TestViewController: UIViewController {
         
         let api = WXRequestApi(url, method: .get, parameters: param)
         api.retryCountWhenFail = 3
-        api.successKeyCodeMap = ["code" : 1]
+        api.successKeyCodeMap = ["code" : "1"]
         api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
         
         api.startRequest { responseModel in
@@ -110,11 +112,10 @@ class TestViewController: UIViewController {
 //        let something2 = person.sallSome(number: 10)
 //        something2
 //        person.book
-        var parseKeyPathMap: [String : AnyClass]? = nil
-        parseKeyPathMap = ["name" : TestViewController.self]
+//        var parseKeyPathMap: [String : AnyClass]? = nil
+//        parseKeyPathMap = ["name" : TestViewController.self]
     }
     
-    //MARK: ----- 测试代码 -----
     func testAlert() {
         setNavBarLeftItem(info: ["测试"]) { _ in
             hideLoading(from: self.view)

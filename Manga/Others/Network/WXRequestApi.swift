@@ -109,7 +109,7 @@ class WXRequestApi: WXBaseRequest {
     var cacheResponseBlock: ((WXResponseModel) -> (DictionaryStrAny?))? = nil
     
     ///自定义请求成功映射Key/Value
-    var successKeyCodeMap: [String : Int]? = nil
+    var successKeyCodeMap: [String : String]? = nil
     
     ///请求成功时解析数据模型映射:KeyPath/Model: (支持KeyPath匹配, 解析的模型在 WXResponseModel.parseKeyPathModel 返回
     var parseKeyPathMap: [String : Convertible.Type]? = nil
@@ -168,25 +168,22 @@ class WXRequestApi: WXBaseRequest {
     
     fileprivate func configResponseBlock(responseBlock: @escaping WXNetworkResponseBlock, responseObj: AnyObject?) {
         
-        let handleResponseFn = { (responseObj: AnyObject?) in
+        let handleResponseClosure = { (responseObj: AnyObject?) in
             let responseModel = self.configResponseModel(responseObj: responseObj)
             responseBlock(responseModel)
             self.handleMulticenter(type: .DidCompletion, responseModel: responseModel)
         }
-        
-        if responseObj != nil {
-            if let retryCountWhenFail = retryCountWhenFail,
-               retryCount < retryCountWhenFail,
-               let error = responseObj as? Error, error._code != -999 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    self.retryCount += 1
-                    handleResponseFn(responseObj)
-                    self.startRequest(responseBlock: responseBlock)
-                }
-                return
+        if let retryCountWhenFail = retryCountWhenFail,
+           retryCount < retryCountWhenFail,
+           let error = responseObj as? Error, error._code != -999 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.retryCount += 1
+                handleResponseClosure(responseObj)
+                self.startRequest(responseBlock: responseBlock)
             }
+            return
         }
-        handleResponseFn(responseObj)
+        handleResponseClosure(responseObj)
     }
     
     ///配置数据响应回调模型
@@ -223,11 +220,17 @@ class WXRequestApi: WXBaseRequest {
             let config = WXNetworkConfig.shared
             if let successKeyCode = self.successKeyCodeMap ?? config.successKeyCodeMap, successKeyCode.count == 1 {
                 let setKey: String = successKeyCode.keys.first!
-                let setCode: Int = successKeyCode.values.first!
+                let setCode: String = successKeyCode.values.first!
                 
-                if let responseCode = responseDict[setKey], let rspCode = responseCode as? Int {
-                    rspModel.isSuccess = (setCode == rspCode)
-                    rspModel.responseCode = rspCode
+                if let responseCode = responseDict[setKey] {
+                    if let rspCode = responseCode as? String {
+                        rspModel.isSuccess = (setCode == rspCode)
+                        rspModel.responseCode = Int(rspCode)
+                        
+                    } else if let rspCode = responseCode as? Int {
+                        rspModel.isSuccess = (Int(setCode) == rspCode)
+                        rspModel.responseCode = rspCode
+                    }
                 }
             }
             if let msgTipKeyOrFailInfo = config.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
@@ -293,7 +296,7 @@ class WXRequestApi: WXBaseRequest {
                     accessory.requestDidCompletion(request: self, responseModel: responseModel)
                 }
             }
-            // save as much as possible at the end
+            // save cache as much as possible at the end
             if responseModel.isCacheData {
                 printfResponseLog(responseModel: responseModel)
             } else {
@@ -444,7 +447,7 @@ class WXBatchRequestApi {
     ///全部请求是否都成功了
     var isAllSuccess: Bool = false
     
-    ///全部响应数据,如果waitAllDone=false,则按请求Api的添加顺序返回, 否则不保证顺序
+    ///全部响应数据, 按请求requestArray的添加顺序排序
     var responseDataArray: [WXResponseModel] = []
     
     ///全部请求对象, 响应时按添加顺序返回
@@ -523,25 +526,35 @@ class WXBatchRequestApi {
     
     ///每次请求响应都回调到页面
     func oftenHandleBatchResponse(responseModel: WXResponseModel) {
-        self.isAllSuccess = !self.hasMarkBatchFail
         
         //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用用缓存
         let apiUniquelyIp = responseModel.apiUniquelyIp
-        if self.responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
-            self.responseInfoDict[apiUniquelyIp] = responseModel
+        if responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
+            responseInfoDict[apiUniquelyIp] = responseModel
         }
         if responseModel.isCacheData == false {
-            self.isAllSuccess = !self.hasMarkBatchFail
-
-            if let rspModel = self.responseInfoDict[ apiUniquelyIp ] {
-                self.responseDataArray.append(rspModel)
+            isAllSuccess = !hasMarkBatchFail
+        }
+        ///按请求对象添加顺序排序
+        let tmpRspArray = responseInfoDict.allValues()
+        var finalRspArray: [WXResponseModel] = []
+        for request in requestArray {
+            for response in tmpRspArray {
+                if request.apiUniquelyIp == response.apiUniquelyIp {
+                    finalRspArray.append(response)
+                    break
+                }
             }
-            if let responseBatchBlock = self.responseBatchBlock {
+        }
+        if finalRspArray.count > 0 {
+            responseDataArray.removeAll()
+            responseDataArray += finalRspArray
+            if let responseBatchBlock = responseBatchBlock {
                 responseBatchBlock(self)
             }
         }
-        if self.requestCount >= self.responseDataArray.count {
-            self.batchRequest = nil
+        if requestCount >= responseDataArray.count {
+            batchRequest = nil
         }
     }
     
