@@ -472,7 +472,7 @@ class WXBatchRequestApi {
     /// - Parameters:
     ///   - responseBlock: 请求全部完成后的响应block回调
     ///   - waitAllDone: 是否等待全部请求完成才回调, 否则回调多次
-    func startRequest(responseBlock: @escaping (WXBatchRequestApi) -> (),
+    func startRequest(_ responseBlock: @escaping (WXBatchRequestApi) -> (),
                       waitAllDone: Bool = true) {
         
         responseDataArray.removeAll()
@@ -525,7 +525,7 @@ class WXBatchRequestApi {
     }
     
     ///每次请求响应都回调到页面
-    func oftenHandleBatchResponse(responseModel: WXResponseModel) {
+    fileprivate func oftenHandleBatchResponse(responseModel: WXResponseModel) {
         
         //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用用缓存
         let apiUniquelyIp = responseModel.apiUniquelyIp

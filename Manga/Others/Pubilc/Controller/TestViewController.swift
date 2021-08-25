@@ -42,8 +42,7 @@ class TestViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    
-//        testloadData2()
+        testloadData()
     }
     
     //MARK: ----- 测试代码 -----
@@ -55,7 +54,6 @@ class TestViewController: UIViewController {
         api0.autoCacheResponse = true
         
         
-        //let url1 = "http://123.207.32.32:8000/home/multidata"
         let url1 = "https://httpbin.org/delay/5"
         //let para0: [String : Any] = ["name" : "张三"]
         let api1 = WXRequestApi(url1, method: .get)
@@ -63,9 +61,10 @@ class TestViewController: UIViewController {
         
         
         let api = WXBatchRequestApi(requestArray: [api0, api1] )
-        api.startRequest(responseBlock: { batchApi in
+        api.startRequest({ batchApi in
             debugLog("批量请求回调", batchApi.responseDataArray)
         }, waitAllDone: false)
+        
     }
     
     func testAFMethod() {
