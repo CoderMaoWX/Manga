@@ -55,9 +55,10 @@ class TestViewController: UIViewController {
         
         let url1 = "http://123.207.32.32:8000/home/multidata"
         let api1 = WXRequestApi(url1, method: .get)
+        api1.autoCacheResponse = true
         
         
-        let api = WXBatchRequestApi(requestArray: [api0, api1] )
+        let api = WXBatchRequestApi(requestArray: [ api1] )
 //        api.startRequest { batchApi in
 //            debugLog("批量请求", batchApi.responseDataArray)
 //        }

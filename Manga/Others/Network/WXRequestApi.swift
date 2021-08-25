@@ -480,28 +480,29 @@ class WXBatchRequestApi {
         for api in requestArray {
             
             api.startRequest { responseModel in
-                if responseModel.isSuccess == false {
+                if responseModel.responseDict == nil {
                     self.hasMarkBatchFail = true
                 }
                 if waitAllDone {
-                    self.handleBatchResponse(responseModel: responseModel)
+                    self.finalHandleBatchResponse(responseModel: responseModel)
                 } else { //回调多次
-                    self.isAllSuccess = !self.hasMarkBatchFail
-                    self.responseDataArray.append(responseModel)
-                    if let responseBatchBlock = self.responseBatchBlock {
-                        responseBatchBlock(self)
-                    }
-                    self.batchRequest = nil
+                    self.oftenHandleBatchResponse(responseModel: responseModel)
                 }
             }
         }
     }
     
-    fileprivate func handleBatchResponse(responseModel: WXResponseModel) {
+    ///待所有请求都响应才回调到页面
+    fileprivate func finalHandleBatchResponse(responseModel: WXResponseModel) {
+        let apiUniquelyIp = responseModel.apiUniquelyIp
+        
+        //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用用缓存
+        if self.responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
+            self.responseInfoDict[apiUniquelyIp] = responseModel
+        }
         if responseModel.isCacheData == false {
             requestCount -= 1
         }
-        responseInfoDict[responseModel.apiUniquelyIp] = responseModel
         guard requestCount <= 0 else { return }
         
         isAllSuccess = !hasMarkBatchFail
@@ -518,6 +519,30 @@ class WXBatchRequestApi {
             responseBatchBlock(self)
         }
         batchRequest = nil
+    }
+    
+    ///每次请求响应都回调到页面
+    func oftenHandleBatchResponse(responseModel: WXResponseModel) {
+        self.isAllSuccess = !self.hasMarkBatchFail
+        
+        //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用用缓存
+        let apiUniquelyIp = responseModel.apiUniquelyIp
+        if self.responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
+            self.responseInfoDict[apiUniquelyIp] = responseModel
+        }
+        if responseModel.isCacheData == false {
+            self.isAllSuccess = !self.hasMarkBatchFail
+
+            if let rspModel = self.responseInfoDict[ apiUniquelyIp ] {
+                self.responseDataArray.append(rspModel)
+            }
+            if let responseBatchBlock = self.responseBatchBlock {
+                responseBatchBlock(self)
+            }
+        }
+        if self.requestCount >= self.responseDataArray.count {
+            self.batchRequest = nil
+        }
     }
     
     /// 取消所有请求
