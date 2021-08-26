@@ -16,9 +16,6 @@ final class WXNetworkConfig {
     ///约定全局请求提示key, 和失败时的默认提示文案
     var messageTipKeyAndFailInfo: [String : String]? = ["msg" : KWXRequestFailueTipMessage]
     
-    ///全局网络请求拦截类
-    var urlSessionProtocolClasses: Any.Type? = nil
-    
     ///请求遇到相应Code时触发通知: [ "notificationName" : 200 ]
     var codeNotifyDict: Dictionary<String, Int>? = nil
     
@@ -27,8 +24,11 @@ final class WXNetworkConfig {
      * 注意: 此代理与请求对象中的<multicenterDelegate>代理互斥, 两者都实现时只会回调请求对象中的代理
      */
     var globleMulticenterDelegate: WXNetworkMulticenter? = nil
-    
-    ///是否禁止所有的网络请求设置代理抓包 (警告: 一定要放在首次发请求之前设值(例如+load方法中), 默认不禁止)
+
+//    ///全局网络请求拦截类
+//    var urlSessionProtocolClasses: Any.Type? = nil
+//
+//    ///是否禁止所有的网络请求设置代理抓包 (警告: 一定要放在首次发请求之前设值(例如+load方法中), 默认不禁止)
 //    var forbidProxyCaught: Bool = false
 //
 //    ///是否打开多路径TCP服务，提供Wi-Fi和蜂窝之间的无缝切换，(默认关闭)

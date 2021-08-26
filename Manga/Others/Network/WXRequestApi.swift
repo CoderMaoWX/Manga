@@ -560,12 +560,11 @@ class WXBatchRequestApi {
     
     /// 取消所有请求
     func cancelAllRequest() {
-        
+        for request in requestArray {
+            request.requestDataTask?.cancel()
+        }
     }
     
-    deinit {
-        debugLog("WXBatchRequestApi 销毁了")
-    }
 }
 
 //MARK: - 请求响应对象
