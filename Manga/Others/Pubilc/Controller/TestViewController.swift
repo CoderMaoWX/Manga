@@ -50,7 +50,7 @@ class TestViewController: UIViewController {
     func testloadData2() {
         let url0 = "http://123.207.32.32:8000/home/multidata"
         let api0 = WXRequestApi(url0, method: .get, parameters: nil)
-        api0.successKeyCodeMap = ["returnCode" : "SUCCESS"]
+        api0.successKeyValueMap = ["returnCode" : "SUCCESS"]
         api0.autoCacheResponse = true
         
         
@@ -89,8 +89,9 @@ class TestViewController: UIViewController {
         let param: [String : Any] = ["sexType" : 1]
         
         let api = WXRequestApi(url, method: .get, parameters: param)
+        api.loadingSuperView = view
         api.retryCountWhenFail = 3
-        api.successKeyCodeMap = ["code" : "1"]
+        api.successKeyValueMap = ["code" : "1"]
         api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
         
         api.startRequest { responseModel in

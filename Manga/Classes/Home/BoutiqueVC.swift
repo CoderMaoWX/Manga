@@ -55,7 +55,7 @@ class BoutiqueVC: BaseVC {
         let param: [String : Any] = ["sexType" : 1]
         
         let request = WXRequestApi(url, method: .get, parameters: param)
-        request.successKeyCodeMap = ["code" : "1"]
+        request.successKeyValueMap = ["code" : "1"]
         request.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
         
         request.startRequest { [weak self] (responseModel) in

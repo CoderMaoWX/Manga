@@ -109,7 +109,7 @@ class WXRequestApi: WXBaseRequest {
     var cacheResponseBlock: ((WXResponseModel) -> (DictionaryStrAny?))? = nil
     
     ///自定义请求成功映射Key/Value
-    var successKeyCodeMap: [String : String]? = nil
+    var successKeyValueMap: [String : String]? = nil
     
     ///请求成功时解析数据模型映射:KeyPath/Model: (支持KeyPath匹配, 解析的模型在 WXResponseModel.parseKeyPathModel 返回
     var parseKeyPathMap: [String : Convertible.Type]? = nil
@@ -218,9 +218,9 @@ class WXRequestApi: WXBaseRequest {
             rspModel.responseDict = responseDict
             
             let config = WXNetworkConfig.shared
-            if let successKeyCode = self.successKeyCodeMap ?? config.successKeyCodeMap, successKeyCode.count == 1 {
-                let setKey: String = successKeyCode.keys.first!
-                let setCode: String = successKeyCode.values.first!
+            if let successKeyValue = self.successKeyValueMap ?? config.successKeyValueMap, successKeyValue.count == 1 {
+                let setKey: String = successKeyValue.keys.first!
+                let setCode: String = successKeyValue.values.first!
                 
                 if let responseCode = responseDict[setKey] {
                     if let rspCode = responseCode as? String {
@@ -421,7 +421,7 @@ class WXRequestApi: WXBaseRequest {
                 }
             }
             //只要返回为非Error就包装一个公共的key, 防止页面当失败解析
-            // if let successKeyCode = self.successKeyCodeMap ?? config.successKeyCodeMap, successKeyCode.count == 1 {
+            // if let successKeyCode = self.successKeyValueMap ?? config.successKeyValueMap, successKeyCode.count == 1 {
             //     let setKey: String = successKeyCode.keys.first!
             //     let setCode: Int = successKeyCode.values.first!
             //     responseDcit[setKey] = "\(setCode)"
@@ -572,9 +572,8 @@ class WXBatchRequestApi {
 ///包装的响应数据
 class WXResponseModel: NSObject {
     /**
-     * 是否请求成功
-     * 优先使用 WXRequestApi.successKeyCodeMap,
-     * 否则使用WXNetworkConfig.successKeyCodeMap标识来判断是否请求成功
+     * 是否请求成功,优先使用 WXRequestApi.successKeyValueMap 来判断是否成功
+     * 否则使用 WXNetworkConfig.successKeyValueMap 标识来判断是否请求成功
      ***/
     var isSuccess: Bool = false
     ///本次响应Code码
@@ -589,9 +588,9 @@ class WXResponseModel: NSObject {
     var parseKeyPathModel: AnyObject? = nil
     ///本次响应的原始数据: NSDictionary, UIImage, NSData ...
     var responseObject: AnyObject? = nil
-    ///本次响应的字典数据
+    ///本次响应的原始字典数据
     var responseDict: DictionaryStrAny? = nil
-    ///错误信息
+    ///失败时的错误信息
     var error: NSError? = nil
     ///原始响应
     var urlResponse: HTTPURLResponse? = nil
@@ -644,4 +643,5 @@ class WXResponseModel: NSObject {
         }
         return nil
     }
+    
 }
