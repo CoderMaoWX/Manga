@@ -63,13 +63,17 @@ class NavgationBarView: UIView {
     
     ///添加左侧导航按钮
     fileprivate var leftItemActionClosure: NavBarItemActionClosure? = nil
+    fileprivate var leftButtonArray: [UIButton] = []
     @discardableResult
     func setNavBarLeftItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
+        for button in leftButtonArray {
+            button.removeFromSuperview()
+        }
         leftItemActionClosure = actionClosure
-        let btnArr = createNavBarItems(object: info, itemType:1, actionClosure: actionClosure)
+        leftButtonArray = createNavBarItems(object: info, itemType:1, actionClosure: actionClosure)
         
         var tmpBtn: UIView? = nil
-        for button in btnArr {
+        for button in leftButtonArray {
             button.snp.makeConstraints {
                 $0.centerY.equalTo(contentView.snp.centerY)
                 if tmpBtn == nil {
@@ -80,18 +84,22 @@ class NavgationBarView: UIView {
             }
             tmpBtn = button
         }
-        return btnArr
+        return leftButtonArray
     }
     
     /// 添加右侧导航按钮
     fileprivate var rightItemActionClosure: NavBarItemActionClosure? = nil
+    fileprivate var rightButtonArray: [UIButton] = []
     @discardableResult
     func setNavBarRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
+        for button in rightButtonArray {
+            button.removeFromSuperview()
+        }
         rightItemActionClosure = actionClosure
-        let btnArr = createNavBarItems(object: infoArr, itemType:2, actionClosure: actionClosure)
+        rightButtonArray = createNavBarItems(object: infoArr, itemType:2, actionClosure: actionClosure)
         
         var tmpBtn: UIView? = nil
-        for button in btnArr.reversed() {
+        for button in rightButtonArray.reversed() {
             button.snp.makeConstraints {
                 $0.centerY.equalTo(contentView.snp.centerY)
                 if tmpBtn == nil {
@@ -102,7 +110,7 @@ class NavgationBarView: UIView {
             }
             tmpBtn = button
         }
-        return btnArr
+        return rightButtonArray
     }
     
     ///添加导航按钮

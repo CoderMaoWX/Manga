@@ -60,8 +60,8 @@ class TestViewController: UIViewController {
     
     lazy var navgationBarView: NavgationBarView = {
         let navgationView = NavgationBarView(nil)
-        navgationView.title = "我是标题"
         navgationView.backgroundColor = .groupTableViewBackground
+        navgationView.title = "我是标题"
         return navgationView
     }()
     
