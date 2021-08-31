@@ -311,7 +311,7 @@ class WXRequestApi: WXBaseRequest {
         guard WXNetworkConfig.shared.closeUrlResponsePrintfLog == false else { return }
         let logHeader = WXNetworkPlugin.appendingPrintfLogHeader(request: self, responseModel: responseModel)
         let logFooter = WXNetworkPlugin.appendingPrintfLogFooter(responseModel: responseModel)
-        debugLog("\(logHeader + logFooter)");
+        debugLog("\(logHeader + logFooter)")
         #endif
     }
     
@@ -517,7 +517,7 @@ class WXBatchRequestApi {
             }
         }
         // 请求最终回调
-        responseDataArray = responseArray;
+        responseDataArray = responseArray
         if let responseBatchBlock = responseBatchBlock {
             responseBatchBlock(self)
         }
@@ -586,7 +586,7 @@ class WXResponseModel: NSObject {
     var responseDuration: TimeInterval? = nil
     ///解析数据的模型: 可KeyPath匹配, 返回 Model对象 或者数组模型 [Model]
     var parseKeyPathModel: AnyObject? = nil
-    ///本次响应的原始数据: NSDictionary, UIImage, NSData ...
+    ///本次响应的原始数据: NSDictionary/ UIImage/ NSData /...
     var responseObject: AnyObject? = nil
     ///本次响应的原始字典数据
     var responseDict: DictionaryStrAny? = nil
@@ -601,7 +601,7 @@ class WXResponseModel: NSObject {
     
     ///解析响应数据的数据模型 (支持KeyPath匹配)
     fileprivate func parseResponseKeyPathModel(requestApi: WXRequestApi,
-                                                  responseDict: DictionaryStrAny) {
+                                               responseDict: DictionaryStrAny) {
         guard let keyPathInfo = requestApi.parseKeyPathMap, keyPathInfo.count == 1 else { return }
         
         let parseKey: String = keyPathInfo.keys.first!
@@ -618,7 +618,7 @@ class WXResponseModel: NSObject {
                 if lastValueDict == nil {
                     return
                 } else {
-                    lastValueDict = findSuitableDict(respKey: modelKey, respValue: lastValueDict)
+                    lastValueDict = findParseDict(respKey: modelKey, respValue: lastValueDict)
                 }
             }
         } else {
@@ -633,7 +633,7 @@ class WXResponseModel: NSObject {
     }
 
     ///寻找最合适的解析: 字典/数组
-    fileprivate func findSuitableDict(respKey: String, respValue: Any?) -> Any? {
+    fileprivate func findParseDict(respKey: String, respValue: Any?) -> Any? {
         if let respDict = respValue as? DictionaryStrAny {
             for (dictKey, dictValue) in respDict {
                 if respKey == dictKey {
