@@ -49,18 +49,18 @@ class TestViewController: UIViewController {
             $0.height.equalTo(statusAddNavBarHeight)
         }
         
-        navgationBarView.setNavBarLeftItem(info: ["Category", "Message"]) { idx in
+        navgationBarView.setNavBarLeftItem(info: [UIImage(named: "mghome_like_select")!, "Message"]) { idx in
             showAlertToast(message: "左侧按钮: \(idx)")
         }
         
-//        navgationBarView.setNavBarRightItem(infoArr: ["Bag", "Setting"]) { idx in
-//            showAlertToast(message: "右侧按钮: \(idx)")
-//        }
+        navgationBarView.setNavBarRightItem(infoArr: ["Bag", UIImage(named: "ImageSelectedSmallOn")!]) { idx in
+            showAlertToast(message: "右侧按钮: \(idx)")
+        }
     }
     
     lazy var navgationBarView: NavgationBarView = {
         let navgationView = NavgationBarView(nil)
-        navgationView.title = "Test"
+        navgationView.title = "我是标题"
         navgationView.backgroundColor = .groupTableViewBackground
         return navgationView
     }()

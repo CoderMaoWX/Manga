@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import SnapKitExtend
+import SnapKit
 
 class NavgationBarView: UIView {
     
@@ -68,10 +68,17 @@ class NavgationBarView: UIView {
         leftItemActionClosure = actionClosure
         let btnArr = createNavBarItems(object: info, itemType:1, actionClosure: actionClosure)
         
-        btnArr.snp.distributeSudokuViews(fixedLineSpacing: 12, fixedInteritemSpacing: 12, warpCount: 2)
-        btnArr.snp.makeConstraints {
-//            $0.leading.bottom.equalTo(contentView)
-            $0.size.equalTo(CGSize(width: 60, height: 44))
+        var tmpBtn: UIView? = nil
+        for button in btnArr {
+            button.snp.makeConstraints {
+                $0.centerY.equalTo(contentView.snp.centerY)
+                if tmpBtn == nil {
+                    $0.leading.equalTo(contentView.snp.leading).offset(12)
+                } else {
+                    $0.leading.equalTo(tmpBtn!.snp.trailing).offset(12)
+                }
+            }
+            tmpBtn = button
         }
         return btnArr
     }
@@ -83,10 +90,17 @@ class NavgationBarView: UIView {
         rightItemActionClosure = actionClosure
         let btnArr = createNavBarItems(object: infoArr, itemType:2, actionClosure: actionClosure)
         
-        btnArr.snp.distributeSudokuViews(fixedItemWidth: 44, fixedItemHeight: 44, warpCount: 2, edgeInset: .init(top: 0, left: 12, bottom: 0, right: 12))
-        btnArr.snp.makeConstraints {
-            $0.centerY.equalTo(contentView.snp.centerY)
-            $0.trailing.equalToSuperview()
+        var tmpBtn: UIView? = nil
+        for button in btnArr.reversed() {
+            button.snp.makeConstraints {
+                $0.centerY.equalTo(contentView.snp.centerY)
+                if tmpBtn == nil {
+                    $0.trailing.equalTo(contentView.snp.trailing).offset(-12)
+                } else {
+                    $0.trailing.equalTo(tmpBtn!.snp.leading).offset(-12)
+                }
+            }
+            tmpBtn = button
         }
         return btnArr
     }
