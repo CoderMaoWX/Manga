@@ -8,6 +8,8 @@
 
 import UIKit
 import Alamofire
+import SnapKit
+import FDFullscreenPopGesture
 
 //class A_Class<T> {
 //    var property: T? = nil
@@ -36,10 +38,32 @@ class TestViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        fd_prefersNavigationBarHidden = true
 //         testAlert()
 //        testloadData()
 //        testType()
+        
+        view.addSubview(navgationBarView)
+        navgationBarView.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view)
+            $0.height.equalTo(statusAddNavBarHeight)
+        }
+        
+        navgationBarView.setNavBarLeftItem(info: ["Category", "Message"]) { idx in
+            showAlertToast(message: "左侧按钮: \(idx)")
+        }
+        
+//        navgationBarView.setNavBarRightItem(infoArr: ["Bag", "Setting"]) { idx in
+//            showAlertToast(message: "右侧按钮: \(idx)")
+//        }
     }
+    
+    lazy var navgationBarView: NavgationBarView = {
+        let navgationView = NavgationBarView(nil)
+        navgationView.title = "Test"
+        navgationView.backgroundColor = .groupTableViewBackground
+        return navgationView
+    }()
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         testloadData()

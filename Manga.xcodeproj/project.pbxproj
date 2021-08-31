@@ -25,6 +25,7 @@
 		5887389E25C558D10049ECAD /* CommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389D25C558D10049ECAD /* CommunityVC.swift */; };
 		588738A125C558DC0049ECAD /* MineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738A025C558DC0049ECAD /* MineVC.swift */; };
 		5899402B26BA39B20086C830 /* MonitorLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = 5899402A26BA39B20086C830 /* MonitorLoad.m */; };
+		58A23DC526DDC51A0012A6F1 /* NavgationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A23DC426DDC51A0012A6F1 /* NavgationBarView.swift */; };
 		58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */; };
 		58A4C11B25E1035A00C1DAB5 /* BoutiqueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11A25E1035A00C1DAB5 /* BoutiqueCell.swift */; };
 		58A4C11E25E1084600C1DAB5 /* UComicCHead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11D25E1084600C1DAB5 /* UComicCHead.swift */; };
@@ -86,6 +87,7 @@
 		5899402826BA39B20086C830 /* Manga-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Manga-Bridging-Header.h"; sourceTree = "<group>"; };
 		5899402926BA39B20086C830 /* MonitorLoad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MonitorLoad.h; sourceTree = "<group>"; };
 		5899402A26BA39B20086C830 /* MonitorLoad.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MonitorLoad.m; sourceTree = "<group>"; };
+		58A23DC426DDC51A0012A6F1 /* NavgationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavgationBarView.swift; sourceTree = "<group>"; };
 		58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoutiqueVC.swift; sourceTree = "<group>"; };
 		58A4C11A25E1035A00C1DAB5 /* BoutiqueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoutiqueCell.swift; sourceTree = "<group>"; };
 		58A4C11D25E1084600C1DAB5 /* UComicCHead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UComicCHead.swift; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				58CDFB5E26BA33F000056527 /* UBaseCCell.swift */,
+				58A23DC426DDC51A0012A6F1 /* NavgationBarView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -512,6 +515,7 @@
 				58763FBB26CFB3F200AA3985 /* WXNetworkConstr.swift in Sources */,
 				58CDFB7326BA33F100056527 /* UIScrollView+Extension.swift in Sources */,
 				58B812DB262D3D9400EB00C7 /* MineCenterHeaderView.swift in Sources */,
+				58A23DC526DDC51A0012A6F1 /* NavgationBarView.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,
 				58CDFB7726BA33F100056527 /* WebVC.swift in Sources */,
 				58CDFB7A26BA33F100056527 /* UBaseCCell.swift in Sources */,

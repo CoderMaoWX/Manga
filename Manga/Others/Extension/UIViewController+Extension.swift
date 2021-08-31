@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+typealias NavBarItemActionClosure = @convention(block) (_ index: Int) -> ()
+
 extension UIViewController {
     
     @objc class func swizzlingMethod() {
@@ -61,8 +63,6 @@ extension UIViewController {
     
     
     //MARK: ======== UIBarButtonItem ========
-    
-    typealias NavBarItemActionClosure = @convention(block) (_ index: Int) -> ()
     
     /// 添加左侧导航按钮
     /// - Parameters:
