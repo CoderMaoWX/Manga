@@ -12,7 +12,6 @@ import UIKit
 //
 //}
 
+class SwizzlingMethod {
 
-extension NSObject {
-    
 }
