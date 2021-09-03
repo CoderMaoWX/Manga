@@ -10,10 +10,10 @@ import UIKit
 class ApiClass: NSObject {
     
     
-    @objc func studyApi() {
+    @objc class func studyApi() {
         debugLog("Hello, World! StudyApi")
 
-        let arr: [String] = ["1", "2", "6", "89", "2", "34"]
+        let arr: [String] = ["1c", "2", "6q", "89", "2", "34"]
 
         let map = arr.map {
             Int($0)
@@ -25,7 +25,7 @@ class ApiClass: NSObject {
 
         // 2.compactMap: 映射
         let compactMap = arr.compactMap {
-            Int($0)
+			Int($0)
         }
         debugLog("compactMap:", compactMap)
         //compactMap: [1, 2, 6, 89, 2, 34]

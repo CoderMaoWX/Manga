@@ -183,6 +183,7 @@
 				584D5D9625C3F27A00FA507C /* AppDelegate.swift */,
 				588738A325C558E20049ECAD /* Classes */,
 				58CDFB4726BA33F000056527 /* Others */,
+				58C3CF7226E22DE5004BDABA /* StudyApi */,
 				58CDFB6326BA33F000056527 /* SupportingFiles */,
 			);
 			path = Manga;
@@ -247,6 +248,15 @@
 			path = Mine;
 			sourceTree = "<group>";
 		};
+		58C3CF7226E22DE5004BDABA /* StudyApi */ = {
+			isa = PBXGroup;
+			children = (
+				58CDFB5626BA33F000056527 /* ApiClass.swift */,
+				5846C87D26D36C4300CEF2FC /* TestViewController.swift */,
+			);
+			path = StudyApi;
+			sourceTree = "<group>";
+		};
 		58CDFB4726BA33F000056527 /* Others */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,7 +302,6 @@
 		58CDFB5526BA33F000056527 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				58CDFB5626BA33F000056527 /* ApiClass.swift */,
 				58763FB826CF9D8000AA3985 /* WXRequestApi.swift */,
 				A39301BD26CFF6D4002EF3AB /* WXNetworkConfig.swift */,
 				58763FBA26CFB3F200AA3985 /* WXNetworkConstr.swift */,
@@ -317,7 +326,6 @@
 				58CDFB5A26BA33F000056527 /* WebVC.swift */,
 				58CDFB5B26BA33F000056527 /* BaseNavigationVC.swift */,
 				58CDFB5C26BA33F000056527 /* TabBarController.swift */,
-				5846C87D26D36C4300CEF2FC /* TestViewController.swift */,
 				5846C87E26D36C4300CEF2FC /* TestViewController.xib */,
 			);
 			path = Controller;
@@ -662,6 +670,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P8FFNR95EQ;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -685,6 +694,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P8FFNR95EQ;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
