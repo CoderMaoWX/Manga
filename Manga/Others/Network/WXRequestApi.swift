@@ -99,7 +99,7 @@ class WXBaseRequest: NSObject {
 
 //MARK: - 单个请求对象
 
-///单个请求对象, 功能根据需求可多种自定义
+/// 单个请求对象, 功能根据需求可多种自定义
 class WXRequestApi: WXBaseRequest {
     
     ///请求成功时是否自动缓存响应数据, 默认不缓存
@@ -139,6 +139,9 @@ class WXRequestApi: WXBaseRequest {
         super.init(requestURL, method: method, parameters: parameters)
     }
     
+    /// 开始网络请求
+    /// - Parameter responseBlock: 请求回调
+    /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
     func startRequest(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
         guard let _ = URL(string: requestURL) else {
