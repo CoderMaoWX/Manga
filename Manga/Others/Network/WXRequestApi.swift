@@ -83,12 +83,12 @@ class WXBaseRequest: NSObject {
                                      headers: HTTPHeaders(requestHeaderDict ?? [:])).responseJSON { response in
             switch response.result {
             case .success(let json):
-                if let successClosure = successClosure {
-                    successClosure(json as AnyObject)
+                successClosure.map {
+                    $0(json as AnyObject)
                 }
             case .failure(let error):
-                if let failureClosure = failureClosure {
-                    failureClosure(error as AnyObject)
+                failureClosure.map {
+                    $0(error as AnyObject)
                 }
             }
            }
@@ -512,15 +512,11 @@ class WXBatchRequestApi {
         guard requestCount <= 0 else { return }
         
         isAllSuccess = !hasMarkBatchFail
-        var responseArray: [WXResponseModel] = []
         
-        for requestApi in requestArray {
-            if let responseObj = responseInfoDict[ requestApi.apiUniquelyIp ] {
-                responseArray.append(responseObj)
-            }
-        }
         // 请求最终回调
-        responseDataArray = responseArray
+        responseDataArray = requestArray.compactMap {
+            responseInfoDict[ $0.apiUniquelyIp ]
+        }
         if let responseBatchBlock = responseBatchBlock {
             responseBatchBlock(self)
         }
@@ -614,7 +610,7 @@ class WXResponseModel: NSObject {
         
         var lastValueDict: Any?
         if parseKey.contains(".") {
-            let keyPathArr =  parseKey.components(separatedBy: ".")
+            let keyPathArr = parseKey.components(separatedBy: ".")
             lastValueDict = responseDict
             
             for modelKey in keyPathArr {
