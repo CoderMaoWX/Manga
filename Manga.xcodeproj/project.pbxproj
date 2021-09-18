@@ -24,6 +24,7 @@
 		5887389B25C558C00049ECAD /* CateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389A25C558C00049ECAD /* CateVC.swift */; };
 		5887389E25C558D10049ECAD /* CommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389D25C558D10049ECAD /* CommunityVC.swift */; };
 		588738A125C558DC0049ECAD /* MineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738A025C558DC0049ECAD /* MineVC.swift */; };
+		588944B526F5964C00E153EB /* UIImage+System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588944B426F5964C00E153EB /* UIImage+System.swift */; };
 		5899402B26BA39B20086C830 /* MonitorLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = 5899402A26BA39B20086C830 /* MonitorLoad.m */; };
 		58A23DC526DDC51A0012A6F1 /* NavgationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A23DC426DDC51A0012A6F1 /* NavgationBarView.swift */; };
 		58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */; };
@@ -84,6 +85,7 @@
 		5887389A25C558C00049ECAD /* CateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CateVC.swift; sourceTree = "<group>"; };
 		5887389D25C558D10049ECAD /* CommunityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityVC.swift; sourceTree = "<group>"; };
 		588738A025C558DC0049ECAD /* MineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineVC.swift; sourceTree = "<group>"; };
+		588944B426F5964C00E153EB /* UIImage+System.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+System.swift"; sourceTree = "<group>"; };
 		5899402826BA39B20086C830 /* Manga-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Manga-Bridging-Header.h"; sourceTree = "<group>"; };
 		5899402926BA39B20086C830 /* MonitorLoad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MonitorLoad.h; sourceTree = "<group>"; };
 		5899402A26BA39B20086C830 /* MonitorLoad.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MonitorLoad.m; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 				58CDFB4D26BA33F000056527 /* UIbutton+Extension.swift */,
 				58CDFB4E26BA33F000056527 /* UIView+Extension.swift */,
 				58CDFB4F26BA33F000056527 /* UIImage+Extension.swift */,
+				588944B426F5964C00E153EB /* UIImage+System.swift */,
 				58CDFB5026BA33F000056527 /* UIViewController+Extension.swift */,
 				58CDFB5126BA33F000056527 /* String+Extension.swift */,
 				58CDFB5226BA33F000056527 /* Dictionary+Extension.swift */,
@@ -514,6 +517,7 @@
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,
 				5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */,
 				58A821BC260AE125002F7689 /* TrendModel.swift in Sources */,
+				588944B526F5964C00E153EB /* UIImage+System.swift in Sources */,
 				5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */,
 				58CDFB7926BA33F100056527 /* TabBarController.swift in Sources */,
 				A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */,
