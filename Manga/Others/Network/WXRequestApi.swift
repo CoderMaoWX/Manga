@@ -113,6 +113,9 @@ class WXRequestApi: WXBaseRequest {
     
     ///请求成功时解析数据模型映射:KeyPath/Model: (支持KeyPath匹配, 解析的模型在 WXResponseModel.parseKeyPathModel 返回
     var parseKeyPathMap: [String : Convertible.Type]? = nil
+    
+    ///调试响应json/Dictionary,方便测试时使用, 如果有设置该值则不会请求,直接回调此值
+    var testResponseJson: Any? = nil
 
     ///请求转圈的父视图
     var loadingSuperView: UIView? = nil
@@ -155,6 +158,11 @@ class WXRequestApi: WXBaseRequest {
         if checkRequestInCache() {
             readRequestCacheWithBlock(fetchCacheBlock: networkBlock)
         }
+        if var rspJsonDict = responseForTestjSon() {
+            rspJsonDict[ kWXNetworkIsTestResponseKey ] = true
+            networkBlock(rspJsonDict as AnyObject)
+            return nil
+        }
         handleMulticenter(type: .WillStart, responseModel: WXResponseModel())
         //开始请求
         let dataRequest = baseRequestBlock(successClosure: networkBlock, failureClosure: networkBlock)
@@ -167,6 +175,20 @@ class WXRequestApi: WXBaseRequest {
             }
         }
         return dataRequest
+    }
+    
+    func responseForTestjSon() -> DictionaryStrAny? {
+        if let rspJsonDict = testResponseJson as? DictionaryStrAny {
+            return rspJsonDict
+            
+        } else if let rspJsonString = testResponseJson as? String {
+            // jsonString -> Dictionary
+            let data = rspJsonString.data(using: String.Encoding.utf8)
+            if let rspJsonDict = try? JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? DictionaryStrAny {
+                return rspJsonDict
+            }
+        }
+        return nil
     }
     
     fileprivate func configResponseBlock(responseBlock: @escaping WXNetworkResponseBlock, responseObj: AnyObject?) {
@@ -413,6 +435,11 @@ class WXRequestApi: WXBaseRequest {
         if responseObj is DictionaryStrAny {
             responseDcit += responseObj as! DictionaryStrAny
             
+            responseDcit[ kWXNetworkIsTestResponseKey ].map({
+                responseDcit.removeValue(forKey: kWXNetworkIsTestResponseKey)
+                responseModel.isTestResponse = $0 as! Bool
+            })
+            
             if let _ = responseDcit[kWXRequestDataFromCacheKey] {
                 responseDcit.removeValue(forKey: kWXRequestDataFromCacheKey)
                 responseModel.isCacheData = true
@@ -589,6 +616,8 @@ class WXResponseModel: NSObject {
     var responseObject: AnyObject? = nil
     ///本次响应的原始字典数据
     var responseDict: DictionaryStrAny? = nil
+    ///本次响应的数据是否是测试数据
+    var isTestResponse: Bool = false
     ///失败时的错误信息
     var error: NSError? = nil
     ///原始响应

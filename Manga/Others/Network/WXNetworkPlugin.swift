@@ -78,7 +78,8 @@ class WXNetworkPlugin {
         let requestHeaders = responseModel.urlRequest?.allHTTPHeaderFields ?? [:]
         let requestHeadersString = (requestHeaders.count > 0) ? "\n\n请求头信息=\(requestHeaders.toJSON()!)" : ""
         let successFlag = isCacheData ? "❤️❤️❤️" : (isSuccess ? "✅✅✅" : "❌❌❌")
-        let statusString  = isCacheData ? "本地缓存数据成功" : (isSuccess ? "网络数据成功" : "网络数据失败");
+        let dataType = responseModel.isTestResponse ? "测试数据" : "网络数据"
+        let statusString  = isCacheData ? "本地缓存数据成功" : (isSuccess ? "\(dataType)成功" : "\(dataType)失败");
         
         let logBody = "\n\(successFlag)请求接口地址\(hostTitle)= \(request.requestURL)\n请求参数json=\n\(requestJson)\(requestHeadersString)\n\n\(statusString)返回=\n"
         return logBody

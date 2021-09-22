@@ -53,7 +53,9 @@ class TestViewController: UIViewController {
         }
         
         navgationBarView.setNavBarLeftItem(info: [UIImage(named:"mghome_like_select")!, "Message"]) { idx in
-            showAlertToast(message: "左侧按钮: \(idx)")
+            self.testloadData()
+            
+            //showAlertToast(message: "左侧按钮: \(idx)")
         }
         
         navgationBarView.setNavBarRightItem(infoArr: ["Bag", UIImage(named: "ImageSelectedSmallOn")!]) { idx in
@@ -108,10 +110,27 @@ class TestViewController: UIViewController {
     func testloadData() {
         WXNetworkConfig.shared.showRequestLaoding = true
         
-        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
+//        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
+        let url = "https://httpbin.org/get"
         let param: [String : Any] = ["sexType" : 1]
         
         let api = WXRequestApi(url, method: .get, parameters: param)
+        api.testResponseJson = """
+        {
+          "args": {},
+          "headers": {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "zh-cn",
+            "Host": "httpbin.org",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15",
+            "X-Amzn-Trace-Id": "Root=1-614b4c36-1c01da195211a25a61c7a152"
+          },
+          "origin": "120.229.0.100",
+          "url": "https://httpbin.org/get"
+        }
+        """
+        
         api.loadingSuperView = view
         api.retryCountWhenFail = 3
         api.successKeyValueMap = ["code" : "1"]
