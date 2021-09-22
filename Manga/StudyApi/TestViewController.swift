@@ -110,8 +110,7 @@ class TestViewController: UIViewController {
     func testloadData() {
         WXNetworkConfig.shared.showRequestLaoding = true
         
-//        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
-        let url = "https://httpbin.org/get"
+        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         
         let api = WXRequestApi(url, method: .get, parameters: param)
