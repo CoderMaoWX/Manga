@@ -16,6 +16,13 @@ class NavgationBarView: UIView {
             titleLabel.text = newValue
         }
     }
+    
+    ///是否显示底部线条
+    var showBottomLine = true {
+        didSet {
+            bottomLine.isHidden = !showBottomLine
+        }
+    }
 
     required init(_ backAction: (()->())?) {
         super.init(frame: .zero)
@@ -32,11 +39,13 @@ class NavgationBarView: UIView {
     
     ///由子类重写覆盖
     fileprivate func initSubView() {
+        backgroundColor = .white
         addSubview(contentView)
         if goBackButtonClosure != nil {
             contentView.addSubview(backButton)
         }
         contentView.addSubview(titleLabel)
+        contentView.addSubview(bottomLine)
     }
     
     ///由子类重写覆盖
@@ -56,6 +65,11 @@ class NavgationBarView: UIView {
         titleLabel.snp.makeConstraints {
             $0.centerX.equalTo(contentView.snp.centerX)
             $0.centerY.equalTo(contentView.snp.centerY)
+        }
+        
+        bottomLine.snp.makeConstraints {
+            $0.leading.bottom.trailing.equalTo(contentView)
+            $0.height.equalTo(0.5)
         }
     }
     
@@ -206,6 +220,12 @@ class NavgationBarView: UIView {
         label.textAlignment = .center
         label.lineBreakMode = .byTruncatingTail
         return label
+    }()
+    
+    fileprivate lazy var bottomLine: UIView = {
+        let lineView = UIView()
+        lineView.backgroundColor = .gray.withAlphaComponent(0.5)
+        return lineView
     }()
     
 }

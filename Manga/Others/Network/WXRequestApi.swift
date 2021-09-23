@@ -26,7 +26,7 @@ class WXBaseRequest: NSObject {
     ///请求参数
     private (set) var parameters: DictionaryStrAny? = nil
     ///请求超时，默认30s
-    var timeOut: Int = 30
+    var timeOut: TimeInterval = 30
     ///请求自定义头信息
     var requestHeaderDict: Dictionary<String, String>? = nil
     ///请求任务对象
@@ -47,27 +47,6 @@ class WXBaseRequest: NSObject {
         }
         return parameters
     }()
-
-//    lazy var manager: Session = {
-//        let config: URLSessionConfiguration = URLSessionConfiguration.default
-//        let serverTrustPolicies: [String: ServerTrustPolicy] = [
-//            ///正式环境的证书配置,修改成自己项目的正式url
-//            "www.baidu.com": .pinCertificates(
-//                certificates: ServerTrustPolicy.certificates(),
-//                validateCertificateChain: true,
-//                validateHost: true
-//            ),
-//            ///测试环境的证书配置,不验证证书,无脑通过
-//            "192.168.1.213:8002": .disableEvaluation
-//            ]
-//        //config.httpAdditionalHeaders = ewHttpHeaders
-//        config.timeoutIntervalForRequest = TimeInterval(timeOut)
-//        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-//        //根据config创建manager
-//        return Session(configuration: config,
-//                                 delegate: SessionDelegate(),
-//                                 serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies))
-//    }()
     
     /// 网络请求方法 (不做任何额外处理的原始Alamofire请求，页面上不建议直接用，请使用子类请求方法)
     /// - Parameters:
@@ -80,7 +59,11 @@ class WXBaseRequest: NSObject {
         let dataRequest = AF.request(requestURL,
                                      method: requestMethod,
                                      parameters: finalParameters,
-                                     headers: HTTPHeaders(requestHeaderDict ?? [:])).responseJSON { response in
+                                     headers: HTTPHeaders(requestHeaderDict ?? [:]),
+                                     requestModifier: {
+                                        $0.timeoutInterval = self.timeOut
+                                        $0.cachePolicy = .reloadIgnoringLocalCacheData
+                                     }).responseJSON { response in
             switch response.result {
             case .success(let json):
                 successClosure.map {
