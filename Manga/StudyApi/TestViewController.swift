@@ -54,7 +54,6 @@ class TestViewController: UIViewController {
         
         navgationBarView.setNavBarLeftItem(info: [UIImage(named:"mghome_like_select")!, "Message"]) { idx in
             self.testloadData()
-            
             //showAlertToast(message: "左侧按钮: \(idx)")
         }
         

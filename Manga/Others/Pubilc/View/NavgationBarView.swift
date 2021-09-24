@@ -164,11 +164,8 @@ class NavgationBarView: UIView {
             index += 1
             button.tag = index
             
-            if itemType == 1 {
-                button.addTarget(self, action: #selector(self.navBarLeftItemAction), for: .touchUpInside)
-            } else {
-                button.addTarget(self, action: #selector(self.navBarRightItemAction), for: .touchUpInside)
-            }
+            let selector = (itemType == 1) ? #selector(self.navBarLeftItemAction) : #selector(self.navBarRightItemAction)
+            button.addTarget(self, action: selector, for: .touchUpInside)
             contentView.addSubview(button)
             barButtonArr.append(button)
         }

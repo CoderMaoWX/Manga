@@ -96,7 +96,7 @@ func debugLog(_ message: Any...,
               lineNumber: Int = #line) {
     #if DEBUG
         let fileName = (file as NSString).lastPathComponent
-        //debugLog("[\(fileName):funciton:\(function):line:\(lineNumber)]- \(message)")
+        //print("[\(fileName):funciton:\(function):line:\(lineNumber)]- \(message)")
     
         var appdengLog: String = ""
         var idx = message.count
