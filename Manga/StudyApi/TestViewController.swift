@@ -106,11 +106,11 @@ class TestViewController: UIViewController {
     }
     
     func testloadData() {
-//        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
-//        let param: [String : Any] = ["sexType" : 1]
+        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
+        let param: [String : Any] = ["sexType" : 1]
 
-		let url = "https://www.runoob.com/wp-content/uploads/2015/10/swift.png"
-        let api = WXRequestApi(url, method: .get, parameters: nil)
+//		let url = "https://picsum.photos/200/300?random=1"
+        let api = WXRequestApi(url, method: .get, parameters: param)
 //        api.testResponseJson = """
 //        {
 //          "args": {},
@@ -130,12 +130,16 @@ class TestViewController: UIViewController {
         api.loadingSuperView = view
         api.retryCountWhenFail = 3
 //        api.successKeyValueMap = ["code" : "1"]
-//        api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
-		api.requestHeaderDict = ["Content-Type":"image/png"]
+        api.successKeyValueMap = ["data.message" : "成功"]
+        api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
 
 		api.startRequest { responseModel in
-            debugLog(responseModel);
-//            responseModel.parseKeyPathModel
+            debugLog(responseModel)
+            if let rspData = responseModel.responseObject as? Data {
+                if let image = UIImage(data: rspData) {
+                    self.view.backgroundColor = .init(patternImage: image)
+                }
+            }
         }
     }
     

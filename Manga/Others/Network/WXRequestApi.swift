@@ -192,12 +192,24 @@ class WXRequestApi: WXBaseRequest {
         handleResponseClosure(responseObj)
     }
     
+    ///寻找最合适的解析: 字典/数组
+    fileprivate func findAppositeDict(matchKey: String, respValue: Any?) -> Any? {
+        if let respDict = respValue as? DictionaryStrAny {
+            for (dictKey, dictValue) in respDict {
+                if matchKey == dictKey {
+                    return dictValue
+                }
+            }
+        }
+        return nil
+    }
+    
     ///配置数据响应回调模型
     fileprivate func configResponseModel(responseObj: AnyObject?) -> WXResponseModel {
         let rspModel = WXResponseModel()
-        rspModel.responseDuration  = getCurrentTimestamp() - self.requestDuration
-        rspModel.apiUniquelyIp     = apiUniquelyIp
-        rspModel.responseObject    = responseObj
+        rspModel.responseDuration = getCurrentTimestamp() - self.requestDuration
+        rspModel.apiUniquelyIp = apiUniquelyIp
+        rspModel.responseObject = responseObj
         
         rspModel.urlRequest = requestDataTask?.request
         rspModel.urlResponse = requestDataTask?.response
@@ -215,40 +227,66 @@ class WXRequestApi: WXBaseRequest {
         }
         
         if let errorCode = code { // Fail
-            rspModel.responseMsg   = domain
-            rspModel.responseCode  = errorCode
+            rspModel.responseMsg = domain
+            rspModel.responseCode = errorCode
             rspModel.error = NSError(domain: domain, code: errorCode, userInfo: nil)
             
         } else { //Success
             let responseDict = packagingResponseObj(responseObj: responseObj!, responseModel: rspModel)
             rspModel.responseDict = responseDict
             
+            var hasMapSuccess = false
             let config = WXNetworkConfig.shared
             if let successKeyValue = self.successKeyValueMap ?? config.successKeyValueMap, successKeyValue.count == 1 {
-                let setKey: String = successKeyValue.keys.first!
-                let setCode: String = successKeyValue.values.first!
                 
-                if let responseCode = responseDict[setKey] {
-                    if let rspCode = responseCode as? String {
-                        rspModel.isSuccess = (setCode == rspCode)
-                        rspModel.responseCode = Int(rspCode)
-                        
-                    } else if let rspCode = responseCode as? Int {
-                        rspModel.isSuccess = (Int(setCode) == rspCode)
-                        rspModel.responseCode = rspCode
+                let matchKey: String = successKeyValue.keys.first!
+                let matchValue: String = successKeyValue.values.first!
+                var lastMatchValue: Any? = responseDict
+                if matchKey.contains(".") {
+                    let keyPathArr = matchKey.components(separatedBy: ".")
+
+                    for tmpKey in keyPathArr {
+                        if lastMatchValue == nil {
+                            break
+                        } else {
+                            lastMatchValue = findAppositeDict(matchKey: tmpKey, respValue: lastMatchValue)
+                        }
+                    }
+                    if let lastMatchValue = lastMatchValue as? String, lastMatchValue == matchValue {
+                        rspModel.isSuccess = true
+                    } else {
+                        rspModel.isSuccess = false
+                    }
+                    
+                } else {
+                    let setCode: String = successKeyValue.values.first!
+                    
+                    if let responseCode = responseDict[matchKey] {
+                        if let rspCode = responseCode as? String {
+                            rspModel.isSuccess = (setCode == rspCode)
+                            rspModel.responseCode = Int(rspCode)
+                            hasMapSuccess = true
+                            
+                        } else if let rspCode = responseCode as? Int {
+                            rspModel.isSuccess = (Int(setCode) == rspCode)
+                            rspModel.responseCode = rspCode
+                            hasMapSuccess = true
+                        }
                     }
                 }
-            }
-            if let msgTipKeyOrFailInfo = config.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
-                if let msg = responseDict[ (msgTipKeyOrFailInfo.keys.first!) ] {
-                    rspModel.responseMsg = msg as? String
-                } else {
-                    rspModel.responseMsg = msgTipKeyOrFailInfo.values.first ?? configFailMessage
-                }
+            
             }
             if rspModel.isSuccess {
                 rspModel.parseResponseKeyPathModel(requestApi: self, responseDict: responseDict)
-            } else {
+                
+            } else if hasMapSuccess {
+                if let msgTipKeyOrFailInfo = config.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
+                    if let msg = responseDict[ (msgTipKeyOrFailInfo.keys.first!) ] {
+                        rspModel.responseMsg = msg as? String
+                    } else {
+                        rspModel.responseMsg = msgTipKeyOrFailInfo.values.first ?? configFailMessage
+                    }
+                }
                 let domain = rspModel.responseMsg ?? configFailMessage
                 let code = rspModel.responseCode ?? -444
                 rspModel.error = NSError(domain: domain, code: code, userInfo: responseDict)
@@ -258,6 +296,36 @@ class WXRequestApi: WXBaseRequest {
             handleMulticenter(type: .WillStop, responseModel: rspModel)
         }
         return rspModel
+    }
+    
+    fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> DictionaryStrAny {
+        var responseDcit: [String : Any] = [:]
+        if responseObj is DictionaryStrAny {
+            responseDcit += responseObj as! DictionaryStrAny
+            
+            responseDcit[ kWXNetworkIsTestResponseKey ].map({
+                responseDcit.removeValue(forKey: kWXNetworkIsTestResponseKey)
+                responseModel.isTestResponse = $0 as! Bool
+            })
+            if let _ = responseDcit[kWXRequestDataFromCacheKey] {
+                responseDcit.removeValue(forKey: kWXRequestDataFromCacheKey)
+                responseModel.isCacheData = true
+            }
+        } else if responseObj is Data {
+            let rspData = responseObj.mutableCopy()
+            if let rspData = rspData as? Data {
+                responseModel.responseObject = rspData as AnyObject
+            }
+        } else if let jsonString = responseObj as? String { // jsonString -> Dictionary
+            if let jsonDict = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? DictionaryStrAny {
+                return jsonDict
+            } else {
+                responseDcit["response"] = jsonString
+            }
+        } else if let response = responseObj.description {
+            responseDcit["response"] = response
+        }
+        return responseDcit
     }
     
     ///网络请求过程多链路回调
@@ -409,35 +477,6 @@ class WXRequestApi: WXBaseRequest {
                 networkCache.setObject(responseObject as? NSCoding, forKey: cacheKey)
             }
         }
-    }
-    
-    fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> DictionaryStrAny {
-        var responseDcit: [String : Any] = [:]
-        if responseObj is DictionaryStrAny {
-            responseDcit += responseObj as! DictionaryStrAny
-            
-            responseDcit[ kWXNetworkIsTestResponseKey ].map({
-                responseDcit.removeValue(forKey: kWXNetworkIsTestResponseKey)
-                responseModel.isTestResponse = $0 as! Bool
-            })
-            
-            if let _ = responseDcit[kWXRequestDataFromCacheKey] {
-                responseDcit.removeValue(forKey: kWXRequestDataFromCacheKey)
-                responseModel.isCacheData = true
-            }
-		} else if responseObj is Data {
-			let rspData = responseObj.mutableCopy()
-			if let rspData = rspData as? Data {
-				responseModel.responseObject = rspData as AnyObject
-			}
-		} else if let jsonString = responseObj as? String { // jsonString -> Dictionary
-            if let data = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? DictionaryStrAny {
-                return data
-            }
-        } else if let response = responseObj.description {
-            responseDcit["response"] = response
-        }
-        return responseDcit
     }
     
 }
