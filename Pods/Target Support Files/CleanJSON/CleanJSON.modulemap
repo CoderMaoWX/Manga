@@ -1,0 +1,6 @@
+module CleanJSON {
+  umbrella header "CleanJSON-umbrella.h"
+
+  export *
+  module * { export * }
+}

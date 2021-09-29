@@ -31,7 +31,7 @@ class TestViewController: UIViewController {
         })
         debugLog("遍历结果: \(String(describing: tmpResult))")
         
-//        testloadData2()
+		testloadData()
     }
 
     override func viewDidLoad() {
@@ -106,34 +106,34 @@ class TestViewController: UIViewController {
     }
     
     func testloadData() {
-        WXNetworkConfig.shared.showRequestLaoding = true
-        
-        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
-        let param: [String : Any] = ["sexType" : 1]
-        
-        let api = WXRequestApi(url, method: .get, parameters: param)
-        api.testResponseJson = """
-        {
-          "args": {},
-          "headers": {
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-cn",
-            "Host": "httpbin.org",
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15",
-            "X-Amzn-Trace-Id": "Root=1-614b4c36-1c01da195211a25a61c7a152"
-          },
-          "origin": "120.229.0.100",
-          "url": "https://httpbin.org/get"
-        }
-        """
-        
+//        let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
+//        let param: [String : Any] = ["sexType" : 1]
+
+		let url = "https://www.runoob.com/wp-content/uploads/2015/10/swift.png"
+        let api = WXRequestApi(url, method: .get, parameters: nil)
+//        api.testResponseJson = """
+//        {
+//          "args": {},
+//          "headers": {
+//            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+//            "Accept-Encoding": "gzip, deflate, br",
+//            "Accept-Language": "zh-cn",
+//            "Host": "httpbin.org",
+//            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15",
+//            "X-Amzn-Trace-Id": "Root=1-614b4c36-1c01da195211a25a61c7a152"
+//          },
+//          "origin": "120.229.0.100",
+//          "url": "https://httpbin.org/get"
+//        }
+//        """
+
         api.loadingSuperView = view
         api.retryCountWhenFail = 3
-        api.successKeyValueMap = ["code" : "1"]
-        api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
-        
-        api.startRequest { responseModel in
+//        api.successKeyValueMap = ["code" : "1"]
+//        api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
+		api.requestHeaderDict = ["Content-Type":"image/png"]
+
+		api.startRequest { responseModel in
             debugLog(responseModel);
 //            responseModel.parseKeyPathModel
         }

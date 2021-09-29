@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.4.3)
+  - CleanJSON (1.0.9)
   - EmptyDataSet-Swift (5.0.0)
   - FDFullscreenPopGesture (1.1)
   - HandyJSON (5.0.2)
@@ -40,6 +41,7 @@ PODS:
   - YYCache (1.0.4)
 
 DEPENDENCIES:
+  - CleanJSON
   - EmptyDataSet-Swift
   - FDFullscreenPopGesture
   - HandyJSON
@@ -61,8 +63,9 @@ DEPENDENCIES:
   - YYCache
 
 SPEC REPOS:
-  trunk:
+  https://cdn.cocoapods.org/:
     - Alamofire
+    - CleanJSON
     - EmptyDataSet-Swift
     - FDFullscreenPopGesture
     - HandyJSON
@@ -86,6 +89,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  CleanJSON: 910a36465ce4829e264a902ccf6d1455fdd9f980
   EmptyDataSet-Swift: eb382c0c87a2d9c678077385a595cec52da38171
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
@@ -107,6 +111,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: 5b5e34ee23bfc9ad1a50f0242ce79f080cc73885
+PODFILE CHECKSUM: 810fb1df906a7ee86dc7c7d4a220d258c10ebcec
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.11.2

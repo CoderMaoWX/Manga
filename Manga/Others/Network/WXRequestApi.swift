@@ -64,17 +64,15 @@ class WXBaseRequest: NSObject {
                                         $0.timeoutInterval = self.timeOut
                                         $0.cachePolicy = .reloadIgnoringLocalCacheData
                                      }).responseJSON { response in
-            switch response.result {
-            case .success(let json):
-                successClosure.map {
-                    $0(json as AnyObject)
-                }
-            case .failure(let error):
-                failureClosure.map {
-                    $0(error as AnyObject)
-                }
-            }
-           }
+
+								switch response.result {
+								case .success(let json):
+									successClosure?(json as AnyObject)
+
+								case .failure(let error):
+									failureClosure?(error as AnyObject)
+								}
+						  }
         requestDataTask = dataRequest
         return dataRequest
     }
@@ -150,7 +148,7 @@ class WXRequestApi: WXBaseRequest {
         //开始请求
         let dataRequest = baseRequestBlock(successClosure: networkBlock, failureClosure: networkBlock)
         
-        if WXNetworkConfig.shared.closeUrlResponsePrintfLog == false {
+        if WXNetworkConfig.shared.printfURLResponseLog {
             if retryCount == 0 {
                 debugLog("👉👉👉已发出网络请求=", requestURL)
             } else {
@@ -216,12 +214,12 @@ class WXRequestApi: WXBaseRequest {
             code = -444
         }
         
-        if let errorCode = code { //has Error
+        if let errorCode = code { // Fail
             rspModel.responseMsg   = domain
             rspModel.responseCode  = errorCode
             rspModel.error = NSError(domain: domain, code: errorCode, userInfo: nil)
             
-        } else {
+        } else { //Success
             let responseDict = packagingResponseObj(responseObj: responseObj!, responseModel: rspModel)
             rspModel.responseDict = responseDict
             
@@ -316,7 +314,7 @@ class WXRequestApi: WXBaseRequest {
     ///打印网络响应日志到控制台
     fileprivate func printfResponseLog(responseModel: WXResponseModel) {
         #if DEBUG
-        guard WXNetworkConfig.shared.closeUrlResponsePrintfLog == false else { return }
+        guard WXNetworkConfig.shared.printfURLResponseLog else { return }
         let logHeader = WXNetworkPlugin.appendingPrintfLogHeader(request: self, responseModel: responseModel)
         let logFooter = WXNetworkPlugin.appendingPrintfLogFooter(responseModel: responseModel)
         debugLog("\(logHeader + logFooter)")
@@ -426,21 +424,13 @@ class WXRequestApi: WXBaseRequest {
             if let _ = responseDcit[kWXRequestDataFromCacheKey] {
                 responseDcit.removeValue(forKey: kWXRequestDataFromCacheKey)
                 responseModel.isCacheData = true
-                
-            } else if responseObj is Data {
-                let rspData = responseObj.mutableCopy()
-                if let rspData = rspData as? Data {
-                    responseModel.responseObject = rspData as AnyObject
-                }
             }
-            //只要返回为非Error就包装一个公共的key, 防止页面当失败解析
-            // if let successKeyCode = self.successKeyValueMap ?? config.successKeyValueMap, successKeyCode.count == 1 {
-            //     let setKey: String = successKeyCode.keys.first!
-            //     let setCode: Int = successKeyCode.values.first!
-            //     responseDcit[setKey] = "\(setCode)"
-            // }
-            
-        } else if let jsonString = responseObj as? String { // jsonString -> Dictionary
+		} else if responseObj is Data {
+			let rspData = responseObj.mutableCopy()
+			if let rspData = rspData as? Data {
+				responseModel.responseObject = rspData as AnyObject
+			}
+		} else if let jsonString = responseObj as? String { // jsonString -> Dictionary
             if let data = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? DictionaryStrAny {
                 return data
             }

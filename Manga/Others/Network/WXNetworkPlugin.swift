@@ -10,7 +10,7 @@ import UIKit
 
 class WXNetworkPlugin {
     
-    /// 上传网络日志到服装日志系统入口
+    /// 上传网络日志到服装日志系统入口 (目前此方法供内部使用)
     /// - Parameters:
     ///   - request: 响应模型
     ///   - responseModel: 请求对象
@@ -18,16 +18,16 @@ class WXNetworkPlugin {
                                    responseModel: WXResponseModel) {
         if responseModel.isCacheData { return }
         let configu = WXNetworkConfig.shared
-        if configu.isDistributionOnlineRelease || configu.uploadResponseJsonToLogSystem == false { return }
+        if configu.isDistributionOnlineRelease { return }
         
-        guard let uploadLogUrl = configu.uploadRequestLogToUrl, let _ = URL(string: uploadLogUrl) else { return }
+        guard let uploadLogUrl = configu.uploadRequestLogToURL, let _ = URL(string: uploadLogUrl) else { return }
         
-        guard let catchLogTag = configu.uploadCatchLogTagStr, catchLogTag.count > 0 else { return }
+        guard let catchLogTag = configu.uploadCatchLogTagFlag, catchLogTag.count > 0 else { return }
         
         var requestJson = request.finalParameters
         
         if let _ = request.finalParameters?[KWXUploadAppsFlyerStatisticsKey] {
-            guard configu.closeStatisticsPrintfLog else { return }
+            guard configu.printfStatisticsLog else { return }
             requestJson?.removeValue(forKey: KWXUploadAppsFlyerStatisticsKey)
         }
         
@@ -76,13 +76,19 @@ class WXNetworkPlugin {
         let requestJson = (request.finalParameters ?? [:]).toJSON() ?? ""
         let hostTitle = WXNetworkConfig.shared.networkHostTitle ?? ""
         let requestHeaders = responseModel.urlRequest?.allHTTPHeaderFields ?? [:]
-        let requestHeadersString = (requestHeaders.count > 0) ? "\n\n请求头信息=\(requestHeaders.toJSON()!)" : ""
-        let successFlag = isCacheData ? "❤️❤️❤️" : (isSuccess ? "✅✅✅" : "❌❌❌")
+        let headersString = (requestHeaders.count > 0) ? "\n\n请求头信息= \(requestHeaders.toJSON()!)" : ""
+        let statusFlag = isCacheData ? "❤️❤️❤️" : (isSuccess ? "✅✅✅" : "❌❌❌")
         let dataType = responseModel.isTestResponse ? "测试数据" : "网络数据"
         let statusString  = isCacheData ? "本地缓存数据成功" : (isSuccess ? "\(dataType)成功" : "\(dataType)失败");
-        
-        let logBody = "\n\(successFlag)请求接口地址\(hostTitle)= \(request.requestURL)\n请求参数json=\n\(requestJson)\(requestHeadersString)\n\n\(statusString)返回=\n"
-        return logBody
+		return """
+
+			\(statusFlag)请求接口地址\(hostTitle)= \(request.requestURL)
+
+			请求参数json= \(requestJson)\(headersString)
+
+			\(statusString)返回=
+
+			"""
     }
 
 

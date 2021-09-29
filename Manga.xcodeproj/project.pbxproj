@@ -14,6 +14,10 @@
 		5824E5E826C66D4200246D19 /* PublicUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E726C66D4200246D19 /* PublicUtils.swift */; };
 		5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E926CA05FB00246D19 /* AlertController+Extension.swift */; };
 		583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583D452025CBF6A500C053F7 /* UCateModel.swift */; };
+		5845629827044D000089B333 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5845629427044D000089B333 /* Model.swift */; };
+		5845629927044D000089B333 /* Encodable+ToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5845629527044D000089B333 /* Encodable+ToDictionary.swift */; };
+		5845629A27044D000089B333 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5845629627044D000089B333 /* Request.swift */; };
+		5845629B27044D000089B333 /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5845629727044D000089B333 /* APIConfig.swift */; };
 		5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5846C87D26D36C4300CEF2FC /* TestViewController.swift */; };
 		5846C88026D36C4300CEF2FC /* TestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5846C87E26D36C4300CEF2FC /* TestViewController.xib */; };
 		584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9625C3F27A00FA507C /* AppDelegate.swift */; };
@@ -74,6 +78,10 @@
 		5824E5E726C66D4200246D19 /* PublicUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUtils.swift; sourceTree = "<group>"; };
 		5824E5E926CA05FB00246D19 /* AlertController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertController+Extension.swift"; sourceTree = "<group>"; };
 		583D452025CBF6A500C053F7 /* UCateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UCateModel.swift; sourceTree = "<group>"; };
+		5845629427044D000089B333 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		5845629527044D000089B333 /* Encodable+ToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Encodable+ToDictionary.swift"; sourceTree = "<group>"; };
+		5845629627044D000089B333 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		5845629727044D000089B333 /* APIConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIConfig.swift; sourceTree = "<group>"; };
 		5846C87D26D36C4300CEF2FC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		5846C87E26D36C4300CEF2FC /* TestViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestViewController.xib; sourceTree = "<group>"; };
 		584D5D9325C3F27A00FA507C /* Manga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manga.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,6 +167,17 @@
 				C7AFDB0A11E2C413F9EE7078 /* Pods-Manga.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		5845629327044D000089B333 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				5845629427044D000089B333 /* Model.swift */,
+				5845629527044D000089B333 /* Encodable+ToDictionary.swift */,
+				5845629627044D000089B333 /* Request.swift */,
+				5845629727044D000089B333 /* APIConfig.swift */,
+			);
+			path = Request;
 			sourceTree = "<group>";
 		};
 		584D5D8A25C3F27900FA507C = {
@@ -274,6 +293,7 @@
 		58CDFB4826BA33F000056527 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				5845629327044D000089B333 /* Request */,
 				5899402926BA39B20086C830 /* MonitorLoad.h */,
 				5899402A26BA39B20086C830 /* MonitorLoad.m */,
 				5899402826BA39B20086C830 /* Manga-Bridging-Header.h */,
@@ -485,6 +505,7 @@
 			files = (
 				58CDFB7026BA33F100056527 /* UIViewController+Extension.swift in Sources */,
 				58CDFB6E26BA33F100056527 /* UIView+Extension.swift in Sources */,
+				5845629A27044D000089B333 /* Request.swift in Sources */,
 				58B3BDBE262949720075272C /* TrendRecommedCell.swift in Sources */,
 				58A4C11B25E1035A00C1DAB5 /* BoutiqueCell.swift in Sources */,
 				58CDFB6D26BA33F100056527 /* UIbutton+Extension.swift in Sources */,
@@ -507,11 +528,14 @@
 				58A4C11E25E1084600C1DAB5 /* UComicCHead.swift in Sources */,
 				58CDFB7526BA33F100056527 /* ApiClass.swift in Sources */,
 				5824E5E626C655DB00246D19 /* PublicFrame.swift in Sources */,
+				5845629927044D000089B333 /* Encodable+ToDictionary.swift in Sources */,
 				58763FBD26D0841100AA3985 /* WXNetworkPlugin.swift in Sources */,
 				5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */,
 				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
+				5845629827044D000089B333 /* Model.swift in Sources */,
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
 				5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */,
+				5845629B27044D000089B333 /* APIConfig.swift in Sources */,
 				58763FB926CF9D8000AA3985 /* WXRequestApi.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,

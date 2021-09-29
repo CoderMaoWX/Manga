@@ -17,6 +17,7 @@ target 'Manga' do
   pod 'HandyJSON'
   pod 'SwiftyJSON'
   pod 'KakaJSON'
+	pod 'CleanJSON'
   
   pod 'Kingfisher'
   pod 'Reusable'

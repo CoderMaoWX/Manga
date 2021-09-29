@@ -37,32 +37,29 @@ final class WXNetworkConfig {
 //    ///请求HUD时的类名
 //    var requestLaodingCalss: AnyObject.Type? = nil
     
-    ///请求HUD全局开关, 默认不显示HUD
-    var showRequestLaoding: Bool = false
+    ///是否显示请求HUD,全局开关, 默认显示
+    var showRequestLaoding: Bool = true
     
     ///是否为正式上线环境: 如果为真,则下面的所有日志上传/打印将全都被忽略
     var isDistributionOnlineRelease: Bool = false
     
     ///在底层打印时提示环境,只作打印使用
     var networkHostTitle: String? = nil
+
+	///是否打印接口响应日志打印，默认打印(release模式都不打印)
+	var printfURLResponseLog: Bool = true
     
-    ///上传请求日志到指定的URL
-    var uploadRequestLogToUrl: String? = nil
+    ///全局上传请求日志到指定的URL
+    var uploadRequestLogToURL: String? = nil
     
     ///日志系统抓包时的标签名
-    var uploadCatchLogTagStr: String? = nil
-    
-    ///是否上传日志到远程日志系统，默认不上传
-    var uploadResponseJsonToLogSystem: Bool = false
-    
-    ///是否关闭打印: 接口响应日志，默认关闭
-    var closeUrlResponsePrintfLog: Bool = false
+    var uploadCatchLogTagFlag: String? = nil
     
     /**
-     * 是否关闭打印: 统计上传日志，默认关闭
+     * 是否打印统计上传日志，默认不打印
      * (如果是统计日志发出的请求则请在请求参数中带有key: KWXUploadAppsFlyerStatisticsKey)
      * */
-    var closeStatisticsPrintfLog: Bool = false
+    var printfStatisticsLog: Bool = false
     
     ///取请求缓存时用到的YYChache对象
     let networkDiskCache: YYDiskCache = {
@@ -74,9 +71,7 @@ final class WXNetworkConfig {
     ///单利对象
     static let shared = WXNetworkConfig()
     private init() {
-        closeUrlResponsePrintfLog = false
-        closeStatisticsPrintfLog = true
-    }
+	}
     
     ///清除所有缓存
     func clearWXNetworkAllRequestCache() {
