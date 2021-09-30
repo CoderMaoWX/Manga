@@ -10,11 +10,12 @@ import Alamofire
 import JKSwiftExtension
 import KakaJSON
 
-typealias DictionaryStrAny = Dictionary<String, Any>
+typealias WXDictionaryStrAny = Dictionary<String, Any>
+typealias WXAnyObjectBlock = (AnyObject) -> ()
+typealias WXProgressBlock = (Progress) -> Void
 
 ///保存请求对象,避免提前释放
 var _globleRequestList: [ WXBaseRequest ] = []
-
 
 
 //MARK: - 请求基础对象
@@ -28,7 +29,7 @@ class WXBaseRequest: NSObject {
     ///请求地址
     private (set) var requestURL: String = ""
     ///请求参数
-    private (set) var parameters: DictionaryStrAny? = nil
+    private (set) var parameters: WXDictionaryStrAny? = nil
     ///请求超时，默认30s
     var timeOut: TimeInterval = 30
     ///请求自定义头信息
@@ -36,7 +37,7 @@ class WXBaseRequest: NSObject {
     ///请求任务对象
     private (set) var requestDataTask: DataRequest? = nil
     
-    required init(_ requestURL: String, method: HTTPMethod = .post, parameters: DictionaryStrAny? = nil) {
+    required init(_ requestURL: String, method: HTTPMethod = .post, parameters: WXDictionaryStrAny? = nil) {
         super.init()
         self.requestMethod = method
         self.requestURL = requestURL
@@ -44,7 +45,7 @@ class WXBaseRequest: NSObject {
     }
     
     ///底层最终的请求参数 (页面上可实现<WXPackParameters>协议来实现重新包装请求参数)
-    lazy var finalParameters: DictionaryStrAny? = {
+    lazy var finalParameters: WXDictionaryStrAny? = {
         var parameters = parameters
         if conforms(to: WXPackParameters.self) {
             parameters = (self as? WXPackParameters)?.parametersWillTransformFromOriginParamete(parameters: parameters)
@@ -58,8 +59,8 @@ class WXBaseRequest: NSObject {
     ///   - failureClosure: 请求失败回调
     /// - Returns: 求Session对象
     @discardableResult
-    func baseRequestBlock(successClosure: ((AnyObject) -> ())?,
-                          failureClosure: ((AnyObject) -> ())? ) -> DataRequest {
+    func baseRequestBlock(successClosure: WXAnyObjectBlock?,
+                          failureClosure: WXAnyObjectBlock? ) -> DataRequest {
         let dataRequest = AF.request(requestURL,
                                      method: requestMethod,
                                      parameters: finalParameters,
@@ -67,8 +68,8 @@ class WXBaseRequest: NSObject {
                                      requestModifier: { [weak self] urlRequest in
 										urlRequest.timeoutInterval = self?.timeOut ?? 60
 										urlRequest.cachePolicy = .reloadIgnoringLocalCacheData
+            
                                      }).responseJSON { response in
-
 								switch response.result {
 								case .success(let json):
 									successClosure?(json as AnyObject)
@@ -81,6 +82,38 @@ class WXBaseRequest: NSObject {
 		_globleRequestList.append(self)
         return dataRequest
     }
+    
+    /// 上传文件请求
+    /// - Parameter responseBlock: 请求回调
+    /// - Returns: 请求任务对象(可用来取消任务)
+    @discardableResult
+    func baseUploadFile(successClosure: WXAnyObjectBlock?,
+                        failureClosure: WXAnyObjectBlock?,
+                        formDataClosure: @escaping ((MultipartFormData) -> Void),
+                        uploadClosure: @escaping WXProgressBlock) -> DataRequest {
+        
+        let dataRequest = AF.upload(
+                    multipartFormData: formDataClosure,
+                    to: requestURL,
+                    method: requestMethod,
+                    headers: HTTPHeaders(requestHeaderDict ?? [:]),
+                    requestModifier: { $0.timeoutInterval = 5 * 60 })
+            .responseJSON { response in
+                switch response.result {
+                case .success(let json):
+                    successClosure?(json as AnyObject)
+
+                case .failure(let error):
+                    failureClosure?(error as AnyObject)
+                }
+            }
+            .uploadProgress(closure: uploadClosure)
+        
+        requestDataTask = dataRequest
+        _globleRequestList.append(self)
+        return dataRequest
+    }
+    
 }
 
 //MARK: - 单个请求对象
@@ -92,7 +125,7 @@ class WXRequestApi: WXBaseRequest {
     var autoCacheResponse: Bool = false
     
     ///自定义请求成功时的缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时底层则不缓存)
-    var cacheResponseBlock: ((WXResponseModel) -> (DictionaryStrAny?))? = nil
+    var cacheResponseBlock: ( (WXResponseModel) -> (WXDictionaryStrAny?) )? = nil
     
     ///自定义请求成功映射Key/Value, (key可以是KeyPath模式进行匹配 如: data.status)
 	///注意: 每个请求状态优先使用此属性判断, 如果此属性值为空, 则再取全局的 WXNetworkConfig.successStatusMap的值进行判断
@@ -110,7 +143,19 @@ class WXRequestApi: WXBaseRequest {
 
     ///请求转圈的父视图
     var loadingSuperView: UIView? = nil
-
+    
+    ///上传文件Data数组
+    var uploadFileDataArr: [ Data ]? = nil
+    
+    ///自定义上传时包装的数据Data对象
+    var uploadConfigDataBlock: ( (MultipartFormData) -> Void )? = nil
+    
+    ///监听上传进度
+    var uploadProgressBlock: WXProgressBlock? = nil
+    
+    ///监听下载进度
+    var downloadProgressBlock: WXProgressBlock? = nil
+    
     ///网络请求过程多链路回调<将要开始, 将要停止, 已经完成>
     /// 注意: 如果没有实现此代理则会回调单例中的全局代理<globleMulticenterDelegate>
     var multicenterDelegate: WXNetworkMulticenter? = nil
@@ -126,13 +171,15 @@ class WXRequestApi: WXBaseRequest {
         return "\(self)"
     }()
     
-    required init(_ requestURL: String, method: HTTPMethod = .post, parameters: DictionaryStrAny? = nil) {
+    required init(_ requestURL: String, method: HTTPMethod = .post, parameters: WXDictionaryStrAny? = nil) {
         super.init(requestURL, method: method, parameters: parameters)
     }
 
 	deinit {
-		debugLog("====== WXBaseRequest 请求结束了======")
+		//debugLog("====== WXBaseRequest 请求结束了======")
 	}
+    
+    //MARK: - 网络请求入口
     
     /// 开始网络请求
     /// - Parameter responseBlock: 请求回调
@@ -144,7 +191,7 @@ class WXRequestApi: WXBaseRequest {
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
             return nil
         }
-        let networkBlock: (AnyObject) -> () = { [weak self] responseObj in
+        let networkBlock: WXAnyObjectBlock = { [weak self] responseObj in
 			self?.configResponseBlock(responseBlock: responseBlock, responseObj: responseObj)
         }
         if checkRequestInCache() {
@@ -169,14 +216,73 @@ class WXRequestApi: WXBaseRequest {
         return dataRequest
     }
     
-    func responseForTestjSon() -> DictionaryStrAny? {
-        if let rspJsonDict = testResponseJson as? DictionaryStrAny {
+    /// 上传文件请求
+    /// - Parameter responseBlock: 请求回调
+    /// - Returns: 请求任务对象(可用来取消任务)
+    @discardableResult
+    func uploadFile(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
+        guard let _ = URL(string: requestURL) else {
+            debugLog("\n❌❌❌无效的 URL 上传地址= \(requestURL)")
+            configResponseBlock(responseBlock: responseBlock, responseObj: nil)
+            return nil
+        }
+        handleMulticenter(type: .WillStart, responseModel: WXResponseModel())
+        
+        let networkBlock: WXAnyObjectBlock = { [weak self] responseObj in
+            self?.configResponseBlock(responseBlock: responseBlock, responseObj: responseObj)
+        }
+        //开始文件上传
+        let dataRequest = baseUploadFile(
+                        successClosure: networkBlock,
+                        failureClosure: networkBlock,
+                        formDataClosure: { [weak self] multipartFormData in
+                        
+                            if let multipartFormDataHandle = self?.uploadConfigDataBlock {
+                                multipartFormDataHandle( multipartFormData )
+                                
+                            } else if let uploadDataArr = self?.uploadFileDataArr, uploadDataArr.count > 0 {
+                                for fileData in uploadDataArr {
+                                    let mineTuple = WXNetworkPlugin.fileMimeType(for: fileData)
+                                    let name = mineTuple.type
+                                    /// 生成一个随机的上传文件名称
+                                    let fileName = name + "-\(Int(Date().timeIntervalSince1970))" + "." + mineTuple.name
+                                    multipartFormData.append(fileData, withName: name, fileName: fileName, mimeType: mineTuple.name)
+                                }
+                            }
+                            //拼接上传参数
+                            if let parameters = self?.parameters, parameters.count > 0 {
+                                for (key, value) in parameters {
+                                    if let valueString = value as? String {
+                                        let paramData = valueString.data(using: String.Encoding.utf8)
+                                        multipartFormData.append(paramData!, withName: key.description)
+                                    }
+                                }
+                            }
+                        },
+                        uploadClosure: { [weak self] in
+                            self?.uploadProgressBlock?($0)
+                        })
+        
+        if WXNetworkConfig.shared.printfURLResponseLog {
+            if retryCount == 0 {
+                debugLog("👉👉👉已开始文件上传=", requestURL)
+            } else {
+                debugLog("👉👉👉文件上传失败,第 \(retryCount) 次尝试重新上传=", requestURL)
+            }
+        }
+        return dataRequest
+    }
+    
+    //MARK: - 处理请求响应
+    
+    func responseForTestjSon() -> WXDictionaryStrAny? {
+        if let rspJsonDict = testResponseJson as? WXDictionaryStrAny {
             return rspJsonDict
             
         } else if let rspJsonString = testResponseJson as? String {
             // jsonString -> Dictionary
             let data = rspJsonString.data(using: String.Encoding.utf8)
-            if let rspJsonDict = try? JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? DictionaryStrAny {
+            if let rspJsonDict = try? JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? WXDictionaryStrAny {
                 return rspJsonDict
             }
         }
@@ -200,7 +306,7 @@ class WXRequestApi: WXBaseRequest {
     
     ///寻找匹配请求成功的关键字典
     fileprivate func findAppositeDict(matchKey: String, respValue: Any?) -> Any? {
-        if let respDict = respValue as? DictionaryStrAny {
+        if let respDict = respValue as? WXDictionaryStrAny {
             for (dictKey, dictValue) in respDict {
                 if matchKey == dictKey {
                     return dictValue
@@ -211,7 +317,7 @@ class WXRequestApi: WXBaseRequest {
     }
 
 	///检查请求成功状态
-	fileprivate func checkingSuccessStatus(responseDict: DictionaryStrAny, rspModel: WXResponseModel) -> Bool {
+	fileprivate func checkingSuccessStatus(responseDict: WXDictionaryStrAny, rspModel: WXResponseModel) -> Bool {
 		var hasMapSuccess = false
 
 		if let successKeyValue = successStatusMap ?? WXNetworkConfig.shared.successStatusMap {
@@ -221,7 +327,6 @@ class WXRequestApi: WXBaseRequest {
 			//1.如果包含点(.)连接,则采用KeyPath模式匹配查找请求成功标识
 			if matchKey.contains(".") {
 				var lastMatchValue: Any? = responseDict
-
 				for tmpKey in matchKey.components(separatedBy: ".") {
 					if lastMatchValue == nil {
 						break
@@ -240,7 +345,6 @@ class WXRequestApi: WXBaseRequest {
 					rspModel.isSuccess = true
 					rspModel.responseCode = lastMatchValue as? Int
 				}
-
 			} else if let responseCode = responseDict[matchKey] {
 				//2.采用直接查找匹配请求成功标识
 				if responseCode is String, (responseCode as! String) == mapSuccessValue {
@@ -313,10 +417,10 @@ class WXRequestApi: WXBaseRequest {
         return rspModel
     }
     
-    fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> DictionaryStrAny {
+    fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> WXDictionaryStrAny {
         var responseDcit: [String : Any] = [:]
-        if responseObj is DictionaryStrAny {
-            responseDcit += responseObj as! DictionaryStrAny
+        if responseObj is WXDictionaryStrAny {
+            responseDcit += responseObj as! WXDictionaryStrAny
             
             responseDcit[ kWXNetworkIsTestResponseKey ].map({
                 responseDcit.removeValue(forKey: kWXNetworkIsTestResponseKey)
@@ -332,7 +436,7 @@ class WXRequestApi: WXBaseRequest {
                 responseModel.responseObject = rspData as AnyObject
             }
         } else if let jsonString = responseObj as? String { // jsonString -> Dictionary
-            if let jsonDict = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? DictionaryStrAny {
+            if let jsonDict = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? WXDictionaryStrAny {
                 return jsonDict
             } else {
                 responseDcit["response"] = jsonString
@@ -461,12 +565,12 @@ class WXRequestApi: WXBaseRequest {
     }
     
     ///读取接口本地缓存数据
-    fileprivate func readRequestCacheWithBlock(fetchCacheBlock: @escaping (AnyObject) -> ()) {
+    fileprivate func readRequestCacheWithBlock(fetchCacheBlock: @escaping WXAnyObjectBlock) {
         if cacheResponseBlock != nil || autoCacheResponse {
             let networkCache = WXNetworkConfig.shared.networkDiskCache
             
             networkCache.object(forKey: cacheKey) { key, cacheObject in
-                guard let cacheObject = cacheObject, var cacheDcit = cacheObject as? DictionaryStrAny else { return }
+                guard let cacheObject = cacheObject, var cacheDcit = cacheObject as? WXDictionaryStrAny else { return }
                 cacheDcit[kWXRequestDataFromCacheKey] = true
                 if Thread.isMainThread {
                     fetchCacheBlock(cacheDcit as AnyObject)
@@ -488,7 +592,7 @@ class WXRequestApi: WXBaseRequest {
                 networkCache.setObject(saveCache as NSCoding, forKey: cacheKey)
             }
         } else if autoCacheResponse {
-            if let responseObject = responseModel.responseObject, responseObject is DictionaryStrAny {
+            if let responseObject = responseModel.responseObject, responseObject is WXDictionaryStrAny {
                 let networkCache = WXNetworkConfig.shared.networkDiskCache
                 networkCache.setObject(responseObject as? NSCoding, forKey: cacheKey)
             }
@@ -522,7 +626,7 @@ class WXBatchRequestApi {
     }
 
 	deinit {
-		debugLog("====== WXBatchRequestApi 请求结束了======")
+		//debugLog("====== WXBatchRequestApi 请求结束了======")
 	}
 
     ///根据请求获取指定的响应数据
@@ -647,7 +751,7 @@ class WXResponseModel: NSObject {
     ///本次响应的原始数据: NSDictionary/ UIImage/ NSData /...
     var responseObject: AnyObject? = nil
     ///本次响应的原始字典数据
-    var responseDict: DictionaryStrAny? = nil
+    var responseDict: WXDictionaryStrAny? = nil
     ///本次响应的数据是否是测试数据
     var isTestResponse: Bool = false
     ///失败时的错误信息
@@ -661,13 +765,12 @@ class WXResponseModel: NSObject {
     
     ///解析响应数据的数据模型 (支持KeyPath匹配)
     fileprivate func parseResponseKeyPathModel(requestApi: WXRequestApi,
-                                               responseDict: DictionaryStrAny) {
+                                               responseDict: WXDictionaryStrAny) {
         guard let keyPathInfo = requestApi.parseModelMap else { return }
         
         let parseKey: String = keyPathInfo.parseKey
         guard parseKey.count > 0 else { return }
         let modelCalss = keyPathInfo.modelType
-//        guard let modelCalss = parseCalss else { return }
         
         var lastValueDict: Any?
         if parseKey.contains(".") {
@@ -684,7 +787,7 @@ class WXResponseModel: NSObject {
         } else {
             lastValueDict = responseDict[parseKey]
         }
-        if let customModelValue = lastValueDict as? DictionaryStrAny {
+        if let customModelValue = lastValueDict as? WXDictionaryStrAny {
             parseKeyPathModel = customModelValue.kj.model(type: modelCalss) as AnyObject
             
         }  else if let modelObj = lastValueDict as? Array<Any> {
@@ -694,7 +797,7 @@ class WXResponseModel: NSObject {
 
     ///寻找最合适的解析: 字典/数组
     fileprivate func findParseDict(respKey: String, respValue: Any?) -> Any? {
-        if let respDict = respValue as? DictionaryStrAny {
+        if let respDict = respValue as? WXDictionaryStrAny {
             for (dictKey, dictValue) in respDict {
                 if respKey == dictKey {
                     return dictValue
@@ -705,7 +808,7 @@ class WXResponseModel: NSObject {
     }
 
 	deinit {
-		debugLog("====== WXResponseModel 请求结束了======")
+		//debugLog("====== WXResponseModel 请求结束了======")
 	}
     
 }

@@ -31,7 +31,7 @@ class TestViewController: UIViewController {
         })
         debugLog("遍历结果: \(String(describing: tmpResult))")
         
-		testloadData()
+        testUploadFile()
     }
 
     override func viewDidLoad() {
@@ -134,6 +134,38 @@ class TestViewController: UIViewController {
                 }
             }
 			debugLog(" ==== 测试接口请求完成 ======")
+        }
+    }
+    
+    ///测试上传文件
+    func testUploadFile() {
+        let image = UIImage(named: "login_pop_bonus")!
+        let imageData = image.pngData()
+        
+        let image2 = UIImage(named: "guide_pay_at_reader2")!
+        let imageData2 = image2.pngData()
+        
+        let url = "http://10.8.31.5:8090/uploadImage  "
+        let param = [
+            "appName" : "TEST",
+            "platform" : "iOS",
+            "version" : "7.3.3",
+        ]
+        let api = WXRequestApi(url, method: .post, parameters: param)
+        api.uploadFileDataArr = [imageData!, imageData2!]
+        api.timeOut = 100
+        api.loadingSuperView = view
+//        api.autoCacheResponse = false
+//        api.retryWhenFailTuple = (times: 3, delay: 3.0)
+//        api.successStatusMap = (key: "code", value: "1")
+
+        api.uploadFile { responseModel in
+            if let rspData = responseModel.responseObject as? Data {
+                if let image = UIImage(data: rspData) {
+                    self.view.backgroundColor = .init(patternImage: image)
+                }
+            }
+            debugLog(" ==== 测试上传文件请求完成 ======")
         }
     }
     
