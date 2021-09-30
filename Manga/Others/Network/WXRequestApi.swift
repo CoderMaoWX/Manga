@@ -12,6 +12,10 @@ import KakaJSON
 
 typealias DictionaryStrAny = Dictionary<String, Any>
 
+///保存请求对象,避免提前释放
+var _globleRequestList: [ WXBaseRequest ] = []
+
+
 
 //MARK: - 请求基础对象
 
@@ -60,9 +64,9 @@ class WXBaseRequest: NSObject {
                                      method: requestMethod,
                                      parameters: finalParameters,
                                      headers: HTTPHeaders(requestHeaderDict ?? [:]),
-                                     requestModifier: {
-                                        $0.timeoutInterval = self.timeOut
-                                        $0.cachePolicy = .reloadIgnoringLocalCacheData
+                                     requestModifier: { [weak self] urlRequest in
+										urlRequest.timeoutInterval = self?.timeOut ?? 60
+										urlRequest.cachePolicy = .reloadIgnoringLocalCacheData
                                      }).responseJSON { response in
 
 								switch response.result {
@@ -74,6 +78,7 @@ class WXBaseRequest: NSObject {
 								}
 						  }
         requestDataTask = dataRequest
+		_globleRequestList.append(self)
         return dataRequest
     }
 }
@@ -90,21 +95,22 @@ class WXRequestApi: WXBaseRequest {
     var cacheResponseBlock: ((WXResponseModel) -> (DictionaryStrAny?))? = nil
     
     ///自定义请求成功映射Key/Value, (key可以是KeyPath模式进行匹配 如: data.status)
-	///注意: 每个请求成功状态优先使用此Map判断, 如果此值为空, 则再取 WXNetworkConfig.successKeyValueMap的值进行判断
-    var successKeyValueMap: [String : String]? = nil
+	///注意: 每个请求状态优先使用此属性判断, 如果此属性值为空, 则再取全局的 WXNetworkConfig.successStatusMap的值进行判断
+    var successStatusMap: (key: String, value: String)? = nil
+
+    ///请求成功时自动解析数据模型映射:Key/ModelType, (key可以是KeyPath模式进行匹配 如: data.returnData)
+    ///成功解析的模型在 WXResponseModel.parseKeyPathModel 中返回
+    var parseModelMap: (parseKey: String, modelType: Convertible.Type)? = nil
     
-    ///请求成功时解析数据模型映射:KeyPath/Model: (支持KeyPath匹配, 解析的模型在 WXResponseModel.parseKeyPathModel 返回
-    var parseKeyPathMap: [String : Convertible.Type]? = nil
+    ///times: 请求失败之后重新请求次数, delay: 每次重试的间隔
+    var retryWhenFailTuple: (times: Int, delay: Double)? = nil
     
     ///调试响应json/Dictionary,方便测试时使用, 如果有设置该值则不会请求,直接回调此值
     var testResponseJson: Any? = nil
 
     ///请求转圈的父视图
     var loadingSuperView: UIView? = nil
-    
-    ///请求失败之后重新请求次数, (每次重试时间隔3秒)
-    var retryCountWhenFail: Int? = nil
-    
+
     ///网络请求过程多链路回调<将要开始, 将要停止, 已经完成>
     /// 注意: 如果没有实现此代理则会回调单例中的全局代理<globleMulticenterDelegate>
     var multicenterDelegate: WXNetworkMulticenter? = nil
@@ -123,6 +129,10 @@ class WXRequestApi: WXBaseRequest {
     required init(_ requestURL: String, method: HTTPMethod = .post, parameters: DictionaryStrAny? = nil) {
         super.init(requestURL, method: method, parameters: parameters)
     }
+
+	deinit {
+		debugLog("====== WXBaseRequest 请求结束了======")
+	}
     
     /// 开始网络请求
     /// - Parameter responseBlock: 请求回调
@@ -134,8 +144,8 @@ class WXRequestApi: WXBaseRequest {
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
             return nil
         }
-        let networkBlock: (AnyObject) -> () = { responseObj in
-            self.configResponseBlock(responseBlock: responseBlock, responseObj: responseObj)
+        let networkBlock: (AnyObject) -> () = { [weak self] responseObj in
+			self?.configResponseBlock(responseBlock: responseBlock, responseObj: responseObj)
         }
         if checkRequestInCache() {
             readRequestCacheWithBlock(fetchCacheBlock: networkBlock)
@@ -174,23 +184,18 @@ class WXRequestApi: WXBaseRequest {
     }
     
     fileprivate func configResponseBlock(responseBlock: @escaping WXNetworkResponseBlock, responseObj: AnyObject?) {
-        
-        let handleResponseClosure = { (responseObj: AnyObject?) in
-            let responseModel = self.configResponseModel(responseObj: responseObj)
-            responseBlock(responseModel)
-            self.handleMulticenter(type: .DidCompletion, responseModel: responseModel)
-        }
-        if let retryCountWhenFail = retryCountWhenFail,
-           retryCount < retryCountWhenFail,
-           let error = responseObj as? Error, error._code != -999 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                self.retryCount += 1
-                handleResponseClosure(responseObj)
-                self.startRequest(responseBlock: responseBlock)
-            }
-            return
-        }
-        handleResponseClosure(responseObj)
+		let responseModel = configResponseModel(responseObj: responseObj)
+		responseBlock(responseModel)
+		handleMulticenter(type: .DidCompletion, responseModel: responseModel)
+
+		if let retryTuple = retryWhenFailTuple {
+			if retryCount < retryTuple.times, let error = responseObj as? Error, error._code != -999 {
+				DispatchQueue.main.asyncAfter(deadline: (.now() + retryTuple.delay)) {
+					self.retryCount += 1
+					self.startRequest(responseBlock: responseBlock)
+				}
+			}
+		}
     }
     
     ///寻找匹配请求成功的关键字典
@@ -209,10 +214,9 @@ class WXRequestApi: WXBaseRequest {
 	fileprivate func checkingSuccessStatus(responseDict: DictionaryStrAny, rspModel: WXResponseModel) -> Bool {
 		var hasMapSuccess = false
 
-		if let successKeyValue = self.successKeyValueMap ?? WXNetworkConfig.shared.successKeyValueMap, successKeyValue.count == 1 {
-
-			let matchKey: String = successKeyValue.keys.first!
-			let mapSuccessValue: String = successKeyValue.values.first!
+		if let successKeyValue = successStatusMap ?? WXNetworkConfig.shared.successStatusMap {
+			let matchKey: String = successKeyValue.key
+			let mapSuccessValue: String = successKeyValue.value
 
 			//1.如果包含点(.)连接,则采用KeyPath模式匹配查找请求成功标识
 			if matchKey.contains(".") {
@@ -257,7 +261,7 @@ class WXRequestApi: WXBaseRequest {
 	///配置数据响应回调模型
     fileprivate func configResponseModel(responseObj: AnyObject?) -> WXResponseModel {
         let rspModel = WXResponseModel()
-        rspModel.responseDuration = getCurrentTimestamp() - self.requestDuration
+        rspModel.responseDuration = getCurrentTimestamp() - requestDuration
         rspModel.apiUniquelyIp = apiUniquelyIp
         rspModel.responseObject = responseObj
         
@@ -387,6 +391,7 @@ class WXRequestApi: WXBaseRequest {
             } else {
                 saveResponseObjToCache(responseModel: responseModel)
             }
+			_globleRequestList.remove(self)
         }
     }
     
@@ -515,7 +520,11 @@ class WXBatchRequestApi {
     required init(requestArray: [WXRequestApi]) {
         self.requestArray = requestArray
     }
-    
+
+	deinit {
+		debugLog("====== WXBatchRequestApi 请求结束了======")
+	}
+
     ///根据请求获取指定的响应数据
     func responseForRequest(request: WXRequestApi) -> WXResponseModel {
         return responseInfoDict[request.apiUniquelyIp] ?? WXResponseModel()
@@ -535,14 +544,14 @@ class WXBatchRequestApi {
         responseBatchBlock = responseBlock
         for api in requestArray {
             
-            api.startRequest { responseModel in
+            api.startRequest { [weak self] responseModel in
                 if responseModel.responseDict == nil {
-                    self.hasMarkBatchFail = true
+                    self?.hasMarkBatchFail = true
                 }
                 if waitAllDone {
-                    self.finalHandleBatchResponse(responseModel: responseModel)
+                    self?.finalHandleBatchResponse(responseModel: responseModel)
                 } else { //回调多次
-                    self.oftenHandleBatchResponse(responseModel: responseModel)
+                    self?.oftenHandleBatchResponse(responseModel: responseModel)
                 }
             }
         }
@@ -553,8 +562,8 @@ class WXBatchRequestApi {
         let apiUniquelyIp = responseModel.apiUniquelyIp
         
         //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用用缓存
-        if self.responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
-            self.responseInfoDict[apiUniquelyIp] = responseModel
+        if responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
+            responseInfoDict[apiUniquelyIp] = responseModel
         }
         if responseModel.isCacheData == false {
             requestCount -= 1
@@ -621,8 +630,8 @@ class WXBatchRequestApi {
 ///包装的响应数据
 class WXResponseModel: NSObject {
     /**
-     * 是否请求成功,优先使用 WXRequestApi.successKeyValueMap 来判断是否成功
-     * 否则使用 WXNetworkConfig.successKeyValueMap 标识来判断是否请求成功
+     * 是否请求成功,优先使用 WXRequestApi.successStatusMap 来判断是否成功
+     * 否则使用 WXNetworkConfig.successStatusMap 标识来判断是否请求成功
      ***/
     var isSuccess: Bool = false
     ///本次响应Code码
@@ -653,12 +662,12 @@ class WXResponseModel: NSObject {
     ///解析响应数据的数据模型 (支持KeyPath匹配)
     fileprivate func parseResponseKeyPathModel(requestApi: WXRequestApi,
                                                responseDict: DictionaryStrAny) {
-        guard let keyPathInfo = requestApi.parseKeyPathMap, keyPathInfo.count == 1 else { return }
+        guard let keyPathInfo = requestApi.parseModelMap else { return }
         
-        let parseKey: String = keyPathInfo.keys.first!
+        let parseKey: String = keyPathInfo.parseKey
         guard parseKey.count > 0 else { return }
-        let parseCalss = keyPathInfo.values.first
-        guard let modelCalss = parseCalss else { return }
+        let modelCalss = keyPathInfo.modelType
+//        guard let modelCalss = parseCalss else { return }
         
         var lastValueDict: Any?
         if parseKey.contains(".") {
@@ -694,5 +703,9 @@ class WXResponseModel: NSObject {
         }
         return nil
     }
+
+	deinit {
+		debugLog("====== WXResponseModel 请求结束了======")
+	}
     
 }

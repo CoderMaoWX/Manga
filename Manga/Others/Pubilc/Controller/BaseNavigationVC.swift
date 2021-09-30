@@ -22,7 +22,7 @@ class BaseNavigationVC: UINavigationController {
         navBar.barTintColor =  UIColor.white
         navBar.tintColor =  UIColor.white
         navBar.titleTextAttributes = [
-            .font : UIFont.systemFont(ofSize: 18),
+            .font : UIFont.boldSystemFont(ofSize: 18),
             .foregroundColor : UIColor.white
         ]
     }
@@ -51,6 +51,18 @@ class BaseNavigationVC: UINavigationController {
             navigationBar.setBackgroundImage(UIColor.white.image(), for: .default)
             navigationBar.shadowImage = nil
         }
+
+		if #available(iOS 13.0, *) {
+			let barApp = UINavigationBarAppearance()
+			barApp.backgroundColor = .white
+			barApp.titleTextAttributes = [
+				.font : UIFont.boldSystemFont(ofSize: 18),
+				.foregroundColor : UIColor.white
+			]
+			barApp.backgroundImage = navigationBar.backgroundImage(for: .default)
+			navigationBar.standardAppearance = barApp
+			navigationBar.scrollEdgeAppearance = barApp;
+		}
     }
     
     // MARK: - 全局拦截Push事件

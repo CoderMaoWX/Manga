@@ -14,7 +14,22 @@ class TabBarController: UITabBarController {
         tabBar.isTranslucent = false
         tabBar.tintColor = UIColor.black //.theme
         setupViewController()
+
+		fixTabbarBgColor()
     }
+
+	func fixTabbarBgColor() {
+		if #available(iOS 13.0, *) {
+			let barApp = UITabBarAppearance()
+			barApp.backgroundColor = .white
+			//barApp.backgroundImage = nil
+			tabBar.standardAppearance = barApp
+
+			if #available(iOS 15.0, *) {
+				tabBar.scrollEdgeAppearance = barApp
+			}
+		}
+	}
     
     func setupViewController() {
         setupChildVC(childVC: TestViewController(),

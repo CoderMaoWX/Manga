@@ -47,7 +47,6 @@ class BaseVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         if let nav = navigationController as? BaseNavigationVC {
             nav.barStyle(.theme)
         }
