@@ -109,28 +109,27 @@ class WXNetworkPlugin {
         }
     }
 
-    ///上传时获取图片类型
-    static func fileMimeType(for data: Data) -> (type: String, name: String) {
+    ///获取文件的 mimeType 类型
+    static func dataMimeType(for data: Data) -> (mimeType: String, fileType: String) {
         var b: UInt8 = 0
         data.copyBytes(to: &b, count: 1)
-
         switch b {
         case 0xFF:
-            return ("image", "jpeg")
+            return ("image/jpeg", "jpeg")
         case 0x89:
-            return ("image", "png")
+            return ("image/png", "png")
         case 0x47:
-            return ("image", "gif")
+            return ("image/gif", "gif")
         case 0x4D, 0x49:
-            return ("image", "tiff")
+            return ("image/tiff", "tiff")
         case 0x25:
-            return ("application", "pdf")
+            return ("application/pdf", "pdf")
         case 0xD0:
-            return ("application", "vnd")
+            return ("application/vnd", "vnd")
         case 0x46:
-            return ("text", "file")
+            return ("text/plain", "file")
         default:
-            return ("application", "stream")
+            return ("application/octet-stream", "stream")
         }
     }
 }

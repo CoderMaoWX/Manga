@@ -60,7 +60,7 @@ class WXBaseRequest: NSObject {
     /// - Returns: 求Session对象
     @discardableResult
     func baseRequestBlock(successClosure: WXAnyObjectBlock?,
-                          failureClosure: WXAnyObjectBlock? ) -> DataRequest {
+                          failureClosure: WXAnyObjectBlock?) -> DataRequest {
         let dataRequest = AF.request(requestURL,
                                      method: requestMethod,
                                      parameters: finalParameters,
@@ -119,8 +119,8 @@ class WXBaseRequest: NSObject {
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
     func baseDownloadFile(successClosure: WXAnyObjectBlock?,
-                        failureClosure: WXAnyObjectBlock?,
-                        downClosure: @escaping WXProgressBlock) -> DownloadRequest {
+                          failureClosure: WXAnyObjectBlock?,
+                          progressClosure: @escaping WXProgressBlock) -> DownloadRequest {
 
         let dataRequest = AF.download(requestURL,
                                       method: requestMethod,
@@ -136,7 +136,7 @@ class WXBaseRequest: NSObject {
                                     failureClosure?(error as AnyObject)
                                 }
                             }
-                            .uploadProgress(closure: downClosure)
+                            .downloadProgress(closure: progressClosure)
         
         requestDataTask = dataRequest
         _globleRequestList.append(self)
@@ -268,11 +268,11 @@ class WXRequestApi: WXBaseRequest {
                                 
                             } else if let uploadDataArr = self?.uploadFileDataArr, uploadDataArr.count > 0 {
                                 for fileData in uploadDataArr {
-                                    let mineTuple = WXNetworkPlugin.fileMimeType(for: fileData)
-                                    let name = mineTuple.type
+                                    let dataInfo = WXNetworkPlugin.dataMimeType(for: fileData)
+                                    let name = (dataInfo.mimeType as NSString).deletingLastPathComponent
                                     /// 生成一个随机的上传文件名称
-                                    let fileName = name + "-\(Int(Date().timeIntervalSince1970))" + "." + mineTuple.name
-                                    multipartFormData.append(fileData, withName: name, fileName: fileName, mimeType: mineTuple.name)
+                                    let fileName = name + "-\(Int(Date().timeIntervalSince1970))" + "." + dataInfo.fileType
+                                    multipartFormData.append(fileData, withName: name, fileName: fileName, mimeType: dataInfo.mimeType)
                                 }
                             }
                             //拼接上传参数
@@ -317,7 +317,7 @@ class WXRequestApi: WXBaseRequest {
         //开始文件下载
         let dataRequest = baseDownloadFile(successClosure: networkBlock,
                                            failureClosure: networkBlock,
-                                           downClosure: { [weak self] in
+                                           progressClosure: { [weak self] in
             self?.fileProgressBlock?($0)
         })
         

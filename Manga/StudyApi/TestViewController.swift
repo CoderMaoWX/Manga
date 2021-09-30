@@ -10,12 +10,18 @@ import UIKit
 import Alamofire
 import SnapKit
 import FDFullscreenPopGesture
+///判断文件类型
+import MobileCoreServices
 
 
 class TestViewController: UIViewController {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //ApiClass.studyApi()
+        
+        testUploadFile()
+        //debugLog("文件类型: \(mimeType(pathExtension: "mp4"))")
+        return
         
         let tmpA: Int? = 4
         tmpA.map {
@@ -31,7 +37,6 @@ class TestViewController: UIViewController {
         })
         debugLog("遍历结果: \(String(describing: tmpResult))")
         
-        testDownFile()
     }
 
     override func viewDidLoad() {
@@ -138,6 +143,9 @@ class TestViewController: UIViewController {
         let image = UIImage(named: "yaofan")!
         let imageData = image.pngData()
         
+//        let path = URL(fileURLWithPath: "/Users/luke/Desktop/video.mp4")
+//        let imageData = Data.init(base64Encoded: path.absoluteString)
+        
         let url = "http://10.8.31.5:8090/uploadImage  "
         let param = [
             "appName" : "TEST",
@@ -145,15 +153,17 @@ class TestViewController: UIViewController {
             "version" : "7.3.3",
         ]
         let api = WXRequestApi(url, method: .post, parameters: param)
-        api.uploadFileDataArr = [imageData!]
-        api.fileProgressBlock = { progress in
-            debugLog("上传文件进度 \(progress.completedUnitCount)%")
-        }
-        api.timeOut = 100
         api.loadingSuperView = view
         api.retryWhenFailTuple = (times: 3, delay: 3.0)
         //api.successStatusMap = (key: "code", value: "1")
-
+        
+        api.uploadFileDataArr = [imageData!]
+        api.fileProgressBlock = { progress in
+            let total = Float(progress.totalUnitCount)
+            let completed = Float(progress.completedUnitCount)
+            let percentage = completed / total * 100
+            debugLog("上传进度: \(String(format:"%.2f",percentage)) %")
+        }
         api.uploadFile { responseModel in
             if let rspData = responseModel.responseObject as? Data {
                 if let image = UIImage(data: rspData) {
@@ -166,24 +176,49 @@ class TestViewController: UIViewController {
     
     ///测试下载文件
     func testDownFile() {
+        //图片
+        //let url = "https://picsum.photos/200/300?random=1"
+        //压缩包
         //let url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
-        let url = "https://picsum.photos/200/300?random=1"
+        //视频
+        let url = "https://video.yinyuetai.com/6b751621a51849d5acdca1ab0d9ab411.mp4"
+        
         let api = WXRequestApi(url, method: .get, parameters: nil)
-        api.fileProgressBlock = { progress in
-            debugLog("下载文件进度 \(progress.completedUnitCount)%")
-        }
         api.loadingSuperView = view
-        api.retryWhenFailTuple = (times: 3, delay: 3.0)
-        //api.successStatusMap = (key: "code", value: "1")
-
+        
+        api.fileProgressBlock = { progress in
+            let total = Float(progress.totalUnitCount)
+            let completed = Float(progress.completedUnitCount)
+            let percentage = completed / total * 100
+            debugLog("下载进度: \(String(format:"%.2f",percentage)) %")
+        }
         api.downloadFile { responseModel in
             if let rspData = responseModel.responseObject as? Data {
                 if let image = UIImage(data: rspData) {
                     self.view.backgroundColor = .init(patternImage: image)
                 }
+                if var mimeType = responseModel.urlResponse?.mimeType {
+                    mimeType = mimeType.replacingOccurrences(of: "/", with: ".")
+                    let url = URL(fileURLWithPath: "/Users/luke/Desktop/" + mimeType, isDirectory: true)
+                    try? rspData.write(to: url)
+                }
             }
             debugLog(" ==== 测试下载文件请求完成 ======")
         }
+    }
+    
+    //根据后缀获取对应的Mime-Type
+    func mimeType(pathExtension: String) -> String {
+        if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension,
+                                                           pathExtension as NSString,
+                                                           nil)?.takeRetainedValue() {
+            if let mimetype = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?
+                .takeRetainedValue() {
+                return mimetype as String
+            }
+        }
+        //文件资源类型如果不知道，传万能类型application/octet-stream，服务器会自动解析文件类
+        return "application/octet-stream"
     }
     
     func testType() {

@@ -26,7 +26,7 @@ class TabBarController: UITabBarController {
 			tabBar.standardAppearance = barApp
 
 			if #available(iOS 15.0, *) {
-				tabBar.scrollEdgeAppearance = barApp
+//				tabBar.scrollEdgeAppearance = barApp
 			}
 		}
 	}
