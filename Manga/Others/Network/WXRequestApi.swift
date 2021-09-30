@@ -35,7 +35,7 @@ class WXBaseRequest: NSObject {
     ///请求自定义头信息
     var requestHeaderDict: Dictionary<String, String>? = nil
     ///请求任务对象
-    private (set) var requestDataTask: DataRequest? = nil
+    private (set) var requestDataTask: Request? = nil
     
     required init(_ requestURL: String, method: HTTPMethod = .post, parameters: WXDictionaryStrAny? = nil) {
         super.init()
@@ -114,6 +114,35 @@ class WXBaseRequest: NSObject {
         return dataRequest
     }
     
+    /// 下载文件请求
+    /// - Parameter responseBlock: 请求回调
+    /// - Returns: 请求任务对象(可用来取消任务)
+    @discardableResult
+    func baseDownloadFile(successClosure: WXAnyObjectBlock?,
+                        failureClosure: WXAnyObjectBlock?,
+                        downClosure: @escaping WXProgressBlock) -> DownloadRequest {
+
+        let dataRequest = AF.download(requestURL,
+                                      method: requestMethod,
+                                      parameters: parameters,
+                                      headers: HTTPHeaders(requestHeaderDict ?? [:]),
+                                      requestModifier: { $0.timeoutInterval = 5 * 60 })
+                            .responseData { response in
+                                switch response.result {
+                                case .success(let json):
+                                    successClosure?(json as AnyObject)
+
+                                case .failure(let error):
+                                    failureClosure?(error as AnyObject)
+                                }
+                            }
+                            .uploadProgress(closure: downClosure)
+        
+        requestDataTask = dataRequest
+        _globleRequestList.append(self)
+        return dataRequest
+    }
+    
 }
 
 //MARK: - 单个请求对象
@@ -150,11 +179,8 @@ class WXRequestApi: WXBaseRequest {
     ///自定义上传时包装的数据Data对象
     var uploadConfigDataBlock: ( (MultipartFormData) -> Void )? = nil
     
-    ///监听上传进度
-    var uploadProgressBlock: WXProgressBlock? = nil
-    
-    ///监听下载进度
-    var downloadProgressBlock: WXProgressBlock? = nil
+    ///监听上传/下载进度
+    var fileProgressBlock: WXProgressBlock? = nil
     
     ///网络请求过程多链路回调<将要开始, 将要停止, 已经完成>
     /// 注意: 如果没有实现此代理则会回调单例中的全局代理<globleMulticenterDelegate>
@@ -260,19 +286,51 @@ class WXRequestApi: WXBaseRequest {
                             }
                         },
                         uploadClosure: { [weak self] in
-                            self?.uploadProgressBlock?($0)
+                            self?.fileProgressBlock?($0)
                         })
         
         if WXNetworkConfig.shared.printfURLResponseLog {
             if retryCount == 0 {
-                debugLog("👉👉👉已开始文件上传=", requestURL)
+                debugLog("👉👉👉已开始上传文件=", requestURL)
             } else {
-                debugLog("👉👉👉文件上传失败,第 \(retryCount) 次尝试重新上传=", requestURL)
+                debugLog("👉👉👉上传文件失败,第 \(retryCount) 次尝试重新上传=", requestURL)
             }
         }
         return dataRequest
     }
     
+    /// 下载文件请求
+    /// - Parameter responseBlock: 请求回调
+    /// - Returns: 请求任务对象(可用来取消任务)
+    @discardableResult
+    func downloadFile(responseBlock: @escaping WXNetworkResponseBlock) -> DownloadRequest? {
+        guard let _ = URL(string: requestURL) else {
+            debugLog("\n❌❌❌无效的 URL 下载地址= \(requestURL)")
+            configResponseBlock(responseBlock: responseBlock, responseObj: nil)
+            return nil
+        }
+        handleMulticenter(type: .WillStart, responseModel: WXResponseModel())
+        
+        let networkBlock: WXAnyObjectBlock = { [weak self] responseObj in
+            self?.configResponseBlock(responseBlock: responseBlock, responseObj: responseObj)
+        }
+        //开始文件下载
+        let dataRequest = baseDownloadFile(successClosure: networkBlock,
+                                           failureClosure: networkBlock,
+                                           downClosure: { [weak self] in
+            self?.fileProgressBlock?($0)
+        })
+        
+        if WXNetworkConfig.shared.printfURLResponseLog {
+            if retryCount == 0 {
+                debugLog("👉👉👉已开始下载文件=", requestURL)
+            } else {
+                debugLog("👉👉👉下载文件失败,第 \(retryCount) 次尝试重新下载=", requestURL)
+            }
+        }
+        return dataRequest
+    }
+
     //MARK: - 处理请求响应
     
     func responseForTestjSon() -> WXDictionaryStrAny? {

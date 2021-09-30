@@ -31,7 +31,7 @@ class TestViewController: UIViewController {
         })
         debugLog("遍历结果: \(String(describing: tmpResult))")
         
-        testUploadFile()
+        testDownFile()
     }
 
     override func viewDidLoad() {
@@ -108,10 +108,6 @@ class TestViewController: UIViewController {
     func testloadData() {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
 		let param: [String : Any] = ["sexType" : 1]
-		//let url = "https://picsum.photos/200/300?random=1"
-
-//		let url = "https://httpbin.org/get"
-//		let param: [String :  [String : String] ] = ["data" : ["message" : "success" ] ]
 
         let api = WXRequestApi(url, method: .get, parameters: param)
 //        api.testResponseJson =
@@ -139,11 +135,8 @@ class TestViewController: UIViewController {
     
     ///测试上传文件
     func testUploadFile() {
-        let image = UIImage(named: "login_pop_bonus")!
+        let image = UIImage(named: "yaofan")!
         let imageData = image.pngData()
-        
-        let image2 = UIImage(named: "guide_pay_at_reader2")!
-        let imageData2 = image2.pngData()
         
         let url = "http://10.8.31.5:8090/uploadImage  "
         let param = [
@@ -152,12 +145,14 @@ class TestViewController: UIViewController {
             "version" : "7.3.3",
         ]
         let api = WXRequestApi(url, method: .post, parameters: param)
-        api.uploadFileDataArr = [imageData!, imageData2!]
+        api.uploadFileDataArr = [imageData!]
+        api.fileProgressBlock = { progress in
+            debugLog("上传文件进度 \(progress.completedUnitCount)%")
+        }
         api.timeOut = 100
         api.loadingSuperView = view
-//        api.autoCacheResponse = false
-//        api.retryWhenFailTuple = (times: 3, delay: 3.0)
-//        api.successStatusMap = (key: "code", value: "1")
+        api.retryWhenFailTuple = (times: 3, delay: 3.0)
+        //api.successStatusMap = (key: "code", value: "1")
 
         api.uploadFile { responseModel in
             if let rspData = responseModel.responseObject as? Data {
@@ -166,6 +161,28 @@ class TestViewController: UIViewController {
                 }
             }
             debugLog(" ==== 测试上传文件请求完成 ======")
+        }
+    }
+    
+    ///测试下载文件
+    func testDownFile() {
+        //let url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
+        let url = "https://picsum.photos/200/300?random=1"
+        let api = WXRequestApi(url, method: .get, parameters: nil)
+        api.fileProgressBlock = { progress in
+            debugLog("下载文件进度 \(progress.completedUnitCount)%")
+        }
+        api.loadingSuperView = view
+        api.retryWhenFailTuple = (times: 3, delay: 3.0)
+        //api.successStatusMap = (key: "code", value: "1")
+
+        api.downloadFile { responseModel in
+            if let rspData = responseModel.responseObject as? Data {
+                if let image = UIImage(data: rspData) {
+                    self.view.backgroundColor = .init(patternImage: image)
+                }
+            }
+            debugLog(" ==== 测试下载文件请求完成 ======")
         }
     }
     
