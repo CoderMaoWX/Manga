@@ -10,13 +10,13 @@ import YYCache
 
 final class WXNetworkConfig {
     
-    ///约定全局请求成功映射: key/value
+    ///约定全局请求成功映射: key/value, (key可以是KeyPath模式进行匹配 如: data.status)
     var successKeyValueMap: [String : String]? = ["status" : "200"]
     
     ///约定全局请求提示key, 和失败时的默认提示文案
     var messageTipKeyAndFailInfo: [String : String]? = ["msg" : KWXRequestFailueTipMessage]
     
-    ///请求遇到相应Code时触发通知: [ "notificationName" : 200 ]
+    ///请求遇到相应Code时触发通知 如: [ "notificationName" : 200 ]
     var codeNotifyDict: Dictionary<String, Int>? = nil
     
     /**

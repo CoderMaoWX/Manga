@@ -86,10 +86,11 @@ class WXRequestApi: WXBaseRequest {
     ///请求成功时是否自动缓存响应数据, 默认不缓存
     var autoCacheResponse: Bool = false
     
-    ///请求成功时自定义响应缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时,底层则不缓存)
+    ///自定义请求成功时的缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时底层则不缓存)
     var cacheResponseBlock: ((WXResponseModel) -> (DictionaryStrAny?))? = nil
     
-    ///自定义请求成功映射Key/Value
+    ///自定义请求成功映射Key/Value, (key可以是KeyPath模式进行匹配 如: data.status)
+	///注意: 每个请求成功状态优先使用此Map判断, 如果此值为空, 则再取 WXNetworkConfig.successKeyValueMap的值进行判断
     var successKeyValueMap: [String : String]? = nil
     
     ///请求成功时解析数据模型映射:KeyPath/Model: (支持KeyPath匹配, 解析的模型在 WXResponseModel.parseKeyPathModel 返回
@@ -192,7 +193,7 @@ class WXRequestApi: WXBaseRequest {
         handleResponseClosure(responseObj)
     }
     
-    ///寻找最合适的解析: 字典/数组
+    ///寻找匹配请求成功的关键字典
     fileprivate func findAppositeDict(matchKey: String, respValue: Any?) -> Any? {
         if let respDict = respValue as? DictionaryStrAny {
             for (dictKey, dictValue) in respDict {
@@ -203,8 +204,57 @@ class WXRequestApi: WXBaseRequest {
         }
         return nil
     }
-    
-    ///配置数据响应回调模型
+
+	///检查请求成功状态
+	fileprivate func checkingSuccessStatus(responseDict: DictionaryStrAny, rspModel: WXResponseModel) -> Bool {
+		var hasMapSuccess = false
+
+		if let successKeyValue = self.successKeyValueMap ?? WXNetworkConfig.shared.successKeyValueMap, successKeyValue.count == 1 {
+
+			let matchKey: String = successKeyValue.keys.first!
+			let mapSuccessValue: String = successKeyValue.values.first!
+
+			//1.如果包含点(.)连接,则采用KeyPath模式匹配查找请求成功标识
+			if matchKey.contains(".") {
+				var lastMatchValue: Any? = responseDict
+
+				for tmpKey in matchKey.components(separatedBy: ".") {
+					if lastMatchValue == nil {
+						break
+					} else { //寻找匹配请求成功的关键字典
+						lastMatchValue = findAppositeDict(matchKey: tmpKey, respValue: lastMatchValue)
+					}
+				}
+				//寻找匹配请求成功的关键key
+				if lastMatchValue is String, (lastMatchValue as! String) == mapSuccessValue {
+					hasMapSuccess = true
+					rspModel.isSuccess = true
+					rspModel.responseCode = Int(lastMatchValue as! String)
+
+				} else if lastMatchValue is Int, (lastMatchValue as! Int) == Int(mapSuccessValue) {
+					hasMapSuccess = true
+					rspModel.isSuccess = true
+					rspModel.responseCode = lastMatchValue as? Int
+				}
+
+			} else if let responseCode = responseDict[matchKey] {
+				//2.采用直接查找匹配请求成功标识
+				if responseCode is String, (responseCode as! String) == mapSuccessValue {
+					hasMapSuccess = true
+					rspModel.isSuccess = true
+					rspModel.responseCode = Int(responseCode as! String)
+
+				} else if responseCode is Int, (responseCode as! Int) == Int(mapSuccessValue) {
+					hasMapSuccess = true
+					rspModel.isSuccess = true
+					rspModel.responseCode = responseCode as? Int
+				}
+			}
+		}
+		return hasMapSuccess
+	}
+
+	///配置数据响应回调模型
     fileprivate func configResponseModel(responseObj: AnyObject?) -> WXResponseModel {
         let rspModel = WXResponseModel()
         rspModel.responseDuration = getCurrentTimestamp() - self.requestDuration
@@ -235,52 +285,13 @@ class WXRequestApi: WXBaseRequest {
             let responseDict = packagingResponseObj(responseObj: responseObj!, responseModel: rspModel)
             rspModel.responseDict = responseDict
             
-            var hasMapSuccess = false
-            let config = WXNetworkConfig.shared
-            if let successKeyValue = self.successKeyValueMap ?? config.successKeyValueMap, successKeyValue.count == 1 {
-                
-                let matchKey: String = successKeyValue.keys.first!
-                let matchValue: String = successKeyValue.values.first!
-                var lastMatchValue: Any? = responseDict
-                if matchKey.contains(".") {
-                    let keyPathArr = matchKey.components(separatedBy: ".")
+            let hasMapSuccess = checkingSuccessStatus(responseDict: responseDict, rspModel: rspModel)
 
-                    for tmpKey in keyPathArr {
-                        if lastMatchValue == nil {
-                            break
-                        } else {
-                            lastMatchValue = findAppositeDict(matchKey: tmpKey, respValue: lastMatchValue)
-                        }
-                    }
-                    if let lastMatchValue = lastMatchValue as? String, lastMatchValue == matchValue {
-                        rspModel.isSuccess = true
-                    } else {
-                        rspModel.isSuccess = false
-                    }
-                    
-                } else {
-                    let setCode: String = successKeyValue.values.first!
-                    
-                    if let responseCode = responseDict[matchKey] {
-                        if let rspCode = responseCode as? String {
-                            rspModel.isSuccess = (setCode == rspCode)
-                            rspModel.responseCode = Int(rspCode)
-                            hasMapSuccess = true
-                            
-                        } else if let rspCode = responseCode as? Int {
-                            rspModel.isSuccess = (Int(setCode) == rspCode)
-                            rspModel.responseCode = rspCode
-                            hasMapSuccess = true
-                        }
-                    }
-                }
-            
-            }
             if rspModel.isSuccess {
                 rspModel.parseResponseKeyPathModel(requestApi: self, responseDict: responseDict)
                 
             } else if hasMapSuccess {
-                if let msgTipKeyOrFailInfo = config.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
+                if let msgTipKeyOrFailInfo = WXNetworkConfig.shared.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
                     if let msg = responseDict[ (msgTipKeyOrFailInfo.keys.first!) ] {
                         rspModel.responseMsg = msg as? String
                     } else {

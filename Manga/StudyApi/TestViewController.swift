@@ -107,34 +107,25 @@ class TestViewController: UIViewController {
     
     func testloadData() {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
-        let param: [String : Any] = ["sexType" : 1]
+		let param: [String : Any] = ["sexType" : 1]
+		//let url = "https://picsum.photos/200/300?random=1"
 
-//		let url = "https://picsum.photos/200/300?random=1"
+//		let url = "https://httpbin.org/get"
+//		let param: [String :  [String : String] ] = ["data" : ["message" : "success" ] ]
+
         let api = WXRequestApi(url, method: .get, parameters: param)
-//        api.testResponseJson = """
-//        {
-//          "args": {},
-//          "headers": {
-//            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-//            "Accept-Encoding": "gzip, deflate, br",
-//            "Accept-Language": "zh-cn",
-//            "Host": "httpbin.org",
-//            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15",
-//            "X-Amzn-Trace-Id": "Root=1-614b4c36-1c01da195211a25a61c7a152"
-//          },
-//          "origin": "120.229.0.100",
-//          "url": "https://httpbin.org/get"
-//        }
-//        """
+//        api.testResponseJson =
+//"""
+//		{"data":{"message":"成功","stateCode":1,"returnData":{"galleryItems":[],"comicLists":[{"comics":[{"subTitle":"少年 搞笑","short_description":"突破次元壁的漫画！","is_vip":4,"cornerInfo":"190","comicId":181616,"author_name":"壁水羽","cover":"https://cover-oss.u17i.com/2021/07/12647_1625125865_1za73F2a4fD1.sbig.jpg","description":"漫画角色发现自己生活在一个漫画的笼子里，于是奋起反抗作者，面对角色的不配合，作者不得已要不断更改题材，恐怖，魔幻，励志轮番上阵，主角们要一一面对，全力通关","name":"笼中人","tags":["少年","搞笑"]}],"comicType":6,"sortId":"86","newTitleIconUrl":"https://image.mylife.u17t.com/2017/07/10/1499657929_N7oo9pPOhaYH.png","argType":3,"argValue":8,"titleIconUrl":"https://image.mylife.u17t.com/2017/08/29/1503986106_7TY5gK000yjZ.png","itemTitle":"强力推荐作品","description":"更多","canedit":0,"argName":"topic"}],"textItems":[],"editTime":"0"}},"code":1}
+//"""
 
         api.loadingSuperView = view
         api.retryCountWhenFail = 3
-//        api.successKeyValueMap = ["code" : "1"]
-        api.successKeyValueMap = ["data.message" : "成功"]
+		api.autoCacheResponse = true
+        api.successKeyValueMap = ["code" : "1"]
         api.parseKeyPathMap = ["data.returnData.comicLists" : ComicListModel.self]
 
 		api.startRequest { responseModel in
-            debugLog(responseModel)
             if let rspData = responseModel.responseObject as? Data {
                 if let image = UIImage(data: rspData) {
                     self.view.backgroundColor = .init(patternImage: image)
