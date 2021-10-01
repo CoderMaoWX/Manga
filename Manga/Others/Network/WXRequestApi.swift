@@ -13,16 +13,14 @@ import KakaJSON
 typealias WXDictionaryStrAny = Dictionary<String, Any>
 typealias WXAnyObjectBlock = (AnyObject) -> ()
 typealias WXProgressBlock = (Progress) -> Void
+typealias WXNetworkResponseBlock = (WXResponseModel) -> ()
 
 ///保存请求对象,避免提前释放
 var _globleRequestList: [ WXBaseRequest ] = []
 
-
 //MARK: - 请求基础对象
 
 ///请求基础对象, 外部上不建议直接用，请使用子类请求方法
-typealias WXNetworkResponseBlock = (WXResponseModel) -> ()
-
 class WXBaseRequest: NSObject {
     ///请求Method类型
     private (set) var requestMethod: HTTPMethod = .post
@@ -234,9 +232,9 @@ class WXRequestApi: WXBaseRequest {
         
         if WXNetworkConfig.shared.printfURLResponseLog {
             if retryCount == 0 {
-                debugLog("👉👉👉已发出网络请求=", requestURL)
+                debugLog("\n👉👉👉已发出网络请求=", requestURL)
             } else {
-                debugLog("👉👉👉请求失败,第 \(retryCount) 次尝试重新请求=", requestURL)
+                debugLog("\n👉👉👉请求失败,第 \(retryCount) 次尝试重新请求=", requestURL)
             }
         }
         return dataRequest
@@ -291,9 +289,9 @@ class WXRequestApi: WXBaseRequest {
         
         if WXNetworkConfig.shared.printfURLResponseLog {
             if retryCount == 0 {
-                debugLog("👉👉👉已开始上传文件=", requestURL)
+                debugLog("\n👉👉👉已开始上传文件=", requestURL)
             } else {
-                debugLog("👉👉👉上传文件失败,第 \(retryCount) 次尝试重新上传=", requestURL)
+                debugLog("\n👉👉👉上传文件失败,第 \(retryCount) 次尝试重新上传=", requestURL)
             }
         }
         return dataRequest
@@ -323,9 +321,9 @@ class WXRequestApi: WXBaseRequest {
         
         if WXNetworkConfig.shared.printfURLResponseLog {
             if retryCount == 0 {
-                debugLog("👉👉👉已开始下载文件=", requestURL)
+                debugLog("\n👉👉👉已开始下载文件=", requestURL)
             } else {
-                debugLog("👉👉👉下载文件失败,第 \(retryCount) 次尝试重新下载=", requestURL)
+                debugLog("\n👉👉👉下载文件失败,第 \(retryCount) 次尝试重新下载=", requestURL)
             }
         }
         return dataRequest
