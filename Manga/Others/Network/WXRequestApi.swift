@@ -351,8 +351,9 @@ class WXRequestApi: WXBaseRequest {
 		responseBlock(responseModel)
 		handleMulticenter(type: .DidCompletion, responseModel: responseModel)
 
+        // 15: is manual cancelled
 		if let retryTuple = retryWhenFailTuple {
-			if retryCount < retryTuple.times, let error = responseObj as? Error, error._code != -999 {
+			if retryCount < retryTuple.times, let error = responseObj as? Error, error._code != 15 {
 				DispatchQueue.main.asyncAfter(deadline: (.now() + retryTuple.delay)) {
 					self.retryCount += 1
 					self.startRequest(responseBlock: responseBlock)
