@@ -200,7 +200,7 @@ class WXRequestApi: WXBaseRequest {
     }
 
 	deinit {
-		//debugLog("====== WXBaseRequest 请求结束了======")
+		//debugLog("====== WXBaseRequest 请求结束了====== \(self)")
 	}
     
     //MARK: - 网络请求入口
@@ -491,6 +491,7 @@ class WXRequestApi: WXBaseRequest {
             let rspData = responseObj.mutableCopy()
             if let rspData = rspData as? Data {
                 responseModel.responseObject = rspData as AnyObject
+                responseDcit["responseObject"] = "Binary Data, length: \(rspData.count)"
             }
         } else if let jsonString = responseObj as? String { // jsonString -> Dictionary
             if let jsonDict = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? WXDictionaryStrAny {
@@ -682,6 +683,8 @@ class WXBatchRequestApi {
     
     ///全部请求对象, 响应时按添加顺序返回
     fileprivate (set) var requestArray: [WXRequestApi]
+    ///请求转圈的父视图
+    fileprivate (set) var loadingSuperView: UIView? = nil
     
     fileprivate var requestCount: Int = 0
     fileprivate var hasMarkBatchFail: Bool = false
@@ -689,12 +692,13 @@ class WXBatchRequestApi {
     fileprivate var responseBatchBlock: ((WXBatchRequestApi) -> ())? = nil
     fileprivate var responseInfoDict: Dictionary<String, WXResponseModel> = [:]
     
-    required init(requestArray: [WXRequestApi]) {
+    required init(requestArray: [WXRequestApi], loadingTo superView: UIView? = nil) {
         self.requestArray = requestArray
+        self.loadingSuperView = superView
     }
 
 	deinit {
-		debugLog("====== WXBatchRequestApi 请求结束了======")
+		//debugLog("====== WXBatchRequestApi 请求结束了====== \(self)")
 	}
 
     ///根据请求获取指定的响应数据
@@ -715,6 +719,7 @@ class WXBatchRequestApi {
         batchRequest = self
         responseBatchBlock = responseBlock
         for api in requestArray {
+            judgeShowLoading(show: true)
             
             api.startRequest { [weak self] responseModel in
                 if responseModel.responseDict == nil {
@@ -725,6 +730,18 @@ class WXBatchRequestApi {
                 } else { //回调多次
                     self?.oftenHandleBatchResponse(responseModel: responseModel)
                 }
+            }
+        }
+    }
+    
+    ///添加请求转圈
+    fileprivate func judgeShowLoading(show: Bool) {
+        guard WXNetworkConfig.shared.showRequestLaoding else { return }
+        if let loadingSuperView = loadingSuperView {
+            if show {
+                showLoading(toView: loadingSuperView)
+            } else {
+                hideLoading(from: loadingSuperView)
             }
         }
     }
@@ -748,6 +765,7 @@ class WXBatchRequestApi {
         responseDataArray = requestArray.compactMap {
             responseInfoDict[ $0.apiUniquelyIp ]
         }
+        judgeShowLoading(show: false)
         if let responseBatchBlock = responseBatchBlock {
             responseBatchBlock(self)
         }
@@ -756,7 +774,6 @@ class WXBatchRequestApi {
     
     ///每次请求响应都回调到页面
     fileprivate func oftenHandleBatchResponse(responseModel: WXResponseModel) {
-        
         //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用用缓存
         let apiUniquelyIp = responseModel.apiUniquelyIp
         if responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
@@ -776,6 +793,7 @@ class WXBatchRequestApi {
                 }
             }
         }
+        judgeShowLoading(show: false)
         if finalRspArray.count > 0 {
             responseDataArray.removeAll()
             responseDataArray += finalRspArray
@@ -874,9 +892,4 @@ class WXResponseModel: NSObject {
         }
         return nil
     }
-
-	deinit {
-		debugLog("====== WXResponseModel 请求结束了======")
-	}
-    
 }

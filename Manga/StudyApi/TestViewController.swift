@@ -21,7 +21,7 @@ class TestViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //ApiClass.studyApi()
         
-        testDownFile()
+        testBatchData()
         //debugLog("文件类型: \(mimeType(pathExtension: "mp4"))")
         return
         
@@ -97,10 +97,10 @@ class TestViewController: UIViewController {
 //        api1.autoCacheResponse = true
         
         
-        let api = WXBatchRequestApi(requestArray: [api0, api1] )
+        let api = WXBatchRequestApi(requestArray: [api0, api1], loadingTo: view)
         api.startRequest({ batchApi in
             debugLog("批量请求回调", batchApi.responseDataArray)
-        }, waitAllDone: true)
+        }, waitAllDone: false)
         
     }
     
@@ -186,11 +186,11 @@ class TestViewController: UIViewController {
     ///测试下载文件
     func testDownFile() {
         //图片
-        //let url = "https://picsum.photos/200/300?random=1"
+        let url = "https://picsum.photos/200/300?random=1"
         //压缩包
         //let url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
         //视频
-        let url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
+        //let url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
         
         let api = WXRequestApi(url, method: .get, parameters: nil)
         api.loadingSuperView = view
