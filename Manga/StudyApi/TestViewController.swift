@@ -15,11 +15,13 @@ import MobileCoreServices
 
 
 class TestViewController: UIViewController {
-
+    
+    var requestTask: DataRequest? = nil;
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //ApiClass.studyApi()
         
-        testUploadFile()
+        testDownFile()
         //debugLog("文件类型: \(mimeType(pathExtension: "mp4"))")
         return
         
@@ -38,14 +40,21 @@ class TestViewController: UIViewController {
         debugLog("遍历结果: \(String(describing: tmpResult))")
         
     }
+    
+    func testRequestDelay() {
+        let url = "https://httpbin.org/delay/3"
+        let param: [String : Any] = ["name" : "张三"]
+        let api = WXRequestApi(url, method: .get, parameters: param)
+        api.timeOut = 40
+        api.loadingSuperView = view
+        api.startRequest { responseModel in
+            debugLog(" ==== 测试接口请求完成 ====== \(api)")
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         fd_prefersNavigationBarHidden = true
-        //testAlert()
-        //testloadData()
-        //testType()
-        
         configNavgationView()
     }
     
@@ -75,7 +84,7 @@ class TestViewController: UIViewController {
 
     //MARK: ----- 测试代码 -----
     
-    func testloadData2() {
+    func testBatchData() {
         let url0 = "http://123.207.32.32:8000/home/multidata"
         let api0 = WXRequestApi(url0, method: .get, parameters: nil)
         api0.successStatusMap = (key: "returnCode",  value: "SUCCESS")
@@ -181,7 +190,7 @@ class TestViewController: UIViewController {
         //压缩包
         //let url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
         //视频
-        let url = "https://video.yinyuetai.com/6b751621a51849d5acdca1ab0d9ab411.mp4"
+        let url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
         
         let api = WXRequestApi(url, method: .get, parameters: nil)
         api.loadingSuperView = view

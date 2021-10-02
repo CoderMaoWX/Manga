@@ -215,6 +215,7 @@ class WXRequestApi: WXBaseRequest {
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
             return nil
         }
+        cancelTheSameOldRequest()
         let networkBlock: WXAnyObjectBlock = { [weak self] responseObj in
 			self?.configResponseBlock(responseBlock: responseBlock, responseObj: responseObj)
         }
@@ -620,6 +621,18 @@ class WXRequestApi: WXBaseRequest {
         return false
     }
     
+    ///检查是否有相同请求在请求, 有则取消旧的请求
+    func cancelTheSameOldRequest() {
+        for request in _globleRequestList {
+            let oldReq = request.requestURL + (request.finalParameters?.toJSON() ?? "")
+            let newReq = requestURL + (finalParameters?.toJSON() ?? "")
+            if oldReq == newReq {
+                request.requestDataTask?.cancel()
+                //注意:这里不能立即break退出遍历,因为取消后可能不会立马回调
+            }
+        }
+    }
+    
     ///读取接口本地缓存数据
     fileprivate func readRequestCacheWithBlock(fetchCacheBlock: @escaping WXAnyObjectBlock) {
         if cacheResponseBlock != nil || autoCacheResponse {
@@ -654,7 +667,6 @@ class WXRequestApi: WXBaseRequest {
             }
         }
     }
-    
 }
 
 //MARK: - 批量请求对象
@@ -682,12 +694,12 @@ class WXBatchRequestApi {
     }
 
 	deinit {
-		//debugLog("====== WXBatchRequestApi 请求结束了======")
+		debugLog("====== WXBatchRequestApi 请求结束了======")
 	}
 
     ///根据请求获取指定的响应数据
-    func responseForRequest(request: WXRequestApi) -> WXResponseModel {
-        return responseInfoDict[request.apiUniquelyIp] ?? WXResponseModel()
+    func responseForRequest(request: WXRequestApi) -> WXResponseModel? {
+        return responseInfoDict[request.apiUniquelyIp]
     }
     
     /// 批量网络请求: (实例方法:Block回调方式)
@@ -864,7 +876,7 @@ class WXResponseModel: NSObject {
     }
 
 	deinit {
-		//debugLog("====== WXResponseModel 请求结束了======")
+		debugLog("====== WXResponseModel 请求结束了======")
 	}
     
 }
