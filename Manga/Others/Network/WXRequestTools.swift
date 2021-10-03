@@ -1,5 +1,5 @@
 //
-//  WXNetworkPlugin.swift
+//  WXRequestTools.swift
 //  Manga
 //
 //  Created by 610582 on 2021/8/21.
@@ -7,8 +7,9 @@
 
 import Foundation
 import UIKit
+import CommonCrypto
 
-class WXNetworkPlugin {
+class WXRequestTools {
     
     /// 上传网络日志到服装日志系统入口 (目前此方法供内部使用)
     /// - Parameters:
@@ -17,12 +18,12 @@ class WXNetworkPlugin {
     static func uploadNetworkResponseJson(request: WXRequestApi,
                                    responseModel: WXResponseModel) {
         if responseModel.isCacheData { return }
-        let configu = WXNetworkConfig.shared
+        let configu = WXRequestConfig.shared
         if configu.isDistributionOnlineRelease { return }
         
-        guard let uploadLogUrl = configu.uploadRequestLogToURL, let _ = URL(string: uploadLogUrl) else { return }
+        guard let tuple = configu.uploadRequestLogTuple, let uploadURL = tuple.url, let _ = URL(string: uploadURL) else { return }
         
-        guard let catchLogTag = configu.uploadCatchLogTagFlag, catchLogTag.count > 0 else { return }
+        guard let catchTag = tuple.catchTag, catchTag.count > 0 else { return }
         
         var requestJson = request.finalParameters
         
@@ -49,7 +50,7 @@ class WXNetworkPlugin {
         uploadInfo["appName"]          = appName
         uploadInfo["version"]          = version
         uploadInfo["body"]             = body
-        uploadInfo["platform"]         = "\(appName)-iOS-\(catchLogTag)"
+        uploadInfo["platform"]         = "\(appName)-iOS-\(catchTag)"
         uploadInfo["device"]           = UIDevice.current.model
         uploadInfo["feeTime"]          = "\(responseModel.responseDuration ?? 0)"
         uploadInfo["timestamp"]        = formatter.string(from: Date())
@@ -59,7 +60,7 @@ class WXNetworkPlugin {
         uploadInfo["response"]         = responseModel.responseDict ?? [:]
         uploadInfo["responseHeader"]   = responseModel.urlResponse?.allHeaderFields ?? [:]
         
-        let baseRequest = WXBaseRequest(uploadLogUrl, method: .post, parameters: uploadInfo)
+        let baseRequest = WXBaseRequest(uploadURL, method: .post, parameters: uploadInfo)
         baseRequest.baseRequestBlock(successClosure: nil, failureClosure: nil)
     }
 
@@ -74,7 +75,7 @@ class WXNetworkPlugin {
         let isSuccess   = (responseModel.responseDict == nil) ? false : true
         let isCacheData = responseModel.isCacheData
         let requestJson = (request.finalParameters ?? [:]).toJSON() ?? ""
-        let hostTitle = WXNetworkConfig.shared.networkHostTitle ?? ""
+        let hostTitle = WXRequestConfig.shared.urlResponseLogTuple.hostTitle ?? ""
         let requestHeaders = responseModel.urlRequest?.allHTTPHeaderFields ?? [:]
         let headersString = (requestHeaders.count > 0) ? "\n\n请求头信息= \(requestHeaders.toJSON()!)" : ""
         let statusFlag = isCacheData ? "❤️❤️❤️" : (isSuccess ? "✅✅✅" : "❌❌❌")
@@ -132,5 +133,34 @@ class WXNetworkPlugin {
             return ("application/octet-stream", "stream")
         }
     }
+    
+    // MARK: 字典 -> JSON字符串
+    /// 字典转换为JSONString
+    static func dictionaryToJSON(dictionary: Dictionary<String, Any>?) -> String? {
+        guard let dictionary = dictionary else {
+            return nil
+        }
+        if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary, options: JSONSerialization.WritingOptions()) {
+            let jsonStr = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
+            return String(jsonStr ?? "")
+        }
+        return nil
+    }
+    
+    ///转换MD5值
+    static func convertToMD5(originStr: String) -> String {
+        let str = originStr.cString(using: String.Encoding.utf8)
+        let strLen = CUnsignedInt(originStr.lengthOfBytes(using: String.Encoding.utf8))
+        let digestLen = Int(CC_MD5_DIGEST_LENGTH)
+        let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
+        CC_MD5(str!, strLen, result)
+        let hash = NSMutableString()
+        for i in 0 ..< digestLen {
+            hash.appendFormat("%02x", result[i])
+        }
+        free(result)
+        return String(format: hash as String)
+    }
+    
 }
 

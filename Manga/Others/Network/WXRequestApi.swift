@@ -7,7 +7,6 @@
 
 import Foundation
 import Alamofire
-import JKSwiftExtension
 import KakaJSON
 
 typealias WXDictionaryStrAny = Dictionary<String, Any>
@@ -231,7 +230,7 @@ class WXRequestApi: WXBaseRequest {
         //开始请求
         let dataRequest = baseRequestBlock(successClosure: networkBlock, failureClosure: networkBlock)
         
-        if WXNetworkConfig.shared.printfURLResponseLog {
+        if WXRequestConfig.shared.urlResponseLogTuple.printf {
             if retryCount == 0 {
                 debugLog("\n👉👉👉已发出网络请求=", requestURL)
             } else {
@@ -267,7 +266,7 @@ class WXRequestApi: WXBaseRequest {
                                 
                             } else if let uploadDataArr = self?.uploadFileDataArr, uploadDataArr.count > 0 {
                                 for fileData in uploadDataArr {
-                                    let dataInfo = WXNetworkPlugin.dataMimeType(for: fileData)
+                                    let dataInfo = WXRequestTools.dataMimeType(for: fileData)
                                     let name = (dataInfo.mimeType as NSString).deletingLastPathComponent
                                     /// 生成一个随机的上传文件名称
                                     let fileName = name + "-\(Int(Date().timeIntervalSince1970))" + "." + dataInfo.fileType
@@ -288,7 +287,7 @@ class WXRequestApi: WXBaseRequest {
                             self?.fileProgressBlock?($0)
                         })
         
-        if WXNetworkConfig.shared.printfURLResponseLog {
+        if WXRequestConfig.shared.urlResponseLogTuple.printf {
             if retryCount == 0 {
                 debugLog("\n👉👉👉已开始上传文件=", requestURL)
             } else {
@@ -320,7 +319,7 @@ class WXRequestApi: WXBaseRequest {
             self?.fileProgressBlock?($0)
         })
         
-        if WXNetworkConfig.shared.printfURLResponseLog {
+        if WXRequestConfig.shared.urlResponseLogTuple.printf {
             if retryCount == 0 {
                 debugLog("\n👉👉👉已开始下载文件=", requestURL)
             } else {
@@ -378,7 +377,7 @@ class WXRequestApi: WXBaseRequest {
 	fileprivate func checkingSuccessStatus(responseDict: WXDictionaryStrAny, rspModel: WXResponseModel) -> Bool {
 		var hasMapSuccess = false
 
-		if let successKeyValue = successStatusMap ?? WXNetworkConfig.shared.successStatusMap {
+		if let successKeyValue = successStatusMap ?? WXRequestConfig.shared.successStatusMap {
 			let matchKey: String = successKeyValue.key
 			let mapSuccessValue: String = successKeyValue.value
 
@@ -457,11 +456,11 @@ class WXRequestApi: WXBaseRequest {
                 rspModel.parseResponseKeyPathModel(requestApi: self, responseDict: responseDict)
                 
             } else if hasMapSuccess {
-                if let msgTipKeyOrFailInfo = WXNetworkConfig.shared.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
-                    if let msg = responseDict[ (msgTipKeyOrFailInfo.keys.first!) ] {
-                        rspModel.responseMsg = msg as? String
+                if let msgTipKeyOrFailInfo = WXRequestConfig.shared.messageTipKeyAndFailInfo {
+                    if let responseMsg = responseDict[ (msgTipKeyOrFailInfo.tipKey) ] {
+                        rspModel.responseMsg = responseMsg as? String
                     } else {
-                        rspModel.responseMsg = msgTipKeyOrFailInfo.values.first ?? configFailMessage
+                        rspModel.responseMsg = msgTipKeyOrFailInfo.defaultTip
                     }
                 }
                 let domain = rspModel.responseMsg ?? configFailMessage
@@ -513,7 +512,7 @@ class WXRequestApi: WXBaseRequest {
         if let tmpDelegate = multicenterDelegate {
             delegate = tmpDelegate
         } else {
-            delegate = WXNetworkConfig.shared.globleMulticenterDelegate
+            delegate = WXRequestConfig.shared.globleMulticenterDelegate
         }
         switch type {
         case .WillStart:
@@ -540,7 +539,7 @@ class WXRequestApi: WXBaseRequest {
         case .DidCompletion:
             judgeShowLoading(show: false)
             checkPostNotification(responseModel: responseModel)
-            WXNetworkPlugin.uploadNetworkResponseJson(request: self, responseModel: responseModel)
+            WXRequestTools.uploadNetworkResponseJson(request: self, responseModel: responseModel)
             
             delegate?.requestDidCompletion(request: self, responseModel: responseModel)
             if let requestAccessories = requestAccessories {
@@ -561,16 +560,16 @@ class WXRequestApi: WXBaseRequest {
     ///打印网络响应日志到控制台
     fileprivate func printfResponseLog(responseModel: WXResponseModel) {
         #if DEBUG
-        guard WXNetworkConfig.shared.printfURLResponseLog else { return }
-        let logHeader = WXNetworkPlugin.appendingPrintfLogHeader(request: self, responseModel: responseModel)
-        let logFooter = WXNetworkPlugin.appendingPrintfLogFooter(responseModel: responseModel)
+        guard WXRequestConfig.shared.urlResponseLogTuple.printf else { return }
+        let logHeader = WXRequestTools.appendingPrintfLogHeader(request: self, responseModel: responseModel)
+        let logFooter = WXRequestTools.appendingPrintfLogFooter(responseModel: responseModel)
         debugLog("\(logHeader + logFooter)")
         #endif
     }
     
     ///检查是否需要发出通知
     fileprivate func checkPostNotification(responseModel: WXResponseModel) {
-        let notifyDict = WXNetworkConfig.shared.codeNotifyDict
+        let notifyDict = WXRequestConfig.shared.codeNotifyDict
         if let responseCode = responseModel.responseCode, let notifyDict = notifyDict {
             for (key, value) in notifyDict where responseCode == value {
                 NotificationCenter.default.post(name: NSNotification.Name(key), object: responseModel)
@@ -585,7 +584,7 @@ class WXRequestApi: WXBaseRequest {
     
     ///添加请求转圈
     fileprivate func judgeShowLoading(show: Bool) {
-        guard WXNetworkConfig.shared.showRequestLaoding else { return }
+        guard WXRequestConfig.shared.showRequestLaoding else { return }
         if let loadingSuperView = loadingSuperView {
             if show {
                 showLoading(toView: loadingSuperView)
@@ -597,17 +596,19 @@ class WXRequestApi: WXBaseRequest {
     
     ///失败默认提示
     fileprivate var configFailMessage: String {
-        if let msgTipKeyOrFailInfo = WXNetworkConfig.shared.messageTipKeyAndFailInfo, msgTipKeyOrFailInfo.count == 1  {
-            return msgTipKeyOrFailInfo.values.first ?? KWXRequestFailueTipMessage
+        if let msgTipKeyOrFailInfo = WXRequestConfig.shared.messageTipKeyAndFailInfo {
+            return msgTipKeyOrFailInfo.defaultTip
         }
-        return KWXRequestFailueTipMessage
+        return KWXRequestFailueDefaultMessage
     }
     
     //MARK: - DealWithCache
     
     lazy var cacheKey: String = {
         if cacheResponseBlock != nil || autoCacheResponse {
-            return (requestURL + (finalParameters?.toJSON() ?? "") ).jk.md5Encrypt()
+            let parameterJson = WXRequestTools.dictionaryToJSON(dictionary: finalParameters)
+            let originValue = requestURL + (parameterJson ?? "")
+            return WXRequestTools.convertToMD5(originStr: originValue)
         }
         return ""
     }()
@@ -615,7 +616,7 @@ class WXRequestApi: WXBaseRequest {
     ///检查接口本地需要有缓存
     fileprivate func checkRequestInCache() -> Bool {
         if cacheResponseBlock != nil || autoCacheResponse {
-            let networkCache = WXNetworkConfig.shared.networkDiskCache
+            let networkCache = WXRequestConfig.shared.networkDiskCache
             if networkCache.containsObject(forKey: cacheKey) {
                 return true
             }
@@ -626,8 +627,12 @@ class WXRequestApi: WXBaseRequest {
     ///检查是否有相同请求在请求, 有则取消旧的请求
     func cancelTheSameOldRequest() {
         for request in _globleRequestList {
-            let oldReq = request.requestURL + (request.finalParameters?.toJSON() ?? "")
-            let newReq = requestURL + (finalParameters?.toJSON() ?? "")
+            let oldJson = WXRequestTools.dictionaryToJSON(dictionary: request.finalParameters)
+            let oldReq = request.requestURL + (oldJson ?? "")
+            
+            let newJson = WXRequestTools.dictionaryToJSON(dictionary: finalParameters)
+            let newReq = requestURL + (newJson ?? "")
+            
             if oldReq == newReq {
                 request.requestDataTask?.cancel()
                 //注意:这里不能立即break退出遍历,因为取消后可能不会立马回调
@@ -638,7 +643,7 @@ class WXRequestApi: WXBaseRequest {
     ///读取接口本地缓存数据
     fileprivate func readRequestCacheWithBlock(fetchCacheBlock: @escaping WXAnyObjectBlock) {
         if cacheResponseBlock != nil || autoCacheResponse {
-            let networkCache = WXNetworkConfig.shared.networkDiskCache
+            let networkCache = WXRequestConfig.shared.networkDiskCache
             
             networkCache.object(forKey: cacheKey) { key, cacheObject in
                 guard let cacheObject = cacheObject, var cacheDcit = cacheObject as? WXDictionaryStrAny else { return }
@@ -659,12 +664,12 @@ class WXRequestApi: WXBaseRequest {
         if let cacheBlock = cacheResponseBlock {
             let customResponseObject = cacheBlock(responseModel)
             if let saveCache = customResponseObject {
-                let networkCache = WXNetworkConfig.shared.networkDiskCache
+                let networkCache = WXRequestConfig.shared.networkDiskCache
                 networkCache.setObject(saveCache as NSCoding, forKey: cacheKey)
             }
         } else if autoCacheResponse {
             if let responseObject = responseModel.responseObject, responseObject is WXDictionaryStrAny {
-                let networkCache = WXNetworkConfig.shared.networkDiskCache
+                let networkCache = WXRequestConfig.shared.networkDiskCache
                 networkCache.setObject(responseObject as? NSCoding, forKey: cacheKey)
             }
         }
@@ -737,7 +742,7 @@ class WXBatchRequestApi {
     
     ///添加请求转圈
     fileprivate func judgeShowLoading(show: Bool) {
-        guard WXNetworkConfig.shared.showRequestLaoding else { return }
+        guard WXRequestConfig.shared.showRequestLaoding else { return }
         if let loadingSuperView = loadingSuperView {
             if show {
                 showLoading(toView: loadingSuperView)
