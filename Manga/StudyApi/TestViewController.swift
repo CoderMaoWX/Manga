@@ -21,7 +21,7 @@ class TestViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //ApiClass.studyApi()
         
-        testBatchData()
+        getFileName()
         //debugLog("文件类型: \(mimeType(pathExtension: "mp4"))")
         return
         
@@ -214,6 +214,19 @@ class TestViewController: UIViewController {
             }
             debugLog(" ==== 测试下载文件请求完成 ======")
         }
+    }
+    
+    ///https://hangge.com/blog/cache/detail_2216.html
+    func getFileName() {
+        //测试1
+//        let mimeType1 = mimeType(pathExtension: "gif")
+//        print(mimeType1)
+        
+        //测试2
+//        let path = Bundle.main.path(forResource: "test1", ofType: "zip")!
+        let url = URL(fileURLWithPath: "/Users/luke/Downloads/Jenkins 入门手册.pdf")
+        let mimeType2 = mimeType(pathExtension: url.pathExtension)
+        print("文件类型: \(mimeType2)")
     }
     
     //根据后缀获取对应的Mime-Type
