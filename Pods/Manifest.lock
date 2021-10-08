@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.4.3)
+  - Alamofire (5.4.4)
   - CleanJSON (1.0.9)
   - EmptyDataSet-Swift (5.0.0)
   - FDFullscreenPopGesture (1.1)
@@ -88,7 +88,7 @@ SPEC REPOS:
     - YYCache
 
 SPEC CHECKSUMS:
-  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
   CleanJSON: 910a36465ce4829e264a902ccf6d1455fdd9f980
   EmptyDataSet-Swift: eb382c0c87a2d9c678077385a595cec52da38171
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0

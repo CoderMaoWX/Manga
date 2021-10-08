@@ -789,7 +789,7 @@ class WXBatchRequestApi {
             isAllSuccess = !hasMarkBatchFail
         }
         ///按请求对象添加顺序排序
-        let tmpRspArray = responseInfoDict.allValues()
+        let tmpRspArray = responseInfoDict.values
         var finalRspArray: [WXResponseModel] = []
         for request in requestArray {
             for response in tmpRspArray {
