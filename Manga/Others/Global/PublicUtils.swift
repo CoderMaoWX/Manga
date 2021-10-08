@@ -270,7 +270,7 @@ func hideLoading(from view: AnyObject, animation: Bool = true) {
 
 /// 指定视图上显示loading框 (可传字段包装含有kLoadingViewKey的键值对)
 /// - Parameter paramater: loading框的父视图, 如果传nil,则会在Window上显示
-func showLoading(toView paramater: AnyObject, animation: Bool = true) {
+func showLoading(toView paramater: AnyObject, animation: Bool = false) {
     ///在主线程中显示UI
     DispatchQueue.main.async {
         
