@@ -21,7 +21,7 @@ class TestViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //ApiClass.studyApi()
         
-        testRequestDelay()
+        testUploadFile()
         //debugLog("文件类型: \(mimeType(pathExtension: "mp4"))")
         return
         
@@ -149,13 +149,13 @@ class TestViewController: UIViewController {
     
     ///测试上传文件
     func testUploadFile() {
-        let image = UIImage(named: "yaofan")!
+        let image = UIImage(named: "womenPic")!
         let imageData = image.pngData()
         
 //        let path = URL(fileURLWithPath: "/Users/luke/Desktop/video.mp4")
 //        let imageData = Data.init(base64Encoded: path.absoluteString)
         
-        let url = "http://10.8.31.5:8090/uploadImage  "
+        let url = "http://10.8.31.5:8090/uploadImage"
         let param = [
             "appName" : "TEST",
             "platform" : "iOS",
@@ -167,6 +167,9 @@ class TestViewController: UIViewController {
         //api.successStatusMap = (key: "code", value: "1")
         
         api.uploadFileDataArr = [imageData!]
+        api.uploadConfigDataBlock = { multipartFormData in
+            multipartFormData.append(imageData!, withName: "files", fileName: "womenPic.png", mimeType: "image/png")
+        }
         api.fileProgressBlock = { progress in
             let total = Float(progress.totalUnitCount)
             let completed = Float(progress.completedUnitCount)
