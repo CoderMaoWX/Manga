@@ -1,6 +1,6 @@
 //
 //  WXRequestApi.swift
-//  Manga
+//  WXNetworkingSwift
 //
 //  Created by 610582 on 2021/8/20.
 //
@@ -9,10 +9,10 @@ import Foundation
 import Alamofire
 import KakaJSON
 
-typealias WXDictionaryStrAny = Dictionary<String, Any>
-typealias WXAnyObjectBlock = (AnyObject) -> ()
-typealias WXProgressBlock = (Progress) -> Void
-typealias WXNetworkResponseBlock = (WXResponseModel) -> ()
+public typealias WXDictionaryStrAny = Dictionary<String, Any>
+public typealias WXAnyObjectBlock = (AnyObject) -> ()
+public typealias WXProgressBlock = (Progress) -> Void
+public typealias WXNetworkResponseBlock = (WXResponseModel) -> ()
 
 ///保存请求对象,避免提前释放
 var _globleRequestList: [ WXBaseRequest ] = []
@@ -20,34 +20,39 @@ var _globleRequestList: [ WXBaseRequest ] = []
 //MARK: - 请求基础对象
 
 ///请求基础对象, 外部上不建议直接用，请使用子类请求方法
-class WXBaseRequest: NSObject {
+public class WXBaseRequest: NSObject {
     ///请求Method类型
-    private (set) var requestMethod: HTTPMethod = .post
+    fileprivate var requestMethod: HTTPMethod = .post
     ///请求地址
     private (set) var requestURL: String = ""
     ///请求参数
-    private (set) var parameters: WXDictionaryStrAny? = nil
+    fileprivate var parameters: WXDictionaryStrAny? = nil
     ///请求超时，默认30s
-    var timeOut: TimeInterval = 30
+    public var timeOut: TimeInterval = 30
     ///请求自定义头信息
-    var requestHeaderDict: Dictionary<String, String>? = nil
+    public var requestHeaderDict: Dictionary<String, String>? = nil
     ///请求任务对象
-    private (set) var requestDataTask: Request? = nil
+    fileprivate var requestDataTask: Request? = nil
     
-    required init(_ requestURL: String, method: HTTPMethod = .post, parameters: WXDictionaryStrAny? = nil) {
+    ///初始化方法
+    required public init(_ requestURL: String, method: HTTPMethod = .post, parameters: WXDictionaryStrAny? = nil) {
         super.init()
         self.requestMethod = method
         self.requestURL = requestURL
         self.parameters = parameters
     }
     
+    deinit {
+        //WXDebugLog("====== WXBaseRequest 请求对象已释放====== \(self)")
+    }
+    
     ///底层最终的请求参数 (页面上可实现<WXPackParameters>协议来实现重新包装请求参数)
     lazy var finalParameters: WXDictionaryStrAny? = {
-        var parameters = parameters
         if conforms(to: WXPackParameters.self) {
-            parameters = (self as? WXPackParameters)?.parametersWillTransformFromOriginParamete(parameters: parameters)
+            return (self as? WXPackParameters)?.parametersWillTransformFromOriginParamete(parameters: parameters)
+        } else {
+            return parameters
         }
-        return parameters
     }()
     
     /// 网络请求方法 (不做任何额外处理的原始Alamofire请求，页面上不建议直接用，请使用子类请求方法)
@@ -56,7 +61,7 @@ class WXBaseRequest: NSObject {
     ///   - failureClosure: 请求失败回调
     /// - Returns: 求Session对象
     @discardableResult
-    func baseRequestBlock(successClosure: WXAnyObjectBlock?,
+    public func baseRequestBlock(successClosure: WXAnyObjectBlock?,
                           failureClosure: WXAnyObjectBlock?) -> DataRequest {
         let dataRequest = AF.request(requestURL,
                                      method: requestMethod,
@@ -84,7 +89,7 @@ class WXBaseRequest: NSObject {
     /// - Parameter responseBlock: 请求回调
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
-    func baseUploadFile(successClosure: WXAnyObjectBlock?,
+    public func baseUploadFile(successClosure: WXAnyObjectBlock?,
                         failureClosure: WXAnyObjectBlock?,
                         formDataClosure: @escaping ((MultipartFormData) -> Void),
                         uploadClosure: @escaping WXProgressBlock) -> DataRequest {
@@ -115,7 +120,7 @@ class WXBaseRequest: NSObject {
     /// - Parameter responseBlock: 请求回调
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
-    func baseDownloadFile(successClosure: WXAnyObjectBlock?,
+    public func baseDownloadFile(successClosure: WXAnyObjectBlock?,
                           failureClosure: WXAnyObjectBlock?,
                           progressClosure: @escaping WXProgressBlock) -> DownloadRequest {
 
@@ -145,47 +150,47 @@ class WXBaseRequest: NSObject {
 //MARK: - 单个请求对象
 
 /// 单个请求对象, 功能根据需求可多种自定义
-class WXRequestApi: WXBaseRequest {
+public class WXRequestApi: WXBaseRequest {
     
     ///请求成功时是否自动缓存响应数据, 默认不缓存
-    var autoCacheResponse: Bool = false
+    public var autoCacheResponse: Bool = false
     
     ///自定义请求成功时的缓存数据, (返回的字典为此次需要保存的缓存数据, 返回nil时底层则不缓存)
-    var cacheResponseBlock: ( (WXResponseModel) -> (WXDictionaryStrAny?) )? = nil
+    public var cacheResponseBlock: ( (WXResponseModel) -> (WXDictionaryStrAny?) )? = nil
     
     ///自定义请求成功映射Key/Value, (key可以是KeyPath模式进行匹配 如: data.status)
 	///注意: 每个请求状态优先使用此属性判断, 如果此属性值为空, 则再取全局的 WXNetworkConfig.successStatusMap的值进行判断
-    var successStatusMap: (key: String, value: String)? = nil
+    public var successStatusMap: (key: String, value: String)? = nil
 
     ///请求成功时自动解析数据模型映射:Key/ModelType, (key可以是KeyPath模式进行匹配 如: data.returnData)
     ///成功解析的模型在 WXResponseModel.parseKeyPathModel 中返回
-    var parseModelMap: (parseKey: String, modelType: Convertible.Type)? = nil
+    public var parseModelMap: (parseKey: String, modelType: Convertible.Type)? = nil
     
     ///times: 请求失败之后重新请求次数, delay: 每次重试的间隔
-    var retryWhenFailTuple: (times: Int, delay: Double)? = nil
+    public var retryWhenFailTuple: (times: Int, delay: Double)? = nil
     
     ///调试响应json/Dictionary,方便测试时使用, 如果有设置该值则不会请求,直接回调此值
-    var testResponseJson: Any? = nil
+    public var testResponseJson: Any? = nil
 
     ///请求转圈的父视图
-    var loadingSuperView: UIView? = nil
+    public var loadingSuperView: UIView? = nil
     
     ///上传文件Data数组
-    var uploadFileDataArr: [ Data ]? = nil
+    public var uploadFileDataArr: [ Data ]? = nil
     
     ///自定义上传时包装的数据Data对象
-    var uploadConfigDataBlock: ( (MultipartFormData) -> Void )? = nil
+    public var uploadConfigDataBlock: ( (MultipartFormData) -> Void )? = nil
     
     ///监听上传/下载进度
-    var fileProgressBlock: WXProgressBlock? = nil
+    public var fileProgressBlock: WXProgressBlock? = nil
     
     ///网络请求过程多链路回调<将要开始, 将要停止, 已经完成>
     /// 注意: 如果没有实现此代理则会回调单例中的全局代理<globleMulticenterDelegate>
-    var multicenterDelegate: WXNetworkMulticenter? = nil
+    public var multicenterDelegate: WXNetworkMulticenter? = nil
     
     ///可以用来添加几个accossories对象 来做额外的插件等特殊功能
     ///如: (请求HUD, 加解密, 自定义打印, 上传统计)
-    var requestAccessories: [WXNetworkMulticenter]? = nil
+    public var requestAccessories: [WXNetworkMulticenter]? = nil
     
     ///以下为私有属性,外部可以忽略
     fileprivate var retryCount: Int = 0
@@ -194,12 +199,13 @@ class WXRequestApi: WXBaseRequest {
         return "\(self)"
     }()
     
-    required init(_ requestURL: String, method: HTTPMethod = .post, parameters: WXDictionaryStrAny? = nil) {
+    ///初始化方法
+    required public init(_ requestURL: String, method: HTTPMethod = .post, parameters: WXDictionaryStrAny? = nil) {
         super.init(requestURL, method: method, parameters: parameters)
     }
 
 	deinit {
-		//debugLog("====== WXBaseRequest 请求结束了====== \(self)")
+		//WXDebugLog("====== WXRequestApi 请求对象已释放====== \(self)")
 	}
     
     //MARK: - 网络请求入口
@@ -208,9 +214,9 @@ class WXRequestApi: WXBaseRequest {
     /// - Parameter responseBlock: 请求回调
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
-    func startRequest(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
+    public func startRequest(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
         guard let _ = URL(string: requestURL) else {
-            debugLog("\n❌❌❌无效的 URL 请求地址= \(requestURL)")
+            WXDebugLog("\n❌❌❌无效的 URL 请求地址= \(requestURL)")
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
             return nil
         }
@@ -218,9 +224,7 @@ class WXRequestApi: WXBaseRequest {
         let networkBlock: WXAnyObjectBlock = { [weak self] responseObj in
 			self?.configResponseBlock(responseBlock: responseBlock, responseObj: responseObj)
         }
-        if checkRequestInCache() {
-            readRequestCacheWithBlock(fetchCacheBlock: networkBlock)
-        }
+        readRequestCacheWithBlock(fetchCacheBlock: networkBlock)
         if var rspJsonDict = responseForTestjSon() {
             rspJsonDict[ kWXNetworkIsTestResponseKey ] = true
             networkBlock(rspJsonDict as AnyObject)
@@ -232,9 +236,9 @@ class WXRequestApi: WXBaseRequest {
         
         if WXRequestConfig.shared.urlResponseLogTuple.printf {
             if retryCount == 0 {
-                debugLog("\n👉👉👉已发出网络请求=", requestURL)
+                WXDebugLog("\n👉👉👉已发出网络请求=", requestURL)
             } else {
-                debugLog("\n👉👉👉请求失败,第 \(retryCount) 次尝试重新请求=", requestURL)
+                WXDebugLog("\n👉👉👉请求失败,第 \(retryCount) 次尝试重新请求=", requestURL)
             }
         }
         return dataRequest
@@ -244,9 +248,9 @@ class WXRequestApi: WXBaseRequest {
     /// - Parameter responseBlock: 请求回调
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
-    func uploadFile(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
+    public func uploadFile(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
         guard let _ = URL(string: requestURL) else {
-            debugLog("\n❌❌❌无效的 URL 上传地址= \(requestURL)")
+            WXDebugLog("\n❌❌❌无效的 URL 上传地址= \(requestURL)")
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
             return nil
         }
@@ -289,9 +293,9 @@ class WXRequestApi: WXBaseRequest {
         
         if WXRequestConfig.shared.urlResponseLogTuple.printf {
             if retryCount == 0 {
-                debugLog("\n👉👉👉已开始上传文件=", requestURL)
+                WXDebugLog("\n👉👉👉已开始上传文件=", requestURL)
             } else {
-                debugLog("\n👉👉👉上传文件失败,第 \(retryCount) 次尝试重新上传=", requestURL)
+                WXDebugLog("\n👉👉👉上传文件失败,第 \(retryCount) 次尝试重新上传=", requestURL)
             }
         }
         return dataRequest
@@ -301,9 +305,9 @@ class WXRequestApi: WXBaseRequest {
     /// - Parameter responseBlock: 请求回调
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
-    func downloadFile(responseBlock: @escaping WXNetworkResponseBlock) -> DownloadRequest? {
+    public func downloadFile(responseBlock: @escaping WXNetworkResponseBlock) -> DownloadRequest? {
         guard let _ = URL(string: requestURL) else {
-            debugLog("\n❌❌❌无效的 URL 下载地址= \(requestURL)")
+            WXDebugLog("\n❌❌❌无效的 URL 下载地址= \(requestURL)")
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
             return nil
         }
@@ -321,9 +325,9 @@ class WXRequestApi: WXBaseRequest {
         
         if WXRequestConfig.shared.urlResponseLogTuple.printf {
             if retryCount == 0 {
-                debugLog("\n👉👉👉已开始下载文件=", requestURL)
+                WXDebugLog("\n👉👉👉已开始下载文件=", requestURL)
             } else {
-                debugLog("\n👉👉👉下载文件失败,第 \(retryCount) 次尝试重新下载=", requestURL)
+                WXDebugLog("\n👉👉👉下载文件失败,第 \(retryCount) 次尝试重新下载=", requestURL)
             }
         }
         return dataRequest
@@ -331,7 +335,7 @@ class WXRequestApi: WXBaseRequest {
 
     //MARK: - 处理请求响应
     
-    func responseForTestjSon() -> WXDictionaryStrAny? {
+    fileprivate func responseForTestjSon() -> WXDictionaryStrAny? {
         if let rspJsonDict = testResponseJson as? WXDictionaryStrAny {
             return rspJsonDict
             
@@ -350,7 +354,7 @@ class WXRequestApi: WXBaseRequest {
 		responseBlock(responseModel)
 		handleMulticenter(type: .DidCompletion, responseModel: responseModel)
 
-        // 15: is manual cancelled
+        // code = 15: is manual cancelled
 		if let retryTuple = retryWhenFailTuple {
 			if retryCount < retryTuple.times, let error = responseObj as? Error, error._code != 15 {
 				DispatchQueue.main.asyncAfter(deadline: (.now() + retryTuple.delay)) {
@@ -477,7 +481,7 @@ class WXRequestApi: WXBaseRequest {
     fileprivate func packagingResponseObj(responseObj: AnyObject, responseModel: WXResponseModel) -> WXDictionaryStrAny {
         var responseDcit: [String : Any] = [:]
         if responseObj is WXDictionaryStrAny {
-            responseDcit += responseObj as! WXDictionaryStrAny
+            responseDcit = responseObj as! WXDictionaryStrAny
             
             responseDcit[ kWXNetworkIsTestResponseKey ].map({
                 responseDcit.removeValue(forKey: kWXNetworkIsTestResponseKey)
@@ -494,7 +498,7 @@ class WXRequestApi: WXBaseRequest {
                 responseDcit["responseObject"] = "Binary Data, length: \(rspData.count)"
             }
         } else if let jsonString = responseObj as? String { // jsonString -> Dictionary
-            if let jsonDict = (try? JSONSerialization.jsonObject( with: jsonString.data(using: String.Encoding.utf8, allowLossyConversion: true)!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? WXDictionaryStrAny {
+            if let jsonDict = WXRequestTools.jsonToDictionary(jsonString: jsonString) {
                 return jsonDict
             } else {
                 responseDcit["response"] = jsonString
@@ -547,13 +551,21 @@ class WXRequestApi: WXBaseRequest {
                     accessory.requestDidCompletion(request: self, responseModel: responseModel)
                 }
             }
+            
             // save cache as much as possible at the end
             if responseModel.isCacheData {
                 printfResponseLog(responseModel: responseModel)
             } else {
                 saveResponseObjToCache(responseModel: responseModel)
+                
+                // remove current request task
+                for idx in 0 ..< _globleRequestList.count {
+                    if _globleRequestList[idx] == self {
+                        _globleRequestList.remove(at: idx)
+                    }
+                    break
+                }
             }
-			_globleRequestList.remove(self)
         }
     }
     
@@ -563,7 +575,7 @@ class WXRequestApi: WXBaseRequest {
         guard WXRequestConfig.shared.urlResponseLogTuple.printf else { return }
         let logHeader = WXRequestTools.appendingPrintfLogHeader(request: self, responseModel: responseModel)
         let logFooter = WXRequestTools.appendingPrintfLogFooter(responseModel: responseModel)
-        debugLog("\(logHeader + logFooter)")
+        WXDebugLog("\(logHeader + logFooter)")
         #endif
     }
     
@@ -587,9 +599,9 @@ class WXRequestApi: WXBaseRequest {
         guard WXRequestConfig.shared.showRequestLaoding else { return }
         if let loadingSuperView = loadingSuperView {
             if show {
-                showLoading(toView: loadingSuperView)
+                WXRequestTools.showLoading(to: loadingSuperView)
             } else {
-                hideLoading(from: loadingSuperView)
+                WXRequestTools.hideLoading(from: loadingSuperView)
             }
         }
     }
@@ -602,30 +614,8 @@ class WXRequestApi: WXBaseRequest {
         return KWXRequestFailueDefaultMessage
     }
     
-    //MARK: - DealWithCache
-    
-    lazy var cacheKey: String = {
-        if cacheResponseBlock != nil || autoCacheResponse {
-            let parameterJson = WXRequestTools.dictionaryToJSON(dictionary: finalParameters)
-            let originValue = requestURL + (parameterJson ?? "")
-            return WXRequestTools.convertToMD5(originStr: originValue)
-        }
-        return ""
-    }()
-    
-    ///检查接口本地需要有缓存
-    fileprivate func checkRequestInCache() -> Bool {
-        if cacheResponseBlock != nil || autoCacheResponse {
-            let networkCache = WXRequestConfig.shared.networkDiskCache
-            if networkCache.containsObject(forKey: cacheKey) {
-                return true
-            }
-        }
-        return false
-    }
-    
     ///检查是否有相同请求在请求, 有则取消旧的请求
-    func cancelTheSameOldRequest() {
+    fileprivate func cancelTheSameOldRequest() {
         for request in _globleRequestList {
             let oldJson = WXRequestTools.dictionaryToJSON(dictionary: request.finalParameters)
             let oldReq = request.requestURL + (oldJson ?? "")
@@ -640,19 +630,33 @@ class WXRequestApi: WXBaseRequest {
         }
     }
     
-    ///读取接口本地缓存数据
+    //MARK: - DealWithCache
+    
+    lazy var cacheKey: String = {
+        if cacheResponseBlock != nil || autoCacheResponse {
+            let parameterJson = WXRequestTools.dictionaryToJSON(dictionary: finalParameters)
+            let originValue = requestURL + (parameterJson ?? "")
+            return WXRequestTools.convertToMD5(originStr: originValue)
+        }
+        return ""
+    }()
+
+    ///如果本地需要有缓存: 则读取接口本地缓存数据返回
     fileprivate func readRequestCacheWithBlock(fetchCacheBlock: @escaping WXAnyObjectBlock) {
         if cacheResponseBlock != nil || autoCacheResponse {
-            let networkCache = WXRequestConfig.shared.networkDiskCache
             
-            networkCache.object(forKey: cacheKey) { key, cacheObject in
-                guard let cacheObject = cacheObject, var cacheDcit = cacheObject as? WXDictionaryStrAny else { return }
-                cacheDcit[kWXRequestDataFromCacheKey] = true
-                if Thread.isMainThread {
-                    fetchCacheBlock(cacheDcit as AnyObject)
-                } else {
-                    DispatchQueue.main.async {
-                        fetchCacheBlock(cacheDcit as AnyObject)
+            DispatchQueue.global().async {
+                var cachePath = WXRequestTools.fetchCachePath() ///缓存目录
+                cachePath = (cachePath as NSString).appendingPathComponent(self.cacheKey)
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: cachePath), let cacheData = fileManager.contents(atPath: cachePath) {
+                    if let cacheJsonStr = String(data: cacheData, encoding: .utf8) {
+                        if var cacheDcit = WXRequestTools.jsonToDictionary(jsonString: cacheJsonStr) {
+                            cacheDcit[kWXRequestDataFromCacheKey] = true
+                            DispatchQueue.main.async {
+                                fetchCacheBlock(cacheDcit as AnyObject)
+                            }
+                        }
                     }
                 }
             }
@@ -661,16 +665,26 @@ class WXRequestApi: WXBaseRequest {
     
     ///保存接口响应数据到本地缓存
     fileprivate func saveResponseObjToCache(responseModel: WXResponseModel) {
-        if let cacheBlock = cacheResponseBlock {
-            let customResponseObject = cacheBlock(responseModel)
-            if let saveCache = customResponseObject {
-                let networkCache = WXRequestConfig.shared.networkDiskCache
-                networkCache.setObject(saveCache as NSCoding, forKey: cacheKey)
+        var saveRspJson: String? = nil
+        if let cacheBlock = cacheResponseBlock, let saveResponseDict = cacheBlock(responseModel) {
+            if let responseJson = WXRequestTools.dictionaryToJSON(dictionary: saveResponseDict) {
+                saveRspJson = responseJson
             }
-        } else if autoCacheResponse {
-            if let responseObject = responseModel.responseObject, responseObject is WXDictionaryStrAny {
-                let networkCache = WXRequestConfig.shared.networkDiskCache
-                networkCache.setObject(responseObject as? NSCoding, forKey: cacheKey)
+        } else if autoCacheResponse, let responseDict = responseModel.responseDict {
+            if let responseJson = WXRequestTools.dictionaryToJSON(dictionary: responseDict) {
+                saveRspJson = responseJson
+            }
+        }
+        
+        if let saveJson = saveRspJson {
+            DispatchQueue.global().async {
+                var cachePath = WXRequestTools.fetchCachePath() ///缓存目录
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: cachePath) == false {
+                    try? fileManager.createDirectory(atPath: cachePath, withIntermediateDirectories: true)
+                }
+                cachePath = (cachePath as NSString).appendingPathComponent(self.cacheKey)
+                try? saveJson.write(toFile: cachePath, atomically: true, encoding: .utf8)
             }
         }
     }
@@ -679,16 +693,16 @@ class WXRequestApi: WXBaseRequest {
 //MARK: - 批量请求对象
 
 ///批量请求对象, 可以
-class WXBatchRequestApi {
+public class WXBatchRequestApi {
     
     ///全部请求是否都成功了
-    var isAllSuccess: Bool = false
+    public var isAllSuccess: Bool = false
     
     ///全部响应数据, 按请求requestArray的添加顺序排序
-    var responseDataArray: [WXResponseModel] = []
+    public var responseDataArray: [WXResponseModel] = []
     
     ///全部请求对象, 响应时按添加顺序返回
-    fileprivate (set) var requestArray: [WXRequestApi]
+    fileprivate var requestArray: [WXRequestApi]
     ///请求转圈的父视图
     fileprivate (set) var loadingSuperView: UIView? = nil
     
@@ -698,25 +712,21 @@ class WXBatchRequestApi {
     fileprivate var responseBatchBlock: ((WXBatchRequestApi) -> ())? = nil
     fileprivate var responseInfoDict: Dictionary<String, WXResponseModel> = [:]
     
-    required init(requestArray: [WXRequestApi], loadingTo superView: UIView? = nil) {
-        self.requestArray = requestArray
+    ///初始化器
+    required public init(apiArray: [WXRequestApi], loadingTo superView: UIView? = nil) {
+        self.requestArray = apiArray
         self.loadingSuperView = superView
     }
 
 	deinit {
-		//debugLog("====== WXBatchRequestApi 请求结束了====== \(self)")
+		//WXDebugLog("====== WXBatchRequestApi 请求对象已释放====== \(self)")
 	}
 
-    ///根据请求获取指定的响应数据
-    func responseForRequest(request: WXRequestApi) -> WXResponseModel? {
-        return responseInfoDict[request.apiUniquelyIp]
-    }
-    
     /// 批量网络请求: (实例方法:Block回调方式)
     /// - Parameters:
-    ///   - responseBlock: 请求全部完成后的响应block回调
+    ///   - responseBlock: 请求完成后响应回调
     ///   - waitAllDone: 是否等待全部请求完成才回调, 否则回调多次
-    func startRequest(_ responseBlock: @escaping (WXBatchRequestApi) -> (),
+    public func startRequest(_ responseBlock: @escaping (WXBatchRequestApi) -> (),
                       waitAllDone: Bool = true) {
         
         responseDataArray.removeAll()
@@ -745,9 +755,9 @@ class WXBatchRequestApi {
         guard WXRequestConfig.shared.showRequestLaoding else { return }
         if let loadingSuperView = loadingSuperView {
             if show {
-                showLoading(toView: loadingSuperView)
+                WXRequestTools.showLoading(to: loadingSuperView)
             } else {
-                hideLoading(from: loadingSuperView)
+                WXRequestTools.hideLoading(from: loadingSuperView)
             }
         }
     }
@@ -812,8 +822,13 @@ class WXBatchRequestApi {
         }
     }
     
+    ///根据请求获取指定的响应数据
+    public func responseForRequest(request: WXRequestApi) -> WXResponseModel? {
+        return responseInfoDict[request.apiUniquelyIp]
+    }
+    
     /// 取消所有请求
-    func cancelAllRequest() {
+    public func cancelAllRequest() {
         for request in requestArray {
             request.requestDataTask?.cancel()
         }
@@ -824,36 +839,36 @@ class WXBatchRequestApi {
 //MARK: - 请求响应对象
 
 ///包装的响应数据
-class WXResponseModel: NSObject {
+public class WXResponseModel: NSObject {
     /**
      * 是否请求成功,优先使用 WXRequestApi.successStatusMap 来判断是否成功
      * 否则使用 WXNetworkConfig.successStatusMap 标识来判断是否请求成功
      ***/
-    var isSuccess: Bool = false
+    public var isSuccess: Bool = false
     ///本次响应Code码
-    var responseCode: Int? = nil
+    public var responseCode: Int? = nil
     ///本次响应的提示信息
-    var responseMsg: String? = nil
+    public var responseMsg: String? = nil
     ///本次数据是否为缓存
-    var isCacheData: Bool = false
+    public var isCacheData: Bool = false
     ///请求耗时(毫秒)
-    var responseDuration: TimeInterval? = nil
+    public var responseDuration: TimeInterval? = nil
     ///解析数据的模型: 可KeyPath匹配, 返回 Model对象 或者数组模型 [Model]
-    var parseKeyPathModel: AnyObject? = nil
+    public var parseKeyPathModel: AnyObject? = nil
     ///本次响应的原始数据: NSDictionary/ UIImage/ NSData /...
-    var responseObject: AnyObject? = nil
+    public var responseObject: AnyObject? = nil
     ///本次响应的原始字典数据
-    var responseDict: WXDictionaryStrAny? = nil
+    public var responseDict: WXDictionaryStrAny? = nil
     ///本次响应的数据是否是测试数据
-    var isTestResponse: Bool = false
+    public var isTestResponse: Bool = false
     ///失败时的错误信息
-    var error: NSError? = nil
+    public var error: NSError? = nil
     ///原始响应
-    var urlResponse: HTTPURLResponse? = nil
+    public var urlResponse: HTTPURLResponse? = nil
     ///原始请求
-    var urlRequest: URLRequest? = nil
+    public var urlRequest: URLRequest? = nil
     
-    fileprivate (set) var apiUniquelyIp: String = "\(String(describing: self))"
+    fileprivate var apiUniquelyIp: String = "\(String(describing: self))"
     
     ///解析响应数据的数据模型 (支持KeyPath匹配)
     fileprivate func parseResponseKeyPathModel(requestApi: WXRequestApi,

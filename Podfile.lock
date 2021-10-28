@@ -38,6 +38,9 @@ PODS:
     - SnapKit
   - SVProgressHUD (2.2.5)
   - SwiftyJSON (5.0.1)
+  - WXNetworkingSwift (0.1.8):
+    - Alamofire
+    - KakaJSON
   - YYCache (1.0.4)
 
 DEPENDENCIES:
@@ -60,6 +63,7 @@ DEPENDENCIES:
   - SnapKitExtend
   - SVProgressHUD
   - SwiftyJSON
+  - WXNetworkingSwift
   - YYCache
 
 SPEC REPOS:
@@ -85,6 +89,7 @@ SPEC REPOS:
     - SnapKitExtend
     - SVProgressHUD
     - SwiftyJSON
+    - WXNetworkingSwift
     - YYCache
 
 SPEC CHECKSUMS:
@@ -109,8 +114,9 @@ SPEC CHECKSUMS:
   SnapKitExtend: aa30cf37196195fae9c4354686cc7710184ebfcc
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
+  WXNetworkingSwift: c1f3cbc36d34919f9788062ad9ec46148e0a225e
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: 810fb1df906a7ee86dc7c7d4a220d258c10ebcec
+PODFILE CHECKSUM: 7770bcfb6795e637bb50948d69e649d443dc9036
 
 COCOAPODS: 1.11.2

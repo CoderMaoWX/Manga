@@ -10,6 +10,7 @@ import Alamofire
 import KakaJSON
 import SwiftyJSON
 import Reusable
+import WXNetworkingSwift
 
 class BoutiqueVC: BaseVC {
     

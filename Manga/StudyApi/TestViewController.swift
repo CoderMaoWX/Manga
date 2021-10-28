@@ -12,6 +12,7 @@ import SnapKit
 import FDFullscreenPopGesture
 ///判断文件类型
 import MobileCoreServices
+import WXNetworkingSwift
 
 
 class TestViewController: UIViewController {
@@ -21,24 +22,7 @@ class TestViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //ApiClass.studyApi()
         
-        testUploadFile()
-        //debugLog("文件类型: \(mimeType(pathExtension: "mp4"))")
-        return
-        
-        let tmpA: Int? = 4
-        tmpA.map {
-            debugLog("===测试数据: \($0)")
-        }
-        
-        let tmpArray: [Int]? = [1, 2, 5, 678, 2212]
-        
-        let tmpResult: [Int]? = tmpArray?.map({
-            let tmp = $0
-            debugLog("遍历数据: \(tmp)")
-            return $0
-        })
-        debugLog("遍历结果: \(String(describing: tmpResult))")
-        
+        testRequestDelay()
     }
     
     func testRequestDelay() {
@@ -97,7 +81,7 @@ class TestViewController: UIViewController {
 //        api1.autoCacheResponse = true
         
         
-        let api = WXBatchRequestApi(requestArray: [api0, api1], loadingTo: view)
+        let api = WXBatchRequestApi(apiArray: [api0, api1], loadingTo: view)
         api.startRequest({ batchApi in
             debugLog("批量请求回调", batchApi.responseDataArray)
         }, waitAllDone: false)

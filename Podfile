@@ -43,6 +43,9 @@ target 'Manga' do
   pod 'JKSwiftExtension'
   
   pod 'YYCache'
+  
+  #自己写的网络库
+  pod 'WXNetworkingSwift'
 
 end
 

@@ -21,9 +21,6 @@
 		5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5846C87D26D36C4300CEF2FC /* TestViewController.swift */; };
 		5846C88026D36C4300CEF2FC /* TestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5846C87E26D36C4300CEF2FC /* TestViewController.xib */; };
 		584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9625C3F27A00FA507C /* AppDelegate.swift */; };
-		58763FB926CF9D8000AA3985 /* WXRequestApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FB826CF9D8000AA3985 /* WXRequestApi.swift */; };
-		58763FBB26CFB3F200AA3985 /* WXRequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FBA26CFB3F200AA3985 /* WXRequestProtocol.swift */; };
-		58763FBD26D0841100AA3985 /* WXRequestTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58763FBC26D0841100AA3985 /* WXRequestTools.swift */; };
 		5887389825C5587C0049ECAD /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389725C5587C0049ECAD /* HomeVC.swift */; };
 		5887389B25C558C00049ECAD /* CateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389A25C558C00049ECAD /* CateVC.swift */; };
 		5887389E25C558D10049ECAD /* CommunityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5887389D25C558D10049ECAD /* CommunityVC.swift */; };
@@ -66,7 +63,6 @@
 		58CDFB8926BA34E200056527 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB8626BA34E200056527 /* LaunchScreen.storyboard */; };
 		7075E033816A232E3D55CCF6 /* libPods-Manga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */; };
 		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
-		A39301BE26CFF6D4002EF3AB /* WXRequestConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39301BD26CFF6D4002EF3AB /* WXRequestConfig.swift */; };
 		A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */; };
 /* End PBXBuildFile section */
 
@@ -86,9 +82,6 @@
 		5846C87E26D36C4300CEF2FC /* TestViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestViewController.xib; sourceTree = "<group>"; };
 		584D5D9325C3F27A00FA507C /* Manga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584D5D9625C3F27A00FA507C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		58763FB826CF9D8000AA3985 /* WXRequestApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXRequestApi.swift; sourceTree = "<group>"; };
-		58763FBA26CFB3F200AA3985 /* WXRequestProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXRequestProtocol.swift; sourceTree = "<group>"; };
-		58763FBC26D0841100AA3985 /* WXRequestTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXRequestTools.swift; sourceTree = "<group>"; };
 		5887389725C5587C0049ECAD /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		5887389A25C558C00049ECAD /* CateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CateVC.swift; sourceTree = "<group>"; };
 		5887389D25C558D10049ECAD /* CommunityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityVC.swift; sourceTree = "<group>"; };
@@ -134,7 +127,6 @@
 		58CDFB8726BA34E200056527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Manga.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A32CD80E25CC494A009A5C56 /* URankCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URankCCell.swift; sourceTree = "<group>"; };
-		A39301BD26CFF6D4002EF3AB /* WXRequestConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WXRequestConfig.swift; sourceTree = "<group>"; };
 		A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwizzlingMethod.swift; sourceTree = "<group>"; };
 		C4DEF34117E1022E8F7858A7 /* Pods-Manga.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Manga.debug.xcconfig"; path = "Target Support Files/Pods-Manga/Pods-Manga.debug.xcconfig"; sourceTree = "<group>"; };
 		C7AFDB0A11E2C413F9EE7078 /* Pods-Manga.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Manga.release.xcconfig"; path = "Target Support Files/Pods-Manga/Pods-Manga.release.xcconfig"; sourceTree = "<group>"; };
@@ -325,10 +317,6 @@
 		58CDFB5526BA33F000056527 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				58763FB826CF9D8000AA3985 /* WXRequestApi.swift */,
-				A39301BD26CFF6D4002EF3AB /* WXRequestConfig.swift */,
-				58763FBA26CFB3F200AA3985 /* WXRequestProtocol.swift */,
-				58763FBC26D0841100AA3985 /* WXRequestTools.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -515,7 +503,6 @@
 				5887389E25C558D10049ECAD /* CommunityVC.swift in Sources */,
 				58CDFB7126BA33F100056527 /* String+Extension.swift in Sources */,
 				58B4924E25CFDDF10052A97C /* UDetailCateCell.swift in Sources */,
-				A39301BE26CFF6D4002EF3AB /* WXRequestConfig.swift in Sources */,
 				5887389825C5587C0049ECAD /* HomeVC.swift in Sources */,
 				58CDFB7426BA33F100056527 /* Array+Extension.swift in Sources */,
 				58CDFB6F26BA33F100056527 /* UIImage+Extension.swift in Sources */,
@@ -529,14 +516,12 @@
 				58CDFB7526BA33F100056527 /* ApiClass.swift in Sources */,
 				5824E5E626C655DB00246D19 /* PublicFrame.swift in Sources */,
 				5845629927044D000089B333 /* Encodable+ToDictionary.swift in Sources */,
-				58763FBD26D0841100AA3985 /* WXRequestTools.swift in Sources */,
 				5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */,
 				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
 				5845629827044D000089B333 /* Model.swift in Sources */,
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
 				5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */,
 				5845629B27044D000089B333 /* APIConfig.swift in Sources */,
-				58763FB926CF9D8000AA3985 /* WXRequestApi.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,
 				5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */,
@@ -548,7 +533,6 @@
 				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,
 				5824E5E826C66D4200246D19 /* PublicUtils.swift in Sources */,
 				5899402B26BA39B20086C830 /* MonitorLoad.m in Sources */,
-				58763FBB26CFB3F200AA3985 /* WXRequestProtocol.swift in Sources */,
 				58CDFB7326BA33F100056527 /* UIScrollView+Extension.swift in Sources */,
 				58B812DB262D3D9400EB00C7 /* MineCenterHeaderView.swift in Sources */,
 				58A23DC526DDC51A0012A6F1 /* NavgationBarView.swift in Sources */,
