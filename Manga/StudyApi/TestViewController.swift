@@ -177,7 +177,7 @@ class TestViewController: UIViewController {
         //视频
         //url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
         //压缩包
-        url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
+        //url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
         
         let api = WXRequestApi(url, method: .get, parameters: nil)
         api.loadingSuperView = view
