@@ -8,7 +8,6 @@ import Foundation
 import UIKit
 import MJRefresh
 import SnapKit
-import Alamofire
 
 //当前提示view在父视图上的tag
 let kEmptyTipViewTag: Int     = 1990

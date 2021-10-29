@@ -7,9 +7,8 @@
 
 import UIKit
 import KakaJSON
-import Alamofire
 import SnapKit
-import SVProgressHUD
+import WXNetworkingSwift
 
 class MineVC: BaseVC {
     
@@ -57,7 +56,6 @@ class MineVC: BaseVC {
     }
    
     func loadData() {
-        let url = "https://manga.1kxun.mobi/api/mycenter/getList"
         var dict: [String: String] = [:]
         dict["_"] = "1617699649"
         dict["_brand"] = "Apple"
@@ -77,26 +75,17 @@ class MineVC: BaseVC {
         dict["page"] = "0"
         dict["sort_type"] = "hot"
         
-        SVProgressHUD.show()
-        AF.request(url, parameters: dict).responseJSON {
-            [weak self] (resultData) in
-            SVProgressHUD.dismiss()
-            
-            switch resultData.result {
-            case .success(let json):
-                let dataArr = (json as? NSDictionary)?["data"] as? NSArray
-                var listModel = modelArray(from: dataArr!, MineListModel.self)
-                
-                listModel.insert(contentsOf: self?.defaultUserItem() ?? [], at: 0)
-                
-                self?.dataArray = listModel
-                debugLog("主页请求成功:" , self?.dataArray as Any)
-                self?.collectionView.reloadData()
-                break
-            case .failure(let error):
-                debugLog("主页请求失败:", error)
-                break
-            }
+        let url = "https://manga.1kxun.mobi/api/mycenter/getList"
+        let request = WXRequestApi(url, method: .get, parameters: dict)
+        request.loadingSuperView = view
+        request.successStatusMap = (key: "status",  value: "success")
+        request.parseModelMap = (parseKey: "data" , modelType: MineListModel.self)
+
+        request.startRequest { [weak self] (responseModel) in
+            var listModel = (responseModel.parseKeyPathModel as? [MineListModel]) ?? []
+            listModel.insert(contentsOf: self?.defaultUserItem() ?? [], at: 0)
+            self?.dataArray = listModel
+            self?.collectionView.reloadData(autoEmptyViewInfo: self?.dataArray)
         }
     }
     

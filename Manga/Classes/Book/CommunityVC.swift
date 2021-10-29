@@ -9,10 +9,8 @@ import UIKit
 import SnapKit
 import KakaJSON
 import SwiftyJSON
-import Alamofire
 import MJRefresh
-import SVProgressHUD
-
+import WXNetworkingSwift
 
 class CommunityVC: BaseVC {
     
@@ -58,8 +56,6 @@ class CommunityVC: BaseVC {
     func loadData(firstPage: Bool) {
         page = firstPage ? 0 : (page+1)
         
-        let url = "https://jp.forum.1kxun.mobi/api/forum/specialPosts"
-        
         var dict: [String: String] = [:]
         dict["_"] = "1617699649"
         dict["_brand"] = "Apple"
@@ -79,31 +75,20 @@ class CommunityVC: BaseVC {
         dict["page"] = "\(page)"
         dict["sort_type"] = "hot"
         
-        //let param: [String : Any] = ["sexType" : 1]
-        AF.request(url, parameters: dict).responseJSON {
-            [weak self] (resultData) in
-            
-            switch resultData.result {
-            case .success(let json):
-                debugLog("主页请求成功:", json)
-//                let dataList = (json as? NSDictionary)?["data"] as? NSArray
-//                let listModel = modelArray(from: dataList!, TrendPostModel.self)
-                
-                let trendModel = (json as? NSDictionary)?.kj.model(TrendModel.self)
-                let listModel = trendModel?.data
-                if firstPage {
-                    self?.dataArray = listModel ?? []
-                } else {
-                    self?.dataArray += listModel ?? []
-                }
-                self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
-                break
-                
-            case .failure(let error):
-                debugLog("主页请求失败:", error)
-                self?.tableView.reloadData(autoEmptyViewInfo: nil)
-                break
+        let url = "https://jp.forum.1kxun.mobi/api/forum/specialPosts"
+        let request = WXRequestApi(url, method: .get, parameters: dict)
+        request.loadingSuperView = view
+        request.successStatusMap = (key: "status",  value: "success")
+        request.parseModelMap = (parseKey: "data" , modelType: TrendInfoModel.self)
+        
+        request.startRequest { [weak self] (responseModel) in
+            let listModel =  (responseModel.parseKeyPathModel as? [TrendInfoModel]) ?? []
+            if firstPage {
+                self?.dataArray = listModel
+            } else {
+                self?.dataArray += listModel
             }
+            self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
         }
     }
     

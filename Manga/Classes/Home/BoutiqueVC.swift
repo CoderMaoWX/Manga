@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 import KakaJSON
 import SwiftyJSON
 import Reusable

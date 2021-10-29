@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 import MJRefresh
-import Alamofire
+import WXNetworkingSwift
 import KakaJSON
 
 class UCateDetailVC: BaseVC {
@@ -44,29 +44,21 @@ class UCateDetailVC: BaseVC {
     }
     
     func loadListData() {
-        let loadURL = "http://app.u17.com/v3/appV3_3/ios/phone/list/commonComicList"
         
         var param: [String: Any] = [:]
         param["argCon"] = argCon
         if argName.count > 0 { param["argName"] = argName }
         param["argValue"] = argValue
         
-        AF.request(loadURL, parameters: param).responseJSON {
-            [weak self](returnData) in
-            
-            switch returnData.result {
-            case .success(let json):
-                let dataDict = ((json as? NSDictionary)?["data"] as? NSDictionary)?["returnData"]
-                debugLog("详情页请求成功:" , dataDict as Any)
-                let listModel = model(from: (dataDict as! NSDictionary), ComicListModel.self)
-                self?.dataArray = listModel?.comics ?? []
-                self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
-                break
-                
-            case .failure(let error):
-                debugLog("详情页请求失败:", error)
-                break
-            }
+        let url = "http://app.u17.com/v3/appV3_3/ios/phone/list/commonComicList"
+        let request = WXRequestApi(url, method: .get, parameters: param)
+        request.loadingSuperView = view
+        request.successStatusMap = (key: "code",  value: "1")
+        request.parseModelMap = (parseKey: "data.returnData.comics" , modelType: ComicModel.self)
+
+        request.startRequest { [weak self] (responseModel) in
+            self?.dataArray = (responseModel.parseKeyPathModel as? [ComicModel]) ?? []
+            self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
         }
     }
 }

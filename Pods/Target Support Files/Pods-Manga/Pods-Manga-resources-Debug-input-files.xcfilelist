@@ -2,4 +2,3 @@ ${PODS_ROOT}/Target Support Files/Pods-Manga/Pods-Manga-resources.sh
 ${PODS_CONFIGURATION_BUILD_DIR}/JKSwiftExtension/JKSwiftExtension.bundle
 ${PODS_ROOT}/LLCycleScrollView/Lib/LLCycleScrollView.bundle
 ${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle
-${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle

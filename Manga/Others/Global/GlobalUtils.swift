@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 import JKSwiftExtension
-import Alamofire
-
 
 ///获取成员变量
 func namesOfMemberVaribale(cls: AnyClass) -> [String] {
@@ -230,7 +228,7 @@ func activityLoading(style: UIActivityIndicatorView.Style? = .gray, color: UICol
 /// 获取Loading弹框
 /// - Parameter parmater: (可传字段包装含有kLoadingViewKey的键值对)
 /// - Returns: Loading弹框父视图
-fileprivate func fetchHUDSuperView(parmater: AnyObject) -> UIView {
+fileprivate func fetchHUDSuperView(parmater: AnyObject?) -> UIView {
     if let loadingView =  parmater as? UIView {
         return loadingView
         
@@ -252,7 +250,7 @@ fileprivate func fetchHUDSuperView(parmater: AnyObject) -> UIView {
 
 /// 隐藏指定视图上的loading框
 /// - Parameter view: 指定视图参数 (可传字段包装含有kLoadingViewKey的键值对)
-func hideLoading(from view: AnyObject, animation: Bool = true) {
+func hideLoading(from view: AnyObject?, animation: Bool = true) {
     let loadingSuperView = fetchHUDSuperView(parmater: view)
     for tmpView in loadingSuperView.subviews where tmpView.tag == kLoadingHUDTag {
         if animation {
@@ -270,7 +268,7 @@ func hideLoading(from view: AnyObject, animation: Bool = true) {
 
 /// 指定视图上显示loading框 (可传字段包装含有kLoadingViewKey的键值对)
 /// - Parameter paramater: loading框的父视图, 如果传nil,则会在Window上显示
-func showLoading(toView paramater: AnyObject, animation: Bool = false) {
+func showLoading(to paramater: AnyObject?, animation: Bool = false) {
     ///在主线程中显示UI
     DispatchQueue.main.async {
         

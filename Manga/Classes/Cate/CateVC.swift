@@ -9,9 +9,8 @@ import UIKit
 import SnapKit
 import Moya
 import MJRefresh
-import Alamofire
 import KakaJSON
-import SVProgressHUD
+import WXNetworkingSwift
 
 class CateVC: BaseVC {
     
@@ -54,29 +53,15 @@ class CateVC: BaseVC {
     }
     
     func loadListData() {
-        let loadURL: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
+        let url: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
+        let request = WXRequestApi(url, method: .get, parameters: nil)
+        request.loadingSuperView = view
+        request.successStatusMap = (key: "code",  value: "1")
+        request.parseModelMap = (parseKey: "data.returnData.rankingList" , modelType: RankingModel.self)
         
-        SVProgressHUD.show()
-        AF.request(loadURL, method: HTTPMethod.get, parameters: nil).responseJSON {
-            [weak self](response) in
-            SVProgressHUD.dismiss()
-            
-            switch response.result {
-            case .success(let json):
-                
-                let data = (json as? NSDictionary)?["data"] as? NSDictionary
-                if let returnData = data?["returnData"] {
-                    let cat = model(from: (returnData as! NSDictionary), CateListModel.self)
-                    self?.rankingList = cat?.rankingList ?? []
-                    self?.collectionView.reloadData()
-                    self?.collectionView.mj_header?.endRefreshing()
-                }
-                break
-            case .failure(let error):
-                debugLog("error: \(error)")
-                break
-            
-            }
+        request.startRequest { [weak self] (responseModel) in
+            self?.rankingList = (responseModel.parseKeyPathModel as? [RankingModel]) ?? []
+            self?.collectionView.reloadData(autoEmptyViewInfo: self?.rankingList)
         }
     }
 }

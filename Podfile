@@ -3,13 +3,11 @@ source 'https://cdn.cocoapods.org/'
 
 inhibit_all_warnings! #屏蔽所有warning
 use_modular_headers!
+# use_frameworks!
 
 platform :ios, '10.0'
 
 target 'Manga' do
-  # Comment the next line if you don't want to use dynamic frameworks
-  # use_frameworks!
-  
   pod 'SnapKitExtend'
   pod 'PromiseKit'
   pod 'Moya'
@@ -26,11 +24,9 @@ target 'Manga' do
   pod 'LLCycleScrollView'
   
   pod 'MJRefresh'
-  pod 'MBProgressHUD'
   pod 'HMSegmentedControl'
   pod 'IQKeyboardManagerSwift'
   
-  pod 'SVProgressHUD'
   pod 'FDFullscreenPopGesture'
   pod 'KVOController'
   
