@@ -22,7 +22,7 @@ class TestViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //ApiClass.studyApi()
         
-        testRequestDelay()
+        testDownFile()
     }
     
     func testRequestDelay() {
@@ -173,21 +173,21 @@ class TestViewController: UIViewController {
     ///测试下载文件
     func testDownFile() {
         //图片
-        let url = "https://picsum.photos/200/300?random=1"
-        //压缩包
-        //let url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
+        var url = "https://picsum.photos/414/896?random=1"
         //视频
-        //let url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
+        //url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
+        //压缩包
+        url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
         
         let api = WXRequestApi(url, method: .get, parameters: nil)
         api.loadingSuperView = view
-        
         api.fileProgressBlock = { progress in
             let total = Float(progress.totalUnitCount)
             let completed = Float(progress.completedUnitCount)
             let percentage = completed / total * 100
             debugLog("下载进度: \(String(format:"%.2f",percentage)) %")
         }
+        
         api.downloadFile { responseModel in
             if let rspData = responseModel.responseObject as? Data {
                 if let image = UIImage(data: rspData) {
@@ -195,7 +195,7 @@ class TestViewController: UIViewController {
                 }
                 if var mimeType = responseModel.urlResponse?.mimeType {
                     mimeType = mimeType.replacingOccurrences(of: "/", with: ".")
-                    let url = URL(fileURLWithPath: "/Users/luke/Desktop/" + mimeType, isDirectory: true)
+                    let url = URL(fileURLWithPath: "/Users/xin610582/Desktop/" + mimeType, isDirectory: true)
                     try? rspData.write(to: url)
                 }
             }
