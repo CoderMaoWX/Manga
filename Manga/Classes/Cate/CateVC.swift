@@ -87,6 +87,5 @@ extension CateVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         detailVC.argName = model.argName ?? ""
         detailVC.argValue = model.argValue
         navigationController?.pushViewController(detailVC, animated: true)
-        
     }
 }

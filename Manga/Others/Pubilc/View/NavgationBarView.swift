@@ -199,7 +199,8 @@ class NavgationBarView: UIView {
     fileprivate lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .clear
-        button.setImage(UIImage(named: "nav_back_white"), for: .normal)
+        let image = UIImage(named: "nav_back_black")?.colorImage(color: .black)
+        button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(goBackAction), for: .touchUpInside)
         return button
     }()

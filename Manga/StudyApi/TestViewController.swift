@@ -253,8 +253,8 @@ class TestViewController: UIViewController {
             
         }.first!.redDotValue = "18"
         
-        let img1 = UIImage(named: "search_keyword_refresh")!
-        let img2 = UIImage(named: "search_history_delete")!
+        let img1 = UIImage(named: "refresh_icon")!
+        let img2 = UIImage(named: "delete_icon")!
         setNavBarRightItem(infoArr: [img1, img2] ) { idx in
             
             showAlertMultiple(title: "请闭上眼睛",

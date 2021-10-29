@@ -92,7 +92,8 @@ class BaseNavigationVC: UINavigationController {
         if viewController is BaseVC {
             target = viewController
         }
-        let leftItem = UIBarButtonItem(image: UIImage(named: "nav_back_white"),
+        let image = UIImage(named: "nav_back_black")?.colorImage(color: .black)
+        let leftItem = UIBarButtonItem(image: image,
                                        style: .plain,
                                        target: target,
                                        action: #selector(goBackAction))
