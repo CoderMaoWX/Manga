@@ -8,12 +8,15 @@
 import UIKit
 import SnapKit
 
+let kButtonSpace = 12.0
+
 class NavgationBarView: UIView {
     
     ///导航标题
-    var title: String = "" {
+    var title: String? {
         willSet {
             titleLabel.text = newValue
+            titleLabel.isHidden = (newValue == nil)
         }
     }
     
@@ -24,7 +27,7 @@ class NavgationBarView: UIView {
         }
     }
 
-    required init(_ backAction: (()->())?) {
+    required init(backAction: (()->())?) {
         super.init(frame: .zero)
         goBackButtonClosure = backAction
         initSubView()
@@ -40,35 +43,30 @@ class NavgationBarView: UIView {
     ///由子类重写覆盖
     fileprivate func initSubView() {
         backgroundColor = .white
-        addSubview(contentView)
         if goBackButtonClosure != nil {
-            contentView.addSubview(backButton)
+            addSubview(backButton)
         }
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(bottomLine)
+        addSubview(titleLabel)
+        addSubview(bottomLine)
     }
     
     ///由子类重写覆盖
     fileprivate func layoutSubView()  {
-        contentView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalTo(self)
-            $0.height.equalTo(44)
-        }
-        
         if goBackButtonClosure != nil {
             backButton.snp.makeConstraints {
-                $0.leading.bottom.equalTo(contentView)
-                $0.size.equalTo(CGSize(width: 44, height: 44))
+                $0.leading.bottom.equalTo(self)
+                $0.size.equalTo(CGSize(width: 44.0, height: 44.0))
             }
         }
         
         titleLabel.snp.makeConstraints {
-            $0.centerX.equalTo(contentView.snp.centerX)
-            $0.centerY.equalTo(contentView.snp.centerY)
+            $0.centerX.equalTo(self.snp.centerX)
+            $0.bottom.equalTo(self)
+            $0.height.greaterThanOrEqualTo(44.0)
         }
         
         bottomLine.snp.makeConstraints {
-            $0.leading.bottom.trailing.equalTo(contentView)
+            $0.leading.bottom.trailing.equalTo(self)
             $0.height.equalTo(0.5)
         }
     }
@@ -79,7 +77,7 @@ class NavgationBarView: UIView {
     fileprivate var leftItemActionClosure: NavBarItemActionClosure? = nil
     fileprivate var leftButtonArray: [UIButton] = []
     @discardableResult
-    func setNavBarLeftItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
+    func setLeftItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
         for button in leftButtonArray {
             button.removeFromSuperview()
         }
@@ -88,12 +86,13 @@ class NavgationBarView: UIView {
         
         var tmpBtn: UIView? = nil
         for button in leftButtonArray {
+            addSubview(button)
             button.snp.makeConstraints {
-                $0.centerY.equalTo(contentView.snp.centerY)
+                $0.centerY.equalTo(titleLabel.snp.centerY)
                 if tmpBtn == nil {
-                    $0.leading.equalTo(contentView.snp.leading).offset(12)
+                    $0.leading.equalTo(self.snp.leading).offset(kButtonSpace)
                 } else {
-                    $0.leading.equalTo(tmpBtn!.snp.trailing).offset(12)
+                    $0.leading.equalTo(tmpBtn!.snp.trailing).offset(kButtonSpace)
                 }
             }
             tmpBtn = button
@@ -105,7 +104,7 @@ class NavgationBarView: UIView {
     fileprivate var rightItemActionClosure: NavBarItemActionClosure? = nil
     fileprivate var rightButtonArray: [UIButton] = []
     @discardableResult
-    func setNavBarRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
+    func setRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
         for button in rightButtonArray {
             button.removeFromSuperview()
         }
@@ -114,12 +113,13 @@ class NavgationBarView: UIView {
         
         var tmpBtn: UIView? = nil
         for button in rightButtonArray.reversed() {
+            addSubview(button)
             button.snp.makeConstraints {
-                $0.centerY.equalTo(contentView.snp.centerY)
+                $0.centerY.equalTo(titleLabel.snp.centerY)
                 if tmpBtn == nil {
-                    $0.trailing.equalTo(contentView.snp.trailing).offset(-12)
+                    $0.trailing.equalTo(self.snp.trailing).offset(-kButtonSpace)
                 } else {
-                    $0.trailing.equalTo(tmpBtn!.snp.leading).offset(-12)
+                    $0.trailing.equalTo(tmpBtn!.snp.leading).offset(-kButtonSpace)
                 }
             }
             tmpBtn = button
@@ -147,7 +147,8 @@ class NavgationBarView: UIView {
                 
             }  else if info is NSAttributedString {
                 button.titleLabel?.font = .systemFont(ofSize: 14)
-                button.setAttributedTitle((info as! NSAttributedString), for: .normal)            } else {
+                button.setAttributedTitle((info as! NSAttributedString), for: .normal)
+            } else {
                 continue
             }
             button.sizeToFit()
@@ -164,24 +165,23 @@ class NavgationBarView: UIView {
             index += 1
             button.tag = index
             
-            let selector = (itemType == 1) ? #selector(self.navBarLeftItemAction) : #selector(self.navBarRightItemAction)
+            let selector = (itemType == 1) ? #selector(self.leftButtonItemAction) : #selector(self.rightButtonItemAction)
             button.addTarget(self, action: selector, for: .touchUpInside)
-            contentView.addSubview(button)
             barButtonArr.append(button)
         }
         return barButtonArr
     }
     
     ///左侧按钮事件
-    @objc fileprivate func navBarLeftItemAction(sender: UIButton) {
+    @objc fileprivate func leftButtonItemAction(sender: UIButton) {
         if let leftItemActionClosure = leftItemActionClosure {
-            leftItemActionClosure(sender.tag)
+            leftItemActionClosure(sender)
         }
     }
     ///右侧按钮事件
-    @objc fileprivate func navBarRightItemAction(sender: UIButton) {
+    @objc fileprivate func rightButtonItemAction(sender: UIButton) {
         if let rightItemActionClosure = rightItemActionClosure {
-            rightItemActionClosure(sender.tag)
+            rightItemActionClosure(sender)
         }
     }
     
@@ -195,12 +195,6 @@ class NavgationBarView: UIView {
     }
     
     //MARK: - 懒加载UI
-    
-    fileprivate lazy var contentView: UIView = {
-        let bgView = UIView()
-        bgView.backgroundColor = .clear
-        return bgView
-    }()
 
     fileprivate lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -213,9 +207,11 @@ class NavgationBarView: UIView {
     fileprivate lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
+        label.backgroundColor = .clear
         label.font = .systemFont(ofSize: 18)
         label.textAlignment = .center
         label.lineBreakMode = .byTruncatingTail
+        label.isHidden = true
         return label
     }()
     

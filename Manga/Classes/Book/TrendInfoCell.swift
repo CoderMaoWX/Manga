@@ -74,7 +74,7 @@ class TrendInfoCell: UITableViewCell {
                 index += 1
                 let imgView = ImgBgView.viewWithTag(index) as? UIImageView
                 imgView?.isHidden = false
-                imgView?.mg.setImageURL(with: tmp.url, placeholder: "normal_placeholder_h")
+                imgView?.mg.setImageURL(with: tmp.url, placeholder: "normal_placeholder")
             }
             
             //  axisType:方向

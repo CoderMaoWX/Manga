@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5DF26C6181600246D19 /* ListView+Extension.swift */; };
 		5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E126C6183000246D19 /* TableView+Extension.swift */; };
-		5824E5E426C655CB00246D19 /* PublicConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E326C655CB00246D19 /* PublicConst.swift */; };
-		5824E5E626C655DB00246D19 /* PublicFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E526C655DB00246D19 /* PublicFrame.swift */; };
-		5824E5E826C66D4200246D19 /* PublicUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E726C66D4200246D19 /* PublicUtils.swift */; };
-		5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E926CA05FB00246D19 /* AlertController+Extension.swift */; };
+		5824E5E426C655CB00246D19 /* GlobalConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E326C655CB00246D19 /* GlobalConst.swift */; };
+		5824E5E626C655DB00246D19 /* GlobalFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E526C655DB00246D19 /* GlobalFrame.swift */; };
+		5824E5E826C66D4200246D19 /* GlobalUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E726C66D4200246D19 /* GlobalUtils.swift */; };
+		5824E5EA26CA05FB00246D19 /* UIAlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E926CA05FB00246D19 /* UIAlertController+Extension.swift */; };
 		583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583D452025CBF6A500C053F7 /* UCateModel.swift */; };
 		5845629827044D000089B333 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5845629427044D000089B333 /* Model.swift */; };
 		5845629927044D000089B333 /* Encodable+ToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5845629527044D000089B333 /* Encodable+ToDictionary.swift */; };
@@ -49,7 +49,7 @@
 		58CDFB7026BA33F100056527 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5026BA33F000056527 /* UIViewController+Extension.swift */; };
 		58CDFB7126BA33F100056527 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5126BA33F000056527 /* String+Extension.swift */; };
 		58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5226BA33F000056527 /* Dictionary+Extension.swift */; };
-		58CDFB7326BA33F100056527 /* UIScrollView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5326BA33F000056527 /* UIScrollView+Extension.swift */; };
+		58CDFB7326BA33F100056527 /* UIScrollView+EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5326BA33F000056527 /* UIScrollView+EmptyView.swift */; };
 		58CDFB7426BA33F100056527 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5426BA33F000056527 /* Array+Extension.swift */; };
 		58CDFB7526BA33F100056527 /* ApiClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5626BA33F000056527 /* ApiClass.swift */; };
 		58CDFB7626BA33F100056527 /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5926BA33F000056527 /* BaseVC.swift */; };
@@ -57,7 +57,7 @@
 		58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5B26BA33F000056527 /* BaseNavigationVC.swift */; };
 		58CDFB7926BA33F100056527 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5C26BA33F000056527 /* TabBarController.swift */; };
 		58CDFB7A26BA33F100056527 /* UBaseCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB5E26BA33F000056527 /* UBaseCCell.swift */; };
-		58CDFB7B26BA33F100056527 /* PublicConfigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB6126BA33F000056527 /* PublicConfigure.swift */; };
+		58CDFB7B26BA33F100056527 /* GlobalConfigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB6126BA33F000056527 /* GlobalConfigure.swift */; };
 		58CDFB7C26BA33F100056527 /* GlobalTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB6226BA33F000056527 /* GlobalTools.swift */; };
 		58CDFB7D26BA33F100056527 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB6426BA33F000056527 /* Assets.xcassets */; };
 		58CDFB8926BA34E200056527 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB8626BA34E200056527 /* LaunchScreen.storyboard */; };
@@ -69,10 +69,10 @@
 /* Begin PBXFileReference section */
 		5824E5DF26C6181600246D19 /* ListView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListView+Extension.swift"; sourceTree = "<group>"; };
 		5824E5E126C6183000246D19 /* TableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableView+Extension.swift"; sourceTree = "<group>"; };
-		5824E5E326C655CB00246D19 /* PublicConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicConst.swift; sourceTree = "<group>"; };
-		5824E5E526C655DB00246D19 /* PublicFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicFrame.swift; sourceTree = "<group>"; };
-		5824E5E726C66D4200246D19 /* PublicUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUtils.swift; sourceTree = "<group>"; };
-		5824E5E926CA05FB00246D19 /* AlertController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlertController+Extension.swift"; sourceTree = "<group>"; };
+		5824E5E326C655CB00246D19 /* GlobalConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConst.swift; sourceTree = "<group>"; };
+		5824E5E526C655DB00246D19 /* GlobalFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFrame.swift; sourceTree = "<group>"; };
+		5824E5E726C66D4200246D19 /* GlobalUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalUtils.swift; sourceTree = "<group>"; };
+		5824E5E926CA05FB00246D19 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extension.swift"; sourceTree = "<group>"; };
 		583D452025CBF6A500C053F7 /* UCateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UCateModel.swift; sourceTree = "<group>"; };
 		5845629427044D000089B333 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		5845629527044D000089B333 /* Encodable+ToDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Encodable+ToDictionary.swift"; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 		58CDFB5026BA33F000056527 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		58CDFB5126BA33F000056527 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		58CDFB5226BA33F000056527 /* Dictionary+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
-		58CDFB5326BA33F000056527 /* UIScrollView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extension.swift"; sourceTree = "<group>"; };
+		58CDFB5326BA33F000056527 /* UIScrollView+EmptyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScrollView+EmptyView.swift"; sourceTree = "<group>"; };
 		58CDFB5426BA33F000056527 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		58CDFB5626BA33F000056527 /* ApiClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiClass.swift; sourceTree = "<group>"; };
 		58CDFB5926BA33F000056527 /* BaseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 		58CDFB5B26BA33F000056527 /* BaseNavigationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseNavigationVC.swift; sourceTree = "<group>"; };
 		58CDFB5C26BA33F000056527 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		58CDFB5E26BA33F000056527 /* UBaseCCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UBaseCCell.swift; sourceTree = "<group>"; };
-		58CDFB6126BA33F000056527 /* PublicConfigure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicConfigure.swift; sourceTree = "<group>"; };
+		58CDFB6126BA33F000056527 /* GlobalConfigure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConfigure.swift; sourceTree = "<group>"; };
 		58CDFB6226BA33F000056527 /* GlobalTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalTools.swift; sourceTree = "<group>"; };
 		58CDFB6426BA33F000056527 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58CDFB8226BA34AC00056527 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -194,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				584D5D9625C3F27A00FA507C /* AppDelegate.swift */,
+				5846C87E26D36C4300CEF2FC /* TestViewController.xib */,
 				588738A325C558E20049ECAD /* Classes */,
 				58CDFB4726BA33F000056527 /* Others */,
 				58C3CF7226E22DE5004BDABA /* StudyApi */,
@@ -305,11 +306,11 @@
 				58CDFB5026BA33F000056527 /* UIViewController+Extension.swift */,
 				58CDFB5126BA33F000056527 /* String+Extension.swift */,
 				58CDFB5226BA33F000056527 /* Dictionary+Extension.swift */,
-				58CDFB5326BA33F000056527 /* UIScrollView+Extension.swift */,
+				58CDFB5326BA33F000056527 /* UIScrollView+EmptyView.swift */,
 				5824E5DF26C6181600246D19 /* ListView+Extension.swift */,
 				5824E5E126C6183000246D19 /* TableView+Extension.swift */,
 				58CDFB5426BA33F000056527 /* Array+Extension.swift */,
-				5824E5E926CA05FB00246D19 /* AlertController+Extension.swift */,
+				5824E5E926CA05FB00246D19 /* UIAlertController+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -337,7 +338,6 @@
 				58CDFB5A26BA33F000056527 /* WebVC.swift */,
 				58CDFB5B26BA33F000056527 /* BaseNavigationVC.swift */,
 				58CDFB5C26BA33F000056527 /* TabBarController.swift */,
-				5846C87E26D36C4300CEF2FC /* TestViewController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -354,11 +354,11 @@
 		58CDFB5F26BA33F000056527 /* Global */ = {
 			isa = PBXGroup;
 			children = (
-				58CDFB6126BA33F000056527 /* PublicConfigure.swift */,
+				58CDFB6126BA33F000056527 /* GlobalConfigure.swift */,
 				58CDFB6226BA33F000056527 /* GlobalTools.swift */,
-				5824E5E326C655CB00246D19 /* PublicConst.swift */,
-				5824E5E526C655DB00246D19 /* PublicFrame.swift */,
-				5824E5E726C66D4200246D19 /* PublicUtils.swift */,
+				5824E5E326C655CB00246D19 /* GlobalConst.swift */,
+				5824E5E526C655DB00246D19 /* GlobalFrame.swift */,
+				5824E5E726C66D4200246D19 /* GlobalUtils.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -508,13 +508,13 @@
 				58CDFB6F26BA33F100056527 /* UIImage+Extension.swift in Sources */,
 				58B4924B25CFD5220052A97C /* UCateDetailVC.swift in Sources */,
 				58B812DF262D60E500EB00C7 /* MineItemCCell.swift in Sources */,
-				5824E5E426C655CB00246D19 /* PublicConst.swift in Sources */,
+				5824E5E426C655CB00246D19 /* GlobalConst.swift in Sources */,
 				588738A125C558DC0049ECAD /* MineVC.swift in Sources */,
 				58CDFB7C26BA33F100056527 /* GlobalTools.swift in Sources */,
-				58CDFB7B26BA33F100056527 /* PublicConfigure.swift in Sources */,
+				58CDFB7B26BA33F100056527 /* GlobalConfigure.swift in Sources */,
 				58A4C11E25E1084600C1DAB5 /* UComicCHead.swift in Sources */,
 				58CDFB7526BA33F100056527 /* ApiClass.swift in Sources */,
-				5824E5E626C655DB00246D19 /* PublicFrame.swift in Sources */,
+				5824E5E626C655DB00246D19 /* GlobalFrame.swift in Sources */,
 				5845629927044D000089B333 /* Encodable+ToDictionary.swift in Sources */,
 				5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */,
 				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
@@ -524,16 +524,16 @@
 				5845629B27044D000089B333 /* APIConfig.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,
-				5824E5EA26CA05FB00246D19 /* AlertController+Extension.swift in Sources */,
+				5824E5EA26CA05FB00246D19 /* UIAlertController+Extension.swift in Sources */,
 				58A821BC260AE125002F7689 /* TrendModel.swift in Sources */,
 				588944B526F5964C00E153EB /* UIImage+System.swift in Sources */,
 				5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */,
 				58CDFB7926BA33F100056527 /* TabBarController.swift in Sources */,
 				A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */,
 				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,
-				5824E5E826C66D4200246D19 /* PublicUtils.swift in Sources */,
+				5824E5E826C66D4200246D19 /* GlobalUtils.swift in Sources */,
 				5899402B26BA39B20086C830 /* MonitorLoad.m in Sources */,
-				58CDFB7326BA33F100056527 /* UIScrollView+Extension.swift in Sources */,
+				58CDFB7326BA33F100056527 /* UIScrollView+EmptyView.swift in Sources */,
 				58B812DB262D3D9400EB00C7 /* MineCenterHeaderView.swift in Sources */,
 				58A23DC526DDC51A0012A6F1 /* NavgationBarView.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,

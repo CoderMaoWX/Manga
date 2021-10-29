@@ -1,5 +1,5 @@
 //
-//  UtilsMethod.swift
+//  GlobalUtils.swift
 //  Manga
 //
 //  Created by 610582 on 2021/8/13.
@@ -52,7 +52,7 @@ func appTopVC() -> UIViewController? {
         //先判断是否有present的控制器
         if (controller?.presentedViewController) != nil {
             //有的话直接拿到弹出控制器，省去多余的判断
-            controller = controller?.presentedViewController;
+            controller = controller?.presentedViewController
         } else {
             if controller is UINavigationController {
                 //如果是NavigationController，取最后一个控制器（当前）
@@ -93,13 +93,13 @@ func gradientColor(size: CGSize,
         return nil
     }
     let gradient = CAGradientLayer()
-    gradient.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height);
+    gradient.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
     
     var startPoint = CGPoint.zero
     if direction == .DownDiagonalLine {
         startPoint = CGPoint(x: 0.0, y: 1.0)
     }
-    gradient.startPoint = startPoint;
+    gradient.startPoint = startPoint
     
     var endPoint = CGPoint.zero
     
@@ -164,7 +164,7 @@ func createAttributedStr(textArr: [Any?],
                 range = NSRange(location: lastTextRange.location+lastTextRange.length, length: addText.count)
             }
             rangeArr.append(NSStringFromRange(range))
-            lastTextRange = range;
+            lastTextRange = range
             
         } else if tempText is UIImage {
             let imgRange = NSRangeFromString(rangeArr.last!)
@@ -336,17 +336,17 @@ func showToastText(_ message: String,
         
         let horizontalMargin: CGFloat = 12.0 //水平方向间距
         let verticalMargin: CGFloat = 15.0 //垂直方向间距
-        let maxTextWidth = kScreenWidth - horizontalMargin*4;
+        let maxTextWidth = kScreenWidth - horizontalMargin*4
         
         //提示文案
         let messageLabel = UILabel(frame: .zero)
         messageLabel.frame = CGRect(x: 0, y: 0, width: maxTextWidth, height: 0)
         messageLabel.textColor = .white
         messageLabel.font = .systemFont(ofSize: 14)
-        messageLabel.textAlignment = .center;
-        messageLabel.preferredMaxLayoutWidth = maxTextWidth;
-        messageLabel.numberOfLines = 0;
-        messageLabel.text = message;
+        messageLabel.textAlignment = .center
+        messageLabel.preferredMaxLayoutWidth = maxTextWidth
+        messageLabel.numberOfLines = 0
+        messageLabel.text = message
         messageLabel.sizeToFit()
         let msgWidth = messageLabel.bounds.size.width
         let msgHeight = messageLabel.bounds.size.height

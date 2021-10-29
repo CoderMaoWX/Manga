@@ -1,5 +1,5 @@
 //
-//  PublicConfigure.swift
+//  GlobalConfigure.swift
 //  WXSwiftDemo
 //
 //  Created by Luke on 2021/8/3.

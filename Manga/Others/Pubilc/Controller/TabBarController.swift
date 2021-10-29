@@ -22,11 +22,10 @@ class TabBarController: UITabBarController {
 		if #available(iOS 13.0, *) {
 			let barApp = UITabBarAppearance()
 			barApp.backgroundColor = .white
-			//barApp.backgroundImage = nil
+			barApp.backgroundImage = nil
 			tabBar.standardAppearance = barApp
-
 			if #available(iOS 15.0, *) {
-//				tabBar.scrollEdgeAppearance = barApp
+				tabBar.scrollEdgeAppearance = barApp
 			}
 		}
 	}

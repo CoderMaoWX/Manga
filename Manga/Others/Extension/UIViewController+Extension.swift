@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-typealias NavBarItemActionClosure = @convention(block) (_ index: Int) -> ()
+typealias NavBarItemActionClosure = @convention(block) (_ button: UIButton) -> ()
 
 extension UIViewController {
     
@@ -156,7 +156,7 @@ extension UIViewController {
         }
         guard closureObject != nil else { return }
         let closure = unsafeBitCast(closureObject, to: NavBarItemActionClosure.self)
-        closure(sender.tag)
+        closure(sender)
     }
     
 }

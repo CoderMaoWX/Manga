@@ -70,7 +70,7 @@ func showAlertMultiple(title: String?, message: String?,
 }
 
 ///显示AlertToast文案
-func showAlertToast(message: String) {
+func showAlertControllerToast(message: String) {
     ///在主线程中显示UI
     DispatchQueue.main.async {
         let alertController = UIAlertController(title: nil, message: message)
@@ -100,7 +100,7 @@ func showAlertToast(message: String) {
 
 extension UIAlertController {
     
-    ///点击系统UIAlertController弹框背景移除弹框
+    ///点击系统UIAlertController弹框背景移除弹框, 注意此方法需要在弹出框调用present显示后调用
     public func enableDismissAtOutside() {
         let subviews = UIApplication.shared.keyWindow?.subviews
         guard let _subviews = subviews, _subviews.count > 0 else {

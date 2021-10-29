@@ -47,21 +47,21 @@ class TestViewController: UIViewController {
         view.addSubview(navgationBarView)
         navgationBarView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(view)
-            $0.height.equalTo(statusAddNavBarHeight)
+            $0.height.equalTo(kStatusAddNavBarHeight)
         }
         
-        navgationBarView.setNavBarLeftItem(info: [UIImage(named:"mghome_like_select")!, "Message"]) { idx in
+        navgationBarView.setLeftItem(info: [UIImage(named:"like_select")!, "Message"]) { button in
             self.testloadData()
-            //showAlertToast(message: "左侧按钮: \(idx)")
+            //showAlertControllerToast(message: "左侧按钮: \(button)")
         }
         
-        navgationBarView.setNavBarRightItem(infoArr: ["Bag", UIImage(named: "ImageSelectedSmallOn")!]) { idx in
-            showAlertToast(message: "右侧按钮: \(idx)")
+        navgationBarView.setRightItem(infoArr: ["Bag", UIImage(named: "selected_on")!]) { button in
+            showAlertControllerToast(message: "右侧按钮: \(button)")
         }
     }
     
     lazy var navgationBarView: NavgationBarView = {
-        let navgationView = NavgationBarView(nil)
+        let navgationView = NavgationBarView(backAction: nil)
         navgationView.title = "我是标题"
         return navgationView
     }()
@@ -249,7 +249,7 @@ class TestViewController: UIViewController {
     func testAlert() {
         setNavBarLeftItem(info: ["测试"]) { _ in
             hideLoading(from: self.view)
-            showAlertToast(message: "休息一下,马上回来,休息一下,马上回来")
+            showAlertControllerToast(message: "休息一下,马上回来,休息一下,马上回来")
             
         }.first!.redDotValue = "18"
         

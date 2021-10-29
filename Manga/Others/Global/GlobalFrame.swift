@@ -1,5 +1,5 @@
 //
-//  WXFrameDefiner.swift
+//  GlobalFrame.swift
 //  Manga
 //
 //  Created by 610582 on 2021/8/13.
@@ -29,27 +29,28 @@ var isiPhoneXScreen: Bool {
     return deviceSafeAreaInsets().bottom > 0
 }
 
-///状态栏高度
-var statusBarHeight: CGFloat {
+///屏幕底部安全间距
+var kBottomSafeArea: CGFloat {
+    return deviceSafeAreaInsets().bottom
+}
+
+///状态栏高度: (刘海屏: 44, 非刘海屏: 20)
+var kStatusBarHeight: CGFloat {
     return UIApplication.shared.statusBarFrame.size.height
 }
 
-///导航栏栏高度
-var navBarHeight: CGFloat {
+///导航栏栏高度: (默认高度: 44)
+var kNavigationBarHeight: CGFloat {
     return appTopVC()?.navigationController?.navigationBar.frame.size.height ?? 44
 }
 
 /// 导航栏 + 状态栏 = 的总高度
-var statusAddNavBarHeight: CGFloat {
-    return statusBarHeight + navBarHeight
+var kStatusAddNavBarHeight: CGFloat {
+    return kStatusBarHeight + kNavigationBarHeight
 }
 
-///系统TabBar栏高度
-var tabBarHeight: CGFloat {
+///系统TabBar栏高度: (刘海屏: 49+34=83, 非刘海屏: 49)
+var kTabBarHeight: CGFloat {
     return appTopVC()?.tabBarController?.tabBar.bounds.size.height ?? 49
 }
 
-///屏幕底部安全间距
-var bottomSafeArea: CGFloat {
-    return deviceSafeAreaInsets().bottom
-}
