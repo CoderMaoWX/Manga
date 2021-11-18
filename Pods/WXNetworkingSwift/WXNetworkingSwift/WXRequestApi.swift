@@ -2,12 +2,16 @@
 //  WXRequestApi.swift
 //  WXNetworkingSwift
 //
-//  Created by 610582 on 2021/8/20.
+//  Created by CoderMaoWX on 2021/8/20.
 //
 
 import Foundation
 import Alamofire
 import KakaJSON
+
+// 另起别名为了桥接作用
+public typealias WXDataRequest = DataRequest
+public typealias WXDownloadRequest = DownloadRequest
 
 public typealias WXDictionaryStrAny = Dictionary<String, Any>
 public typealias WXAnyObjectBlock = (AnyObject) -> ()
@@ -62,7 +66,7 @@ public class WXBaseRequest: NSObject {
     /// - Returns: 求Session对象
     @discardableResult
     public func baseRequestBlock(successClosure: WXAnyObjectBlock?,
-                          failureClosure: WXAnyObjectBlock?) -> DataRequest {
+                          failureClosure: WXAnyObjectBlock?) -> WXDataRequest {
         let dataRequest = AF.request(requestURL,
                                      method: requestMethod,
                                      parameters: finalParameters,
@@ -92,7 +96,7 @@ public class WXBaseRequest: NSObject {
     public func baseUploadFile(successClosure: WXAnyObjectBlock?,
                         failureClosure: WXAnyObjectBlock?,
                         formDataClosure: @escaping ((MultipartFormData) -> Void),
-                        uploadClosure: @escaping WXProgressBlock) -> DataRequest {
+                        uploadClosure: @escaping WXProgressBlock) -> WXDataRequest {
         
         let dataRequest = AF.upload(
                     multipartFormData: formDataClosure,
@@ -122,7 +126,7 @@ public class WXBaseRequest: NSObject {
     @discardableResult
     public func baseDownloadFile(successClosure: WXAnyObjectBlock?,
                           failureClosure: WXAnyObjectBlock?,
-                          progressClosure: @escaping WXProgressBlock) -> DownloadRequest {
+                          progressClosure: @escaping WXProgressBlock) -> WXDownloadRequest {
 
         let dataRequest = AF.download(requestURL,
                                       method: requestMethod,
@@ -214,7 +218,7 @@ public class WXRequestApi: WXBaseRequest {
     /// - Parameter responseBlock: 请求回调
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
-    public func startRequest(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
+    public func startRequest(responseBlock: WXNetworkResponseBlock?) -> WXDataRequest? {
         guard let _ = URL(string: requestURL) else {
             WXDebugLog("\n❌❌❌无效的 URL 请求地址= \(requestURL)")
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
@@ -238,7 +242,7 @@ public class WXRequestApi: WXBaseRequest {
             if retryCount == 0 {
                 WXDebugLog("\n👉👉👉已发出网络请求=", requestURL)
             } else {
-                WXDebugLog("\n👉👉👉请求失败,第 \(retryCount) 次尝试重新请求=", requestURL)
+                WXDebugLog("\n👉👉👉请求失败,第【 \(retryCount) 】次尝试重新请求=", requestURL)
             }
         }
         return dataRequest
@@ -248,7 +252,7 @@ public class WXRequestApi: WXBaseRequest {
     /// - Parameter responseBlock: 请求回调
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
-    public func uploadFile(responseBlock: @escaping WXNetworkResponseBlock) -> DataRequest? {
+    public func uploadFile(responseBlock: WXNetworkResponseBlock?) -> WXDataRequest? {
         guard let _ = URL(string: requestURL) else {
             WXDebugLog("\n❌❌❌无效的 URL 上传地址= \(requestURL)")
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
@@ -295,7 +299,7 @@ public class WXRequestApi: WXBaseRequest {
             if retryCount == 0 {
                 WXDebugLog("\n👉👉👉已开始上传文件=", requestURL)
             } else {
-                WXDebugLog("\n👉👉👉上传文件失败,第 \(retryCount) 次尝试重新上传=", requestURL)
+                WXDebugLog("\n👉👉👉上传文件失败,第【 \(retryCount) 】次尝试重新上传=", requestURL)
             }
         }
         return dataRequest
@@ -305,7 +309,7 @@ public class WXRequestApi: WXBaseRequest {
     /// - Parameter responseBlock: 请求回调
     /// - Returns: 请求任务对象(可用来取消任务)
     @discardableResult
-    public func downloadFile(responseBlock: @escaping WXNetworkResponseBlock) -> DownloadRequest? {
+    public func downloadFile(responseBlock: @escaping WXNetworkResponseBlock) -> WXDownloadRequest? {
         guard let _ = URL(string: requestURL) else {
             WXDebugLog("\n❌❌❌无效的 URL 下载地址= \(requestURL)")
             configResponseBlock(responseBlock: responseBlock, responseObj: nil)
@@ -327,7 +331,7 @@ public class WXRequestApi: WXBaseRequest {
             if retryCount == 0 {
                 WXDebugLog("\n👉👉👉已开始下载文件=", requestURL)
             } else {
-                WXDebugLog("\n👉👉👉下载文件失败,第 \(retryCount) 次尝试重新下载=", requestURL)
+                WXDebugLog("\n👉👉👉下载文件失败,第【 \(retryCount) 】次尝试重新下载=", requestURL)
             }
         }
         return dataRequest
@@ -349,19 +353,19 @@ public class WXRequestApi: WXBaseRequest {
         return nil
     }
     
-    fileprivate func configResponseBlock(responseBlock: @escaping WXNetworkResponseBlock, responseObj: AnyObject?) {
+    fileprivate func configResponseBlock(responseBlock: WXNetworkResponseBlock?, responseObj: AnyObject?) {
 		let responseModel = configResponseModel(responseObj: responseObj)
-		responseBlock(responseModel)
+		responseBlock?(responseModel)
 		handleMulticenter(type: .DidCompletion, responseModel: responseModel)
 
-        // code = 15: is manual cancelled
+        // code = 15 (isExplicitlyCancelledError): is manual cancelled
 		if let retryTuple = retryWhenFailTuple {
-			if retryCount < retryTuple.times, let error = responseObj as? Error, error._code != 15 {
-				DispatchQueue.main.asyncAfter(deadline: (.now() + retryTuple.delay)) {
-					self.retryCount += 1
-					self.startRequest(responseBlock: responseBlock)
-				}
-			}
+            if retryCount < retryTuple.times, let error = responseObj as? AFError, error.isExplicitlyCancelledError == false {
+                DispatchQueue.main.asyncAfter(deadline: (.now() + retryTuple.delay)) {
+                    self.retryCount += 1
+                    self.startRequest(responseBlock: responseBlock)
+                }
+            }
 		}
     }
     
@@ -378,9 +382,7 @@ public class WXRequestApi: WXBaseRequest {
     }
 
 	///检查请求成功状态
-	fileprivate func checkingSuccessStatus(responseDict: WXDictionaryStrAny, rspModel: WXResponseModel) -> Bool {
-		var hasMapSuccess = false
-
+	fileprivate func checkingSuccessStatus(responseDict: WXDictionaryStrAny, rspModel: WXResponseModel) {
 		if let successKeyValue = successStatusMap ?? WXRequestConfig.shared.successStatusMap {
 			let matchKey: String = successKeyValue.key
 			let mapSuccessValue: String = successKeyValue.value
@@ -397,30 +399,42 @@ public class WXRequestApi: WXBaseRequest {
 				}
 				//寻找匹配请求成功的关键key
 				if lastMatchValue is String, (lastMatchValue as! String) == mapSuccessValue {
-					hasMapSuccess = true
 					rspModel.isSuccess = true
 					rspModel.responseCode = Int(lastMatchValue as! String)
 
 				} else if lastMatchValue is Int, (lastMatchValue as! Int) == Int(mapSuccessValue) {
-					hasMapSuccess = true
 					rspModel.isSuccess = true
 					rspModel.responseCode = lastMatchValue as? Int
 				}
 			} else if let responseCode = responseDict[matchKey] {
 				//2.采用直接查找匹配请求成功标识
 				if responseCode is String, (responseCode as! String) == mapSuccessValue {
-					hasMapSuccess = true
 					rspModel.isSuccess = true
 					rspModel.responseCode = Int(responseCode as! String)
 
 				} else if responseCode is Int, (responseCode as! Int) == Int(mapSuccessValue) {
-					hasMapSuccess = true
 					rspModel.isSuccess = true
 					rspModel.responseCode = responseCode as? Int
 				}
 			}
 		}
-		return hasMapSuccess
+        //取返回的提示信息
+        if let msgTipKeyOrFailInfo = WXRequestConfig.shared.messageTipKeyAndFailInfo {
+            if let responseMsg = responseDict[ (msgTipKeyOrFailInfo.tipKey) ] {
+                rspModel.responseMsg = responseMsg as? String
+            } else {
+                rspModel.responseMsg = msgTipKeyOrFailInfo.defaultTip
+            }
+        }
+        //如果失败时没有返回Msg,则填一个全局默认提示信息
+        if rspModel.isSuccess == false {
+            if rspModel.responseMsg == nil {
+                rspModel.responseMsg = configFailMessage
+            }
+            let domain = rspModel.responseMsg ?? KWXRequestFailueDefaultMessage
+            let code = rspModel.responseCode ?? -444
+            rspModel.error = NSError(domain: domain, code: code, userInfo: responseDict)
+        }
 	}
 
 	///配置数据响应回调模型
@@ -435,12 +449,13 @@ public class WXRequestApi: WXBaseRequest {
 
         var code: Int? = nil
         var domain: String = configFailMessage
-        if let error = responseObj as? Error {
+        if let error = responseObj as? AFError {
+            code = error.responseCode ?? error._code
+            domain = error.errorDescription ?? configFailMessage
+            
+        } else if let error = responseObj as? Error {
             code = error._code
-            domain = error._domain
-        } else if let error = responseObj as? NSError {
-            code = error.code
-            domain = error.domain
+            domain = error._domain ?? configFailMessage
         } else if responseObj == nil {
             code = -444
         }
@@ -454,22 +469,10 @@ public class WXRequestApi: WXBaseRequest {
             let responseDict = packagingResponseObj(responseObj: responseObj!, responseModel: rspModel)
             rspModel.responseDict = responseDict
             
-            let hasMapSuccess = checkingSuccessStatus(responseDict: responseDict, rspModel: rspModel)
+            checkingSuccessStatus(responseDict: responseDict, rspModel: rspModel)
 
             if rspModel.isSuccess {
                 rspModel.parseResponseKeyPathModel(requestApi: self, responseDict: responseDict)
-                
-            } else if hasMapSuccess {
-                if let msgTipKeyOrFailInfo = WXRequestConfig.shared.messageTipKeyAndFailInfo {
-                    if let responseMsg = responseDict[ (msgTipKeyOrFailInfo.tipKey) ] {
-                        rspModel.responseMsg = responseMsg as? String
-                    } else {
-                        rspModel.responseMsg = msgTipKeyOrFailInfo.defaultTip
-                    }
-                }
-                let domain = rspModel.responseMsg ?? configFailMessage
-                let code = rspModel.responseCode ?? -444
-                rspModel.error = NSError(domain: domain, code: code, userInfo: responseDict)
             }
         }
         if rspModel.isCacheData == false {
@@ -629,8 +632,6 @@ public class WXRequestApi: WXBaseRequest {
             }
         }
     }
-    
-    //MARK: - DealWithCache
     
     lazy var cacheKey: String = {
         if cacheResponseBlock != nil || autoCacheResponse {

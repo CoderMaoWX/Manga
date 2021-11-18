@@ -2,7 +2,7 @@
 //  WXRequestTools.swift
 //  WXNetworkingSwift
 //
-//  Created by 610582 on 2021/8/21.
+//  Created by CoderMaoWX on 2021/8/21.
 //
 
 import Foundation
@@ -122,7 +122,6 @@ public class WXRequestTools {
     public static func appendingPrintfLogFooter(responseModel: WXResponseModel) -> String {
         if let responseDict = responseModel.responseDict {
             let jsonData = try? JSONSerialization.data(withJSONObject: responseDict, options: .prettyPrinted)
-            
             var responseJson = responseDict.description
             if let jsonData = jsonData {
                 responseJson = String(data: jsonData, encoding: .utf8) ?? responseJson
@@ -160,7 +159,7 @@ public class WXRequestTools {
     ///缓存目录
     internal static func fetchCachePath() -> String {
         let cacheDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).last! as NSString
-        var cachePath = cacheDirectory.appendingPathComponent(kWXNetworkResponseCache)
+        let cachePath = cacheDirectory.appendingPathComponent(kWXNetworkResponseCache)
         return cachePath
     }
     

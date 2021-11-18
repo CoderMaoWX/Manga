@@ -7,7 +7,6 @@
 //  测试类
 
 import UIKit
-import Alamofire
 import SnapKit
 import FDFullscreenPopGesture
 ///判断文件类型
@@ -17,11 +16,11 @@ import WXNetworkingSwift
 
 class TestViewController: UIViewController {
     
-    var requestTask: DataRequest? = nil;
+    var requestTask: WXDataRequest? = nil;
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //ApiClass.studyApi()
-        
+        requestTask?.cancel()
         testDownFile()
     }
     
@@ -86,21 +85,6 @@ class TestViewController: UIViewController {
             debugLog("批量请求回调", batchApi.responseDataArray)
         }, waitAllDone: false)
         
-    }
-    
-    func testAFMethod() {
-        let url = "https://httpbin.org/image"
-        AF.request(url,
-                   method: .get,
-                   parameters: nil,
-                   headers: ["accept" : "image/webp"]).responseJSON { response in
-                    switch response.result {
-                    case .success(let json):
-                        debugLog(json)
-                    case .failure(let error):
-                        debugLog(error)
-                    }
-                   }
     }
     
     func testloadData() {
