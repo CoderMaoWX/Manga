@@ -36,7 +36,7 @@ PODS:
   - SnapKitExtend (1.1.0):
     - SnapKit
   - SwiftyJSON (5.0.1)
-  - WXNetworkingSwift (0.2.1):
+  - WXNetworkingSwift (0.2.2):
     - Alamofire
     - KakaJSON
   - YYCache (1.0.4)
@@ -106,7 +106,7 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SnapKitExtend: aa30cf37196195fae9c4354686cc7710184ebfcc
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
-  WXNetworkingSwift: 1fada059b15a4ff1ea9b9acbc9afc163752bd67e
+  WXNetworkingSwift: 96ac356ea8d76bf385c9b3c78b9c5ba8d6f37caf
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
 PODFILE CHECKSUM: 01a8ec1258e52ef724d3f0a12e6acd19b3d6b0b8
