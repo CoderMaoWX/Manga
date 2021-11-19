@@ -95,7 +95,7 @@ func debugLog(_ message: Any...,
               function: String = #function,
               lineNumber: Int = #line) {
     #if DEBUG
-        let fileName = (file as NSString).lastPathComponent
+        let fileName = (file as NSString).lastPathComponent as NSString
         //print("[\(fileName):funciton:\(function):line:\(lineNumber)]- \(message)")
     
         var appdengLog: String = ""
@@ -104,7 +104,7 @@ func debugLog(_ message: Any...,
             appdengLog += "\(log)" + ( (idx != 1) ? " " : "" )
             idx -= 1
         }
-        print("[\(fileName): line:\(lineNumber)]", appdengLog)
+    print("[\(fileName.deletingPathExtension): line:\(lineNumber)]", appdengLog)
     #endif
 }
 

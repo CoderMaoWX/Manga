@@ -12,6 +12,10 @@ let kButtonSpace = 12.0
 
 class NavgationBarView: UIView {
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        debugLog("NavgationBarView touchesBegan, superview:", superview!)
+    }
+    
     ///导航标题
     var title: String? {
         willSet {
