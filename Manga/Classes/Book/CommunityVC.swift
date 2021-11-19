@@ -77,10 +77,11 @@ class CommunityVC: BaseVC {
         
         let url = "https://jp.forum.1kxun.mobi/api/forum/specialPosts"
         let request = WXRequestApi(url, method: .get, parameters: dict)
-        request.loadingSuperView = view
-        request.successStatusMap = (key: "status",  value: "success")
-        request.parseModelMap = (parseKey: "data" , modelType: TrendInfoModel.self)
-        
+        request.successStatusMap = (key: "status", value: "success")
+        request.parseModelMap = (parseKey: "data", modelType: TrendInfoModel.self)
+        if tableView.mj_header?.state != .refreshing {
+            request.loadingSuperView = view
+        }
         request.startRequest { [weak self] (responseModel) in
             let listModel =  (responseModel.parseKeyPathModel as? [TrendInfoModel]) ?? []
             if firstPage {

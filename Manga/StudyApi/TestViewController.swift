@@ -39,6 +39,38 @@ class TestViewController: UIViewController {
         super.viewDidLoad()
         fd_prefersNavigationBarHidden = true
         configNavgationView()
+        
+        if #available(iOS 15.0, *) {
+            var conf = UIButton.Configuration.borderedTinted()
+            /// 设置图片的摆放（图片在上，则文字在下）
+            conf.imagePlacement = .bottom
+            /// 设置图片和文字的间距
+            conf.imagePadding = 20
+            
+           let action = UIAction(title: "UIAction", image: UIImage(named: "acg_comment"), identifier: .pasteAndGo, discoverabilityTitle: "discoverabilityTitle", attributes: .destructive, state: .on) { action in
+                debugLog("\nUIAction点击事件", action)
+            }
+            let btn = UIButton.init(configuration: conf, primaryAction: nil)
+            btn.addTarget(self, action: #selector(myUIAction), for: .touchUpInside)
+            btn.setImage(UIImage(named: "refresh_icon"), for: .normal)
+            btn.setTitle("刷新", for: .normal)
+            btn.frame = CGRect(x: 100, y: 200, width: 100, height: 100)
+            btn.backgroundColor = .groupTableViewBackground
+            view.addSubview(btn)
+        }
+    }
+    
+    @objc func myUIAction(button: UIButton) {
+        debugLog("\n点击事件myUIAction", button)
+        if #available(iOS 15.0, *) {
+            if button.configuration?.imagePlacement == .trailing {
+                button.configuration?.imagePlacement = .top
+            } else {
+                button.configuration?.imagePlacement = .trailing
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
     ///自定义导航栏

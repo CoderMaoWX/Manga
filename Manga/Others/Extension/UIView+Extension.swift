@@ -168,7 +168,7 @@ extension UIView {
                 dotLabel.sizeToFit()
                 let dotH = dotLabel.bounds.size.height
                 var dotW = dotLabel.bounds.size.width + (text.count > 1 ? 5 : 0)
-                if dotW < dotH {  dotW = dotH }
+                if dotW < dotH { dotW = dotH }
                 dotLabel.layer.cornerRadius = dotH / 2
                 dotLabel.layer.masksToBounds = true
                 dotLabel.clipsToBounds = true
@@ -184,10 +184,10 @@ extension UIView {
         }
     }
     
-    /// 设置: 红点数字提示
+    /// 设置: 红点数字提示 (控制偏移位置)
     /// - Parameters:
     ///   - number: 提示的数字
-    ///   - offset: 在控件右上角的基础上进行 偏移控制
+    ///   - offset: 在控件右上角中心位置的基础上进行 偏移控制
     func redDotValue(_ number: String?, offset: CGPoint) {
         redDotValue = number
         let dotLabel = viewWithTag(kDotLabelTag)

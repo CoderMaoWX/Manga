@@ -631,8 +631,10 @@ extension UIScrollView {
                 }
             }
         } else { ///当前页面是 UIScrollView 子视图
-            if subviews.count > 0 {
-                return false
+            for subView in subviews {
+                if subView.isHidden == false || subView.alpha != 0.0 {
+                    return false
+                }
             }
         }
         return true

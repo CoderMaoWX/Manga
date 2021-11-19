@@ -110,7 +110,7 @@ func debugLog(_ message: Any...,
 
 ///初始化网络监听器
 let reachabilityNetwork: NetworkReachabilityManager? = {
-    return NetworkReachabilityManager(host: "https://www.baidu.com")
+    return NetworkReachabilityManager.init()
 }()
 
 ///开启网络监听, 网络变化回调
@@ -128,5 +128,5 @@ func networkListen() {
             break
         }
     })
-    debugLog("监听网络: \(String(describing: status))")
+    debugLog("已开始监听网络: \(String(describing: status))")
 }

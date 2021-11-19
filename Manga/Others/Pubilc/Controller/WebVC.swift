@@ -168,10 +168,10 @@ extension WebVC: WKNavigationDelegate, WKUIDelegate {
                 decisionHandler(.cancel)
                 return
             }
-            guard url == "jp.forum.1kxun.com" else {
-                decisionHandler(.cancel)
-                return
-            }
+//            guard url == "jp.forum.1kxun.com" else {
+//                decisionHandler(.cancel)
+//                return
+//            }
             debugLog("点击图片 IMAGEPATH =  \(url)")
             navigationController?.pushViewController(PreviewImgVC(previewURL: tapStr), animated: true)
             
