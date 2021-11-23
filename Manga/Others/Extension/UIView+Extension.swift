@@ -74,18 +74,34 @@ extension UIView {
     @discardableResult
     func addLineTo(position: WXDrawLinePosition, thinSize: CGFloat) -> UIView {
         let line = UIView()
+        line.backgroundColor = .groupTableViewBackground
+        addSubview(line)
+        
         switch position {
         case .top:
-            line.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: thinSize)
-        
+            //line.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: thinSize)
+            line.snp.makeConstraints { make in
+                make.top.leading.width.equalTo(self)
+                make.height.equalTo(thinSize)
+            }
         case .left:
-            line.frame = CGRect(x: 0, y: 0, width: thinSize, height: frame.size.height)
-            
+            //line.frame = CGRect(x: 0, y: 0, width: thinSize, height: frame.size.height)
+            line.snp.makeConstraints { make in
+                make.top.leading.height.equalTo(self)
+                make.width.equalTo(thinSize)
+            }
         case .bottom:
-            line.frame = CGRect(x: 0, y: frame.size.height-thinSize, width: frame.size.width, height: thinSize)
-            
+            //line.frame = CGRect(x: 0, y: frame.size.height-thinSize, width: frame.size.width, height: thinSize)
+            line.snp.makeConstraints { make in
+                make.leading.bottom.width.equalTo(self)
+                make.height.equalTo(thinSize)
+            }
         case .right:
-            line.frame = CGRect(x: frame.size.width-thinSize, y: 0, width: thinSize, height: frame.size.height)
+            //line.frame = CGRect(x: frame.size.width-thinSize, y: 0, width: thinSize, height: frame.size.height)
+            line.snp.makeConstraints { make in
+                make.leading.trailing.height.equalTo(self)
+                make.width.equalTo(thinSize)
+            }
         }
         return line
     }
