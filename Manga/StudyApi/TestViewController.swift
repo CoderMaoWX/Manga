@@ -43,19 +43,16 @@ class TestViewController: UIViewController {
             "ct"    : "feed",
             "a"     : "search_topic",
             "c"     : "weicoabroad",
-            "i"     : "xxx",
             "s"     : "3f16726c",
             "time"  : "1606139954516",
-            "udid"  : "xx-xx-xx-xx-xxx",
-            "auth"  : "xxx",
             "lang"  : "en-CN",
             "version" : "409",
-            "user_id" : "xxx",
         ]
         let api = WXRequestApi(url, method: .get, parameters: param)
         api.timeOut = 40
         api.loadingSuperView = view
         api.successStatusMap = (key: "retcode", value: "0")
+        api.parseModelMap = (parseKey: "data", modelType: WeiboModel.self)
         api.startRequest { [weak self] responseModel in
             self?.textView.text = responseModel.responseDict?.debugDescription
         }
@@ -82,7 +79,7 @@ class TestViewController: UIViewController {
     }
     
     ///测试不发请求,直接返回赋值的 testResponseJson
-    func testloadData() {
+    func testJsonData() {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
 		let param: [String : Any] = ["sexType" : 1]
 
@@ -139,7 +136,6 @@ class TestViewController: UIViewController {
                     self.view.backgroundColor = .init(patternImage: image)
                 }
             }
-            debugLog(" ==== 测试上传文件请求完成 ======")
         }
     }
     
@@ -172,7 +168,6 @@ class TestViewController: UIViewController {
                     try? rspData.write(to: url)
                 }
             }
-            debugLog(" ==== 测试下载文件请求完成 ======")
         }
     }
     

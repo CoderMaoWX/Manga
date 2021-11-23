@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		581DDE80274CE2F30043FCC7 /* WeiboModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DDE7F274CE2F30043FCC7 /* WeiboModel.swift */; };
 		5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5DF26C6181600246D19 /* ListView+Extension.swift */; };
 		5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E126C6183000246D19 /* TableView+Extension.swift */; };
 		5824E5E426C655CB00246D19 /* GlobalConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E326C655CB00246D19 /* GlobalConst.swift */; };
@@ -63,6 +64,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		581DDE7F274CE2F30043FCC7 /* WeiboModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeiboModel.swift; sourceTree = "<group>"; };
 		5824E5DF26C6181600246D19 /* ListView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListView+Extension.swift"; sourceTree = "<group>"; };
 		5824E5E126C6183000246D19 /* TableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableView+Extension.swift"; sourceTree = "<group>"; };
 		5824E5E326C655CB00246D19 /* GlobalConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConst.swift; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 			children = (
 				58CDFB5626BA33F000056527 /* ApiClass.swift */,
 				5846C87D26D36C4300CEF2FC /* TestViewController.swift */,
+				581DDE7F274CE2F30043FCC7 /* WeiboModel.swift */,
 			);
 			path = StudyApi;
 			sourceTree = "<group>";
@@ -504,6 +507,7 @@
 				58A821BC260AE125002F7689 /* TrendModel.swift in Sources */,
 				588944B526F5964C00E153EB /* UIImage+System.swift in Sources */,
 				5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */,
+				581DDE80274CE2F30043FCC7 /* WeiboModel.swift in Sources */,
 				58CDFB7926BA33F100056527 /* TabBarController.swift in Sources */,
 				A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */,
 				583D452125CBF6A500C053F7 /* UCateModel.swift in Sources */,
