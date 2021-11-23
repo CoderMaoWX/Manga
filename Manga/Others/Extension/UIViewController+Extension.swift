@@ -82,8 +82,8 @@ extension UIViewController {
     ///   - actionClosure: 按钮的回调事件
     /// - Returns: 返回多个: UIButton
     @discardableResult
-    func setNavBarRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
-        let tuples = createNavBarItems(object: infoArr, itemType:2, actionClosure: actionClosure)
+    func setNavBarRightItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
+        let tuples = createNavBarItems(object: info, itemType:2, actionClosure: actionClosure)
         navigationItem.rightBarButtonItems = tuples.0
         return tuples.1
     }
@@ -138,8 +138,12 @@ extension UIViewController {
             let barItem = UIBarButtonItem(customView: button)
             let spaceItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
             spaceItem.width = 15
-            barItemArr.insert(contentsOf: [barItem], at: 0)
             barButtonArr.append(button)
+            if itemType == 1 {
+                barItemArr.append(barItem)
+            } else {
+                barItemArr.insert(contentsOf: [barItem], at: 0)
+            }
         }
         return (barItemArr, barButtonArr)
     }

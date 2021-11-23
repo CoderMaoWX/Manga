@@ -19,11 +19,11 @@ class BaseNavigationVC: UINavigationController {
     // 设置NavigationBar背景颜色, 字体颜色, 字体大小
     func initialize()  {
         let navBar = UINavigationBar.appearance()
-        navBar.barTintColor =  UIColor.white
-        navBar.tintColor =  UIColor.white
+        navBar.barTintColor =  .white
+        navBar.tintColor = .white
         navBar.titleTextAttributes = [
             .font : UIFont.boldSystemFont(ofSize: 18),
-            .foregroundColor : UIColor.white
+            //.foregroundColor : UIColor.white
         ]
     }
 

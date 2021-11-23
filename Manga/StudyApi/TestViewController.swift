@@ -14,15 +14,27 @@ import MobileCoreServices
 import WXNetworkingSwift
 import SwiftUI
 
-
 class TestViewController: UIViewController {
     
     var requestTask: WXDataRequest? = nil;
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        requestTask?.cancel()
-        testloadData()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configNavgationView()
     }
+    
+    ///导航栏事件
+    func configNavgationView() {
+        navigationItem.title = "我是标题"
+        setNavBarLeftItem(info: [UIImage(named:"like_select")!, "Message"]) { button in
+            self.testGetRequest()
+        }
+        setNavBarRightItem(info: ["Bag", UIImage(named: "selected_on")!]) { button in
+            showAlertControllerToast(message: "右侧按钮: \(button)")
+        }
+    }
+    
+    //MARK: ----- 测试请求代码 -----
     
     func testGetRequest() {
         let url = "https://weibointl.api.weibo.cn/portal.php"
@@ -43,51 +55,12 @@ class TestViewController: UIViewController {
         let api = WXRequestApi(url, method: .get, parameters: param)
         api.timeOut = 40
         api.loadingSuperView = view
+        api.successStatusMap = (key: "retcode", value: "0")
         api.startRequest { [weak self] responseModel in
             self?.textView.text = responseModel.responseDict?.debugDescription
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        fd_prefersNavigationBarHidden = true
-        configNavgationView()
-    }
-    
-    lazy var textView: UITextView = {
-        let textView = UITextView()
-        textView.frame = CGRect(x: 0, y: 88, width: view.bounds.size.width, height: view.bounds.size.height)
-        textView.textColor = .black
-        textView.isEditable = false
-        view.addSubview(textView)
-        return textView
-    }()
-    
-    ///自定义导航栏
-    func configNavgationView() {
-        view.addSubview(navgationBarView)
-        navgationBarView.snp.makeConstraints {
-            $0.top.leading.trailing.equalTo(view)
-            $0.height.equalTo(kStatusAddNavBarHeight)
-        }
-        
-        navgationBarView.setLeftItem(info: [UIImage(named:"like_select")!, "Message"]) { button in
-            self.testGetRequest()
-        }
-        
-        navgationBarView.setRightItem(infoArr: ["Bag", UIImage(named: "selected_on")!]) { button in
-            showAlertControllerToast(message: "右侧按钮: \(button)")
-        }
-    }
-    
-    lazy var navgationBarView: NavgationBarView = {
-        let navgationView = NavgationBarView(backAction: nil)
-        navgationView.title = "我是标题"
-        return navgationView
-    }()
-
-    //MARK: ----- 测试代码 -----
-    
     func testBatchData() {
         let url0 = "http://123.207.32.32:8000/home/multidata"
         let api0 = WXRequestApi(url0, method: .get, parameters: nil)
@@ -108,15 +81,16 @@ class TestViewController: UIViewController {
         
     }
     
+    ///测试不发请求,直接返回赋值的 testResponseJson
     func testloadData() {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
 		let param: [String : Any] = ["sexType" : 1]
 
         let api = WXRequestApi(url, method: .get, parameters: param)
-//        api.testResponseJson =
-//"""
-//		{"data":{"message":"成功","stateCode":1,"returnData":{"galleryItems":[],"comicLists":[{"comics":[{"subTitle":"少年 搞笑","short_description":"突破次元壁的漫画！","is_vip":4,"cornerInfo":"190","comicId":181616,"author_name":"壁水羽","cover":"https://cover-oss.u17i.com/2021/07/12647_1625125865_1za73F2a4fD1.sbig.jpg","description":"漫画角色发现自己生活在一个漫画的笼子里，于是奋起反抗作者，面对角色的不配合，作者不得已要不断更改题材，恐怖，魔幻，励志轮番上阵，主角们要一一面对，全力通关","name":"笼中人","tags":["少年","搞笑"]}],"comicType":6,"sortId":"86","newTitleIconUrl":"https://image.mylife.u17t.com/2017/07/10/1499657929_N7oo9pPOhaYH.png","argType":3,"argValue":8,"titleIconUrl":"https://image.mylife.u17t.com/2017/08/29/1503986106_7TY5gK000yjZ.png","itemTitle":"强力推荐作品","description":"更多","canedit":0,"argName":"topic"}],"textItems":[],"editTime":"0"}},"code":1}
-//"""
+        api.testResponseJson =
+"""
+		{"data":{"message":"成功","stateCode":1,"returnData":{"galleryItems":[],"comicLists":[{"comics":[{"subTitle":"少年 搞笑","short_description":"突破次元壁的漫画！","is_vip":4,"cornerInfo":"190","comicId":181616,"author_name":"壁水羽","cover":"https://cover-oss.u17i.com/2021/07/12647_1625125865_1za73F2a4fD1.sbig.jpg","description":"漫画角色发现自己生活在一个漫画的笼子里，于是奋起反抗作者，面对角色的不配合，作者不得已要不断更改题材，恐怖，魔幻，励志轮番上阵，主角们要一一面对，全力通关","name":"笼中人","tags":["少年","搞笑"]}],"comicType":6,"sortId":"86","newTitleIconUrl":"https://image.mylife.u17t.com/2017/07/10/1499657929_N7oo9pPOhaYH.png","argType":3,"argValue":8,"titleIconUrl":"https://image.mylife.u17t.com/2017/08/29/1503986106_7TY5gK000yjZ.png","itemTitle":"强力推荐作品","description":"更多","canedit":0,"argName":"topic"}],"textItems":[],"editTime":"0"}},"code":1}
+"""
 
         api.timeOut = 40
         api.loadingSuperView = view
@@ -229,22 +203,6 @@ class TestViewController: UIViewController {
         return "application/octet-stream"
     }
     
-    func testType() {
-    //        debugLog(self)
-    //        debugLog(type(of: self))
-    //        debugLog(TestViewController.Type.self)
-        
-        //let dType: ComicListModel.Type = ComicListModel.self
-//        let myBook = Book()
-//        let person = ZhangSan<Book>()
-//        let something1 = person.buySome(number: type(of: myBook))
-//        let something2 = person.sallSome(number: 10)
-//        something2
-//        person.book
-//        var parseModelMap: [String : AnyClass]? = nil
-//        parseModelMap = ["name" : TestViewController.self]
-    }
-    
     func testAlert() {
         setNavBarLeftItem(info: ["测试"]) { _ in
             hideLoading(from: self.view)
@@ -254,7 +212,7 @@ class TestViewController: UIViewController {
         
         let img1 = UIImage(named: "refresh_icon")!
         let img2 = UIImage(named: "delete_icon")!
-        setNavBarRightItem(infoArr: [img1, img2] ) { idx in
+        setNavBarRightItem(info: [img1, img2] ) { idx in
             
             showAlertMultiple(title: "请闭上眼睛",
                               message: "休息一下,马上回来...",
@@ -268,6 +226,16 @@ class TestViewController: UIViewController {
             }
         }
     }
+    
+    lazy var textView: UITextView = {
+        let textView = UITextView()
+        let size = view.bounds.size
+        textView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        textView.textColor = .black
+        textView.isEditable = false
+        view.addSubview(textView)
+        return textView
+    }()
     
     func testIOS15Api() {
         if #available(iOS 15.0, *) {

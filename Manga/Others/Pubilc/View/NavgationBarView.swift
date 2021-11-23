@@ -108,12 +108,12 @@ class NavgationBarView: UIView {
     fileprivate var rightItemActionClosure: NavBarItemActionClosure? = nil
     fileprivate var rightButtonArray: [UIButton] = []
     @discardableResult
-    func setRightItem(infoArr: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
+    func setRightItem(info: [Any], actionClosure: @escaping NavBarItemActionClosure ) -> [UIButton] {
         for button in rightButtonArray {
             button.removeFromSuperview()
         }
         rightItemActionClosure = actionClosure
-        rightButtonArray = createNavBarItems(object: infoArr, itemType:2, actionClosure: actionClosure)
+        rightButtonArray = createNavBarItems(object: info, itemType:2, actionClosure: actionClosure)
         
         var tmpBtn: UIView? = nil
         for button in rightButtonArray.reversed() {
