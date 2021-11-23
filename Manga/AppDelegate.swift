@@ -44,8 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            }
 
            let timer = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: .write, queue: DispatchQueue.global())
-           timer.setEventHandler {[weak self] in
-               let event:DispatchSource.FileSystemEvent = timer.data
+           timer.setEventHandler {
+               let event: DispatchSource.FileSystemEvent = timer.data
                switch event {
                
                case .write:

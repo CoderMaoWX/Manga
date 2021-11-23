@@ -18,6 +18,7 @@
 
 + (void)initialize {
     
+    //[NSURLSessionConfiguration defaultSessionConfiguration].connectionProxyDictionary = @{};    
 }
 
 @end

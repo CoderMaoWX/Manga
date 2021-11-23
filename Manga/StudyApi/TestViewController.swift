@@ -12,6 +12,7 @@ import FDFullscreenPopGesture
 ///判断文件类型
 import MobileCoreServices
 import WXNetworkingSwift
+import SwiftUI
 
 
 class TestViewController: UIViewController {
@@ -19,19 +20,31 @@ class TestViewController: UIViewController {
     var requestTask: WXDataRequest? = nil;
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //ApiClass.studyApi()
         requestTask?.cancel()
-        testDownFile()
+        testloadData()
     }
     
-    func testRequestDelay() {
-        let url = "https://httpbin.org/delay/3"
-        let param: [String : Any] = ["name" : "张三"]
+    func testGetRequest() {
+        let url = "https://weibointl.api.weibo.cn/portal.php"
+        let param: [String : Any] = [
+            "ua"    : "iPhone12%2C1_iOS14.2_Weibo_intl._409_wifi",
+            "ct"    : "feed",
+            "a"     : "search_topic",
+            "c"     : "weicoabroad",
+            "i"     : "xxx",
+            "s"     : "3f16726c",
+            "time"  : "1606139954516",
+            "udid"  : "xx-xx-xx-xx-xxx",
+            "auth"  : "xxx",
+            "lang"  : "en-CN",
+            "version" : "409",
+            "user_id" : "xxx",
+        ]
         let api = WXRequestApi(url, method: .get, parameters: param)
         api.timeOut = 40
         api.loadingSuperView = view
-        api.startRequest { responseModel in
-            debugLog(" ==== 测试接口请求完成 ====== \(api)")
+        api.startRequest { [weak self] responseModel in
+            self?.textView.text = responseModel.responseDict?.debugDescription
         }
     }
 
@@ -39,39 +52,16 @@ class TestViewController: UIViewController {
         super.viewDidLoad()
         fd_prefersNavigationBarHidden = true
         configNavgationView()
-        
-        if #available(iOS 15.0, *) {
-            var conf = UIButton.Configuration.borderedTinted()
-            /// 设置图片的摆放（图片在上，则文字在下）
-            conf.imagePlacement = .bottom
-            /// 设置图片和文字的间距
-            conf.imagePadding = 20
-            
-           let action = UIAction(title: "UIAction", image: UIImage(named: "acg_comment"), identifier: .pasteAndGo, discoverabilityTitle: "discoverabilityTitle", attributes: .destructive, state: .on) { action in
-                debugLog("\nUIAction点击事件", action)
-            }
-            let btn = UIButton.init(configuration: conf, primaryAction: nil)
-            btn.addTarget(self, action: #selector(myUIAction), for: .touchUpInside)
-            btn.setImage(UIImage(named: "refresh_icon"), for: .normal)
-            btn.setTitle("刷新", for: .normal)
-            btn.frame = CGRect(x: 100, y: 200, width: 100, height: 100)
-            btn.backgroundColor = .groupTableViewBackground
-            view.addSubview(btn)
-        }
     }
     
-    @objc func myUIAction(button: UIButton) {
-        debugLog("\n点击事件myUIAction", button)
-        if #available(iOS 15.0, *) {
-            if button.configuration?.imagePlacement == .trailing {
-                button.configuration?.imagePlacement = .top
-            } else {
-                button.configuration?.imagePlacement = .trailing
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-    }
+    lazy var textView: UITextView = {
+        let textView = UITextView()
+        textView.frame = CGRect(x: 0, y: 88, width: view.bounds.size.width, height: view.bounds.size.height)
+        textView.textColor = .black
+        textView.isEditable = false
+        view.addSubview(textView)
+        return textView
+    }()
     
     ///自定义导航栏
     func configNavgationView() {
@@ -82,8 +72,7 @@ class TestViewController: UIViewController {
         }
         
         navgationBarView.setLeftItem(info: [UIImage(named:"like_select")!, "Message"]) { button in
-            self.testloadData()
-            //showAlertControllerToast(message: "左侧按钮: \(button)")
+            self.testGetRequest()
         }
         
         navgationBarView.setRightItem(infoArr: ["Bag", UIImage(named: "selected_on")!]) { button in
@@ -103,13 +92,13 @@ class TestViewController: UIViewController {
         let url0 = "http://123.207.32.32:8000/home/multidata"
         let api0 = WXRequestApi(url0, method: .get, parameters: nil)
         api0.successStatusMap = (key: "returnCode",  value: "SUCCESS")
-//        api0.autoCacheResponse = true
+        api0.autoCacheResponse = true
         
         
         let url1 = "https://httpbin.org/delay/5"
         //let para0: [String : Any] = ["name" : "张三"]
         let api1 = WXRequestApi(url1, method: .get)
-//        api1.autoCacheResponse = true
+        api1.autoCacheResponse = true
         
         
         let api = WXBatchRequestApi(apiArray: [api0, api1], loadingTo: view)
@@ -136,14 +125,8 @@ class TestViewController: UIViewController {
         api.successStatusMap = (key: "code", value: "1")
         api.parseModelMap = (parseKey: "data.returnData.comicLists", modelType: ComicListModel.self)
 
-		api.startRequest { responseModel in
-			self.view.backgroundColor = .groupTableViewBackground
-            if let rspData = responseModel.responseObject as? Data {
-                if let image = UIImage(data: rspData) {
-                    self.view.backgroundColor = .init(patternImage: image)
-                }
-            }
-			debugLog(" ==== 测试接口请求完成 ======")
+		api.startRequest { [weak self] responseModel in
+            self?.textView.text = responseModel.responseDict?.debugDescription
         }
     }
     
@@ -189,7 +172,7 @@ class TestViewController: UIViewController {
     ///测试下载文件
     func testDownFile() {
         //图片
-        var url = "https://picsum.photos/414/896?random=1"
+        let url = "https://picsum.photos/414/896?random=1"
         //视频
         //url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
         //压缩包
@@ -285,5 +268,38 @@ class TestViewController: UIViewController {
             }
         }
     }
-
+    
+    func testIOS15Api() {
+        if #available(iOS 15.0, *) {
+            var conf = UIButton.Configuration.borderedTinted()
+            /// 设置图片的摆放（图片在上，则文字在下）
+            conf.imagePlacement = .bottom
+            /// 设置图片和文字的间距
+            conf.imagePadding = 20
+            
+           let action = UIAction(title: "UIAction", image: UIImage(named: "acg_comment"), identifier: .pasteAndGo, discoverabilityTitle: "discoverabilityTitle", attributes: .destructive, state: .on) { action in
+                debugLog("\nUIAction点击事件", action)
+            }
+            let btn = UIButton.init(configuration: conf, primaryAction: action)
+            btn.addTarget(self, action: #selector(myUIAction), for: .touchUpInside)
+            btn.setImage(UIImage(named: "refresh_icon"), for: .normal)
+            btn.setTitle("刷新", for: .normal)
+            btn.frame = CGRect(x: 100, y: 200, width: 100, height: 100)
+            btn.backgroundColor = .groupTableViewBackground
+            view.addSubview(btn)
+        }
+    }
+    
+    @objc func myUIAction(button: UIButton) {
+        debugLog("\n点击事件myUIAction", button)
+        if #available(iOS 15.0, *) {
+            if button.configuration?.imagePlacement == .trailing {
+                button.configuration?.imagePlacement = .top
+            } else {
+                button.configuration?.imagePlacement = .trailing
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 }
