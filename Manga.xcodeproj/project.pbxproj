@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		581AFFFC274E4CD1005AF330 /* ChaseRenewSubVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581AFFFB274E4CD1005AF330 /* ChaseRenewSubVC.swift */; };
 		581DDE80274CE2F30043FCC7 /* WeiboModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DDE7F274CE2F30043FCC7 /* WeiboModel.swift */; };
 		581DDE82274DCCD20043FCC7 /* PublicTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DDE81274DCCD20043FCC7 /* PublicTools.swift */; };
+		581DDE88274E331D0043FCC7 /* ChaseRenewSuperVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DDE87274E331D0043FCC7 /* ChaseRenewSuperVC.swift */; };
+		581DDE8A274E3A3A0043FCC7 /* HandpickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DDE89274E3A3A0043FCC7 /* HandpickVC.swift */; };
 		5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5DF26C6181600246D19 /* ListView+Extension.swift */; };
 		5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E126C6183000246D19 /* TableView+Extension.swift */; };
 		5824E5E426C655CB00246D19 /* GlobalConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E326C655CB00246D19 /* GlobalConst.swift */; };
@@ -65,8 +68,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		581AFFFB274E4CD1005AF330 /* ChaseRenewSubVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaseRenewSubVC.swift; sourceTree = "<group>"; };
 		581DDE7F274CE2F30043FCC7 /* WeiboModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeiboModel.swift; sourceTree = "<group>"; };
 		581DDE81274DCCD20043FCC7 /* PublicTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicTools.swift; sourceTree = "<group>"; };
+		581DDE87274E331D0043FCC7 /* ChaseRenewSuperVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaseRenewSuperVC.swift; sourceTree = "<group>"; };
+		581DDE89274E3A3A0043FCC7 /* HandpickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandpickVC.swift; sourceTree = "<group>"; };
 		5824E5DF26C6181600246D19 /* ListView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListView+Extension.swift"; sourceTree = "<group>"; };
 		5824E5E126C6183000246D19 /* TableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableView+Extension.swift"; sourceTree = "<group>"; };
 		5824E5E326C655CB00246D19 /* GlobalConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConst.swift; sourceTree = "<group>"; };
@@ -223,6 +229,9 @@
 			isa = PBXGroup;
 			children = (
 				5887389725C5587C0049ECAD /* HomeVC.swift */,
+				581DDE87274E331D0043FCC7 /* ChaseRenewSuperVC.swift */,
+				581AFFFB274E4CD1005AF330 /* ChaseRenewSubVC.swift */,
+				581DDE89274E3A3A0043FCC7 /* HandpickVC.swift */,
 				58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */,
 				58A4C11A25E1035A00C1DAB5 /* BoutiqueCell.swift */,
 				58A4C11D25E1084600C1DAB5 /* UComicCHead.swift */,
@@ -507,9 +516,11 @@
 				58CDFB7B26BA33F100056527 /* GlobalConfigure.swift in Sources */,
 				58A4C11E25E1084600C1DAB5 /* UComicCHead.swift in Sources */,
 				58CDFB7526BA33F100056527 /* ApiClass.swift in Sources */,
+				581DDE88274E331D0043FCC7 /* ChaseRenewSuperVC.swift in Sources */,
 				5824E5E626C655DB00246D19 /* GlobalFrame.swift in Sources */,
 				5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */,
 				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
+				581AFFFC274E4CD1005AF330 /* ChaseRenewSubVC.swift in Sources */,
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
 				5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,
@@ -528,6 +539,7 @@
 				58CDFB7326BA33F100056527 /* UIScrollView+EmptyView.swift in Sources */,
 				58B812DB262D3D9400EB00C7 /* MineCenterHeaderView.swift in Sources */,
 				58A23DC526DDC51A0012A6F1 /* NavgationBarView.swift in Sources */,
+				581DDE8A274E3A3A0043FCC7 /* HandpickVC.swift in Sources */,
 				5887389B25C558C00049ECAD /* CateVC.swift in Sources */,
 				58CDFB7726BA33F100056527 /* WebVC.swift in Sources */,
 				58CDFB7A26BA33F100056527 /* UBaseCCell.swift in Sources */,

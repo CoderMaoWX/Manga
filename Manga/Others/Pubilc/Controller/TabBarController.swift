@@ -31,10 +31,13 @@ class TabBarController: UITabBarController {
 	}
     
     func setupViewController() {
-        setupChildVC(childVC: TestViewController(),
-                     title: "测试",
-                     imageName: "tabbar_item_default_0",
-                     selImageName: "tabbar_item_default_0")
+//        let isTest = false //测试Api
+//        if isTest {
+//            setupChildVC(childVC: TestViewController(),
+//                         title: "测试",
+//                         imageName: "tabbar_item_default_0",
+//                         selImageName: "tabbar_item_default_0")
+//        }
         
         setupChildVC(childVC: HomeVC(),
                      title: "精选",
@@ -58,8 +61,8 @@ class TabBarController: UITabBarController {
     }
     
     func setupChildVC(childVC: UIViewController, title: String, imageName: String, selImageName: String) {
+//        childVC.navigationItem.title = title
         childVC.tabBarItem.title = title
-        childVC.navigationItem.title = title
         childVC.tabBarItem.image = UIImage(named: imageName)?.withRenderingMode(.alwaysOriginal)
         childVC.tabBarItem.selectedImage = UIImage(named: selImageName)?.withRenderingMode(.alwaysOriginal)
         childVC.tabBarItem.imageInsets.top = 10
