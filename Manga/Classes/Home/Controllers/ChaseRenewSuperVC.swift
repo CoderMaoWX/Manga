@@ -37,8 +37,10 @@ class ChaseRenewSuperVC: BaseVC {
     }
     
     var titles: [NSString] = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-    let VCs: [UIViewController] = [ChaseRenewSubVC(), ChaseRenewSubVC(), ChaseRenewSubVC(),ChaseRenewSubVC(),
-                                   ChaseRenewSubVC(), ChaseRenewSubVC(), ChaseRenewSubVC()]
+    let VCs: [UIViewController] = [
+        ChaseRenewSubVC(), ChaseRenewSubVC(),ChaseRenewSubVC(),ChaseRenewSubVC(),
+        ChaseRenewSubVC(), ChaseRenewSubVC(), ChaseRenewSubVC()
+    ]
     var currentSelectIndex = 0
 
     lazy var segment: HMSegmentedControl = {
@@ -77,14 +79,18 @@ extension ChaseRenewSuperVC : UIPageViewControllerDelegate, UIPageViewController
         guard let index = VCs.firstIndex(of: viewController) else { return nil }
         let beforeIndex = index - 1
         guard beforeIndex >= 0 else { return nil }
-        return VCs[beforeIndex]
+        let tmpVC = VCs[beforeIndex]
+        (tmpVC as! ChaseRenewSubVC).day = beforeIndex + 1
+        return tmpVC
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let index = VCs.firstIndex(of: viewController) else { return nil }
         let afterIndex = index + 1
         guard afterIndex <= VCs.count - 1 else { return nil }
-        return VCs[afterIndex]
+        let tmpVC = VCs[afterIndex]
+        (tmpVC as! ChaseRenewSubVC).day = afterIndex + 1
+        return tmpVC
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
