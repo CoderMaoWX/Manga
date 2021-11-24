@@ -118,7 +118,11 @@ class BaseNavigationVC: UINavigationController {
                 self.prohibitPop = false
             }
         }
-        return super.popViewController(animated: animated)
+        let popVC = super.popViewController(animated: animated)
+        if let popVC = popVC {
+            NotificationCenter.default.removeObserver(popVC)
+        }
+        return popVC
     }
 
     //MARK: - 导航器销毁事件

@@ -16,9 +16,9 @@ let kDotLabelTag = 1949
 
 enum WXDrawLinePosition: Int {
     case top
-    case left
+    case leading
     case bottom
-    case right
+    case trailing
 }
 
 extension UIView {
@@ -79,27 +79,23 @@ extension UIView {
         
         switch position {
         case .top:
-            //line.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: thinSize)
             line.snp.makeConstraints { make in
                 make.top.leading.width.equalTo(self)
                 make.height.equalTo(thinSize)
             }
-        case .left:
-            //line.frame = CGRect(x: 0, y: 0, width: thinSize, height: frame.size.height)
+        case .leading:
             line.snp.makeConstraints { make in
-                make.top.leading.height.equalTo(self)
+                make.leading.top.bottom.equalTo(self)
                 make.width.equalTo(thinSize)
             }
         case .bottom:
-            //line.frame = CGRect(x: 0, y: frame.size.height-thinSize, width: frame.size.width, height: thinSize)
             line.snp.makeConstraints { make in
-                make.leading.bottom.width.equalTo(self)
+                make.leading.bottom.trailing.equalTo(self)
                 make.height.equalTo(thinSize)
             }
-        case .right:
-            //line.frame = CGRect(x: frame.size.width-thinSize, y: 0, width: thinSize, height: frame.size.height)
+        case .trailing:
             line.snp.makeConstraints { make in
-                make.leading.trailing.height.equalTo(self)
+                make.top.trailing.bottom.equalTo(self)
                 make.width.equalTo(thinSize)
             }
         }

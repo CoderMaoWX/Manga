@@ -20,12 +20,13 @@ class TestViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addLineTo(position: .top, thinSize: 1)
         configNavgationView()
     }
     
     ///导航栏事件
     func configNavgationView() {
-        navigationItem.title = "我是标题"
+        navigationItem.title = "测试标题"
         setNavBarLeftItem(info: [UIImage(named:"like_select")!, "Message"]) { button in
             self.testGetRequest()
         }
@@ -225,7 +226,7 @@ class TestViewController: UIViewController {
     lazy var textView: UITextView = {
         let textView = UITextView()
         let size = view.bounds.size
-        textView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        textView.frame = CGRect(x: 0, y: 1, width: size.width, height: size.height)
         textView.textColor = .black
         textView.isEditable = false
         view.addSubview(textView)

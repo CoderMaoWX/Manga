@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		581DDE80274CE2F30043FCC7 /* WeiboModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DDE7F274CE2F30043FCC7 /* WeiboModel.swift */; };
+		581DDE82274DCCD20043FCC7 /* PublicTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DDE81274DCCD20043FCC7 /* PublicTools.swift */; };
 		5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5DF26C6181600246D19 /* ListView+Extension.swift */; };
 		5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E126C6183000246D19 /* TableView+Extension.swift */; };
 		5824E5E426C655CB00246D19 /* GlobalConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5824E5E326C655CB00246D19 /* GlobalConst.swift */; };
@@ -65,6 +66,7 @@
 
 /* Begin PBXFileReference section */
 		581DDE7F274CE2F30043FCC7 /* WeiboModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeiboModel.swift; sourceTree = "<group>"; };
+		581DDE81274DCCD20043FCC7 /* PublicTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicTools.swift; sourceTree = "<group>"; };
 		5824E5DF26C6181600246D19 /* ListView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListView+Extension.swift"; sourceTree = "<group>"; };
 		5824E5E126C6183000246D19 /* TableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableView+Extension.swift"; sourceTree = "<group>"; };
 		5824E5E326C655CB00246D19 /* GlobalConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConst.swift; sourceTree = "<group>"; };
@@ -153,6 +155,14 @@
 				C7AFDB0A11E2C413F9EE7078 /* Pods-Manga.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		581DDE83274DCCD80043FCC7 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				581DDE81274DCCD20043FCC7 /* PublicTools.swift */,
+			);
+			path = Tools;
 			sourceTree = "<group>";
 		};
 		584D5D8A25C3F27900FA507C = {
@@ -310,6 +320,7 @@
 			children = (
 				58CDFB5826BA33F000056527 /* Controller */,
 				58CDFB5D26BA33F000056527 /* View */,
+				581DDE83274DCCD80043FCC7 /* Tools */,
 			);
 			path = Pubilc;
 			sourceTree = "<group>";
@@ -502,6 +513,7 @@
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
 				5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,
+				581DDE82274DCCD20043FCC7 /* PublicTools.swift in Sources */,
 				58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */,
 				5824E5EA26CA05FB00246D19 /* UIAlertController+Extension.swift in Sources */,
 				58A821BC260AE125002F7689 /* TrendModel.swift in Sources */,
