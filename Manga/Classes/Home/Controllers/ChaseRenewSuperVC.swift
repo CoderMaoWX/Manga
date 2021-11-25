@@ -27,7 +27,7 @@ class ChaseRenewSuperVC: BaseVC {
         segment.titleTextAttributes = [colorKey : UIColor.gray,
                                         fontKey : UIFont.systemFont(ofSize: 14) ]
         
-        segment.selectedTitleTextAttributes = [colorKey : UIColor.green,
+        segment.selectedTitleTextAttributes = [colorKey : UIColor.hex("#3BDD92"),
                                                 fontKey : UIFont.boldSystemFont(ofSize: 14) ]
         view.addSubview(segment)
     }
@@ -62,10 +62,7 @@ class ChaseRenewSuperVC: BaseVC {
         let index = segment.selectedSegmentIndex
         if index == currentSelectIndex { return }
 
-        let tmpVC = VCs[Int(index)]
-        tmpVC.view.backgroundColor = .random
-        
-        let vcs: [UIViewController] = [ tmpVC ]
+        let vcs: [UIViewController] = [ VCs[Int(index)] ]
         let direction: UIPageViewController.NavigationDirection = currentSelectIndex > Int(index) ? .reverse : .forward
 
         pageVC.setViewControllers(vcs, direction: direction, animated: true) { [weak self](bool) in

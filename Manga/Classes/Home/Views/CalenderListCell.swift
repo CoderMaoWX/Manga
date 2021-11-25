@@ -19,12 +19,6 @@ class CalenderListCell: UITableViewCell, Reusable {
         
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        tagBtn.layer.masksToBounds = true
-        tagBtn.layer.cornerRadius = 8
-    }
-    
     var model: CalenderListModel? {
         didSet {
             guard let model = model else { return }

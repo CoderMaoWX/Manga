@@ -62,12 +62,7 @@ extension MgCompatible {
  */
 extension UIImageView: MgCompatible {}
 extension Manga where Base: UIImageView {
-    func setImageURL(_ with: String?) {
-        let url = URL(string: with ?? "")
-        base.kf.setImage(with: url)
-    }
-    
-    func setImageURL(with: String?, placeholder: String = "") {
+    func setImageURL(_ with: String?, placeholder: String = "common_placeholder") {
         let url = URL(string: with ?? "")
         base.kf.setImage(with: url, placeholder: UIImage(named: placeholder))
     }
