@@ -24,9 +24,7 @@ class ChaseRenewSubVC: BaseVC {
         tw.dataSource = self
         tw.separatorStyle = .none
         tw.tableFooterView = UIView()
-//        tw.register(cellType: CalenderListCell.self)
-        let recommed = UINib(nibName: "CalenderListCell", bundle: nil)
-        tw.register(recommed, forCellReuseIdentifier: "CalenderListCell")
+        tw.register(cellType: CalenderListCell.self)
         return tw
     }()
 
@@ -94,8 +92,7 @@ extension ChaseRenewSubVC: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(for: indexPath, cellType: CalenderListCell.self)
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CalenderListCell", for: indexPath) as! CalenderListCell
+        let cell = tableView.dequeueReusableCell(for: indexPath, cellType: CalenderListCell.self)
         cell.model = dataArray[indexPath.row]
         return cell
     }

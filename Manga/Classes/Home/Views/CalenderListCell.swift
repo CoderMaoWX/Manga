@@ -8,7 +8,7 @@
 import UIKit
 import Reusable
 
-class CalenderListCell: UITableViewCell, Reusable {
+class CalenderListCell: UITableViewCell, Reusable, NibLoadable {
 
     @IBOutlet weak var imgView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
