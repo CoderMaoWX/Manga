@@ -22,6 +22,7 @@ class TestViewController: UIViewController {
         super.viewDidLoad()
         WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.31.5:8090/pullLogcat", catchTag: "mwx678")
         configNavgationView()
+        testIOS15Api()
     }
     
     ///导航栏事件
@@ -242,20 +243,32 @@ class TestViewController: UIViewController {
             conf.imagePadding = 20
             
            let action = UIAction(title: "UIAction", image: UIImage(named: "acg_comment"), identifier: .pasteAndGo, discoverabilityTitle: "discoverabilityTitle", attributes: .destructive, state: .on) { action in
-                debugLog("\nUIAction点击事件", action)
+                //debugLog("\nUIAction点击事件", action)
             }
-            let btn = UIButton.init(configuration: conf, primaryAction: action)
+            let btn = WXTmpView.init(configuration: conf, primaryAction: action)
             btn.addTarget(self, action: #selector(myUIAction), for: .touchUpInside)
             btn.setImage(UIImage(named: "refresh_icon"), for: .normal)
             btn.setTitle("刷新", for: .normal)
             btn.frame = CGRect(x: 100, y: 200, width: 100, height: 100)
             btn.backgroundColor = .groupTableViewBackground
             view.addSubview(btn)
+            
+            let topView = UIButton(frame: CGRect(x: 30, y: -80, width: 50, height: 60))
+            topView.addTarget(self, action: #selector(topViewAction), for: .touchUpInside)
+            topView.backgroundColor = .gray
+            topView.tag = 2021
+            btn.addSubview(topView)
         }
     }
     
+    @objc func topViewAction(button: UIButton) {
+        debugLog("点击了浮层")
+        button.backgroundColor = .random
+    }
+    
     @objc func myUIAction(button: UIButton) {
-        debugLog("\n点击事件myUIAction", button)
+        debugLog("点击了底部按钮")
+        button.backgroundColor = .random
         if #available(iOS 15.0, *) {
             if button.configuration?.imagePlacement == .trailing {
                 button.configuration?.imagePlacement = .top
@@ -265,5 +278,18 @@ class TestViewController: UIViewController {
         } else {
             // Fallback on earlier versions
         }
+    }
+}
+
+class WXTmpView: UIButton {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        var tmpView = super.hitTest(point, with: event)
+        if tmpView == nil {
+            let topView = self.viewWithTag(2021)!
+            if topView.frame.contains(point) {
+                tmpView = topView
+            }
+        }
+        return tmpView
     }
 }
