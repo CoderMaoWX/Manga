@@ -20,13 +20,14 @@ class TestViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addLineTo(position: .top, thinSize: 1)
+        WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.31.5:8090/pullLogcat", catchTag: "mwx678")
         configNavgationView()
     }
     
     ///导航栏事件
     func configNavgationView() {
         navigationItem.title = "测试标题"
+        view.addLineTo(position: .top, thinSize: 1)
         setNavBarLeftItem(info: [UIImage(named:"like_select")!, "Message"]) { button in
             self.testGetRequest()
         }
@@ -76,7 +77,6 @@ class TestViewController: UIViewController {
         api.startRequest({ batchApi in
             debugLog("批量请求回调", batchApi.responseDataArray)
         }, waitAllDone: false)
-        
     }
     
     ///测试不发请求,直接返回赋值的 testResponseJson
@@ -143,11 +143,11 @@ class TestViewController: UIViewController {
     ///测试下载文件
     func testDownFile() {
         //图片
-        let url = "https://picsum.photos/414/896?random=1"
+        var url = "https://picsum.photos/414/896?random=1"
         //视频
         //url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
         //压缩包
-        //url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2135/2135_i_4_7_i_1.zip"
+        url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2018/2018_i_6_0_i_2.zip"
         
         let api = WXRequestApi(url, method: .get, parameters: nil)
         api.loadingSuperView = view

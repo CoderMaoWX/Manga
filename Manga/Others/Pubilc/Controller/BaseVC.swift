@@ -47,9 +47,9 @@ class BaseVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        if let nav = navigationController as? BaseNavigationVC {
-//            nav.barStyle(.theme)
-//        }
+        if let nav = navigationController as? BaseNavigationVC {
+            nav.barStyle(.theme)
+        }
     }
     
     //MARK: - 全局导航返回按钮事件

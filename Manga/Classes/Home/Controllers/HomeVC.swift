@@ -10,6 +10,7 @@ import HMSegmentedControl
 
 class HomeVC: BaseVC {
     override func viewDidLoad() {
+        navigationItem.title = nil
         super.viewDidLoad()
         addNavRightActionBtn()
     }
@@ -64,10 +65,10 @@ class HomeVC: BaseVC {
         segment.sectionTitles = titles as [String]?
         segment.selectionIndicatorLocation = .none
         segment.selectedSegmentIndex = UInt(currentSelectIndex)
-        segment.titleTextAttributes = [colorKey : UIColor.black,
+        segment.titleTextAttributes = [colorKey : UIColor.white,
                                         fontKey : UIFont.systemFont(ofSize: 14) ]
         
-        segment.selectedTitleTextAttributes = [colorKey : UIColor.black,
+        segment.selectedTitleTextAttributes = [colorKey : UIColor.white,
                                                fontKey  : UIFont.boldSystemFont(ofSize: 18) ]
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: segment)
     }
