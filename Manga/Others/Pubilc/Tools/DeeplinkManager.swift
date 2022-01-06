@@ -72,7 +72,7 @@ private func jumpDeeplinkWithModel(jumpModel: DeeplinkModel) {
         
         let selectTabBarBlock = {
             if let tabBarVC = appTopVC?.view.window?.rootViewController as? UITabBarController {
-                tabBarVC.selectedIndex = 2
+                tabBarVC.selectedIndex = 0
             }
         }
         if let currentNav = currentVC?.navigationController {
