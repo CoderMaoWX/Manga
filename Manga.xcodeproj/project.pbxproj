@@ -64,7 +64,7 @@
 		58CDFB8926BA34E200056527 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB8626BA34E200056527 /* LaunchScreen.storyboard */; };
 		7075E033816A232E3D55CCF6 /* libPods-Manga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */; };
 		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
-		A3878E9E274E884500850F13 /* NetworkApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3878E9D274E884500850F13 /* NetworkApi.swift */; };
+		A3878E9E274E884500850F13 /* NetworkPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3878E9D274E884500850F13 /* NetworkPort.swift */; };
 		A3878EA2274E920B00850F13 /* CalenderListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3878EA1274E920B00850F13 /* CalenderListModel.swift */; };
 		A3878EA6274E947400850F13 /* CalenderListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3878EA4274E947400850F13 /* CalenderListCell.swift */; };
 		A3878EA7274E947400850F13 /* CalenderListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3878EA5274E947400850F13 /* CalenderListCell.xib */; };
@@ -133,7 +133,7 @@
 		58CDFB8726BA34E200056527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Manga.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A32CD80E25CC494A009A5C56 /* URankCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URankCCell.swift; sourceTree = "<group>"; };
-		A3878E9D274E884500850F13 /* NetworkApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkApi.swift; sourceTree = "<group>"; };
+		A3878E9D274E884500850F13 /* NetworkPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPort.swift; sourceTree = "<group>"; };
 		A3878EA1274E920B00850F13 /* CalenderListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalenderListModel.swift; sourceTree = "<group>"; };
 		A3878EA4274E947400850F13 /* CalenderListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalenderListCell.swift; sourceTree = "<group>"; };
 		A3878EA5274E947400850F13 /* CalenderListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalenderListCell.xib; sourceTree = "<group>"; };
@@ -324,7 +324,7 @@
 		58CDFB5526BA33F000056527 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				A3878E9D274E884500850F13 /* NetworkApi.swift */,
+				A3878E9D274E884500850F13 /* NetworkPort.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -559,7 +559,7 @@
 				5824E5E226C6183000246D19 /* TableView+Extension.swift in Sources */,
 				A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */,
 				581AFFFC274E4CD1005AF330 /* ChaseRenewSubVC.swift in Sources */,
-				A3878E9E274E884500850F13 /* NetworkApi.swift in Sources */,
+				A3878E9E274E884500850F13 /* NetworkPort.swift in Sources */,
 				58CDFB7226BA33F100056527 /* Dictionary+Extension.swift in Sources */,
 				5824E5E026C6181600246D19 /* ListView+Extension.swift in Sources */,
 				58CDFB7826BA33F100056527 /* BaseNavigationVC.swift in Sources */,

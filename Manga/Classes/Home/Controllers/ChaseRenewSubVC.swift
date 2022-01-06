@@ -67,17 +67,14 @@ class ChaseRenewSubVC: BaseVC {
         param["_locale"] = "CN"
         param["_channel"] = "Appstore"
         param["_carrier"] = "中国电信"
-//        param["_brand"] = "Apple"
-//        param["_"] = "1637742865"
 
-        let url = Api(.calenderList)
-        let request = WXRequestApi(url, method: .get, parameters: param)
-        request.successStatusMap = (key: "status",  value: "success")
-        request.parseModelMap = (parseKey: "data" , modelType: CalenderListModel.self)
+        let api = WXRequestApi(path(.calender_list), method: .get, parameters: param)
+        api.successStatusMap = (key: "status",  value: "success")
+        api.parseModelMap = (parseKey: "data" , modelType: CalenderListModel.self)
         if tableView.mj_header?.state != .refreshing {
-            request.loadingSuperView = view
+            api.loadingSuperView = view
         }
-        request.startRequest { [weak self] (responseModel) in
+        api.startRequest { [weak self] (responseModel) in
             self?.dataArray = (responseModel.parseKeyPathModel as? [CalenderListModel]) ?? []
             self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
         }
