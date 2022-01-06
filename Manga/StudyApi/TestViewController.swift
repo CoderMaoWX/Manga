@@ -14,12 +14,13 @@ import MobileCoreServices
 import WXNetworkingSwift
 import SwiftUI
 
-class TestViewController: UIViewController {
+class TestViewController: BaseVC {
     
     var requestTask: WXDataRequest? = nil;
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.41.162:8090/pullLogcat", catchTag: "mwx678")
         configNavgationView()
         testIOS15Api()
@@ -29,11 +30,12 @@ class TestViewController: UIViewController {
     func configNavgationView() {
         navigationItem.title = "测试标题"
         view.addLineTo(position: .top, thinSize: 1)
-        setNavBarLeftItem(info: [UIImage(named:"like_select")!, "Message"]) { button in
+        setNavBarLeftItem(info: [UIImage(named:"acg_like")!, "Message"]) { button in
             self.testBatchData()
         }
         setNavBarRightItem(info: ["Bag", UIImage(named: "selected_on")!]) { button in
-            showAlertControllerToast(message: "右侧按钮: \(button)")
+            //showAlertControllerToast(message: "右侧按钮: \(button)")
+            OpenZXDeeplink(url: "Manga://open?params=%7B%22m_param%22%20%3A%20%7B%7D%2C%20%22source%22%3A%22%22%2C%22url%22%20%3A%20%22100004293741%22%2C%22action%22%20%3A%20%221%22%2C%22name%22%3A%22%22%7D", title: "Baidu")
         }
     }
     

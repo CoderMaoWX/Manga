@@ -40,7 +40,7 @@ func propertyNamesOfMember(cls: AnyClass) -> [String] {
 }
 
 ///获取App最顶层的控制器
-func appTopVC() -> UIViewController? {
+var appTopVC: UIViewController? {
     let window = UIApplication.shared.keyWindow
     //当前windows的根控制器
     var controller = window?.rootViewController
@@ -73,6 +73,7 @@ func appTopVC() -> UIViewController? {
         }
     }
 }
+
 
 /// 渐变方向
 enum GradientChangeDirection: Int {

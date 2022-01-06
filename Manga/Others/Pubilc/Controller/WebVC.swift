@@ -22,7 +22,7 @@ class WebVC: BaseVC {
     fileprivate lazy var progressView: UIProgressView = {
         let pv = UIProgressView(frame: CGRect.zero)
         pv.trackImage = UIImage(named: "nav_bg")
-        pv.progressTintColor = UIColor.white
+        pv.progressTintColor = UIColor.orange
         return pv
     }()
     

@@ -9,6 +9,18 @@ import UIKit
 
 class BaseVC: UIViewController {
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        view.window?.endEditing(true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let nav = navigationController as? BaseNavigationVC {
+            nav.barStyle(.theme)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //公共配置
@@ -29,7 +41,7 @@ class BaseVC: UIViewController {
     }
     
     ///公共配置
-    func publicConfig() {
+    private func publicConfig() {
         view.backgroundColor = .white
         edgesForExtendedLayout = .all
         extendedLayoutIncludesOpaqueBars = false
@@ -40,25 +52,44 @@ class BaseVC: UIViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        view.window?.endEditing(true)
+    //MARK: - 空白页提示视图
+    
+    ///需要显示的自定义提示view
+    fileprivate lazy var emptyTipView: WXEmptyTipView = {
+        let tipView = WXEmptyTipView(frame: .zero)
+        tipView.backgroundColor = view.backgroundColor ?? .white
+        tipView.iconImage = UIImage(named: "empty_data_tip");
+        tipView.title = "暂无数据"
+        tipView.subTitle = nil
+        tipView.buttonTitle = nil
+        tipView.actionBtnBlcok = nil
+        tipView.tag = kEmptyTipViewTag
+        view.addSubview(tipView)
+        return tipView
+    }()
+    
+    ///配置显示空白提示页
+    func showEmptyTipView(config: (WXEmptyTipView) -> ()) {
+        config(emptyTipView)
+        view.bringSubviewToFront(emptyTipView)
+        emptyTipView.isHidden = false
+        emptyTipView.snp.remakeConstraints {
+            $0.edges.equalTo(UIEdgeInsets.zero)
+        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if let nav = navigationController as? BaseNavigationVC {
-            nav.barStyle(.theme)
-        }
+    ///隐藏空白提示页
+    func hidenEmptyTipView() {
+        emptyTipView.isHidden = true
     }
     
     //MARK: - 全局导航返回按钮事件
     @objc func goBackAction() {
-        let vcArray: [UIViewController]! = navigationController?.viewControllers
-        if vcArray.count > 1, vcArray?.last == self {
-            navigationController?.popViewController(animated: true)
-        } else {
+        if let _ = presentingViewController {
             dismiss(animated: true, completion: nil)
+            
+        } else if let vcArray = navigationController?.viewControllers, vcArray.last == self {
+            navigationController?.popViewController(animated: true)
         }
     }
     

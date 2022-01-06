@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import Moya
 import MJRefresh
-import KakaJSON
 import WXNetworkingSwift
 
 class CateVC: BaseVC {

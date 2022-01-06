@@ -41,7 +41,7 @@ var kStatusBarHeight: CGFloat {
 
 ///导航栏栏高度: (默认高度: 44)
 var kNavigationBarHeight: CGFloat {
-    return appTopVC()?.navigationController?.navigationBar.frame.size.height ?? 44
+    return appTopVC?.navigationController?.navigationBar.frame.size.height ?? 44
 }
 
 /// 导航栏 + 状态栏 = 的总高度
@@ -51,6 +51,6 @@ var kStatusAddNavBarHeight: CGFloat {
 
 ///系统TabBar栏高度: (刘海屏: 49+34=83, 非刘海屏: 49)
 var kTabBarHeight: CGFloat {
-    return appTopVC()?.tabBarController?.tabBar.bounds.size.height ?? 49
+    return appTopVC?.tabBarController?.tabBar.bounds.size.height ?? 49
 }
 

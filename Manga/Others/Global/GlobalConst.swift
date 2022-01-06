@@ -18,7 +18,7 @@ let kAppDispalyName           = "App名称"
 let kAppBundleID              = "com.xxx.xxx"
 
 //App Schemes
-let kAppURLSchemes            = "xxx"
+let kAppURLSchemes            = "Manga"
 
 //警告:上线后修改成真正的AppStore中的Appid
 let kAppStoreAppId            = "xxx"

@@ -35,7 +35,7 @@ func configPageDict(_ dataInfo: Any?) -> Any? { // -> [String : Any]
 }
 
 ///空白提示页
-fileprivate class WXEmptyTipView: UIView {
+class WXEmptyTipView: UIView {
     
     //MARK: - InitMethod
     required init?(coder: NSCoder) {
@@ -123,7 +123,7 @@ fileprivate class WXEmptyTipView: UIView {
         }
     }
     
-    func initLayoutSubView() {
+    private func initLayoutSubView() {
         addSubview(contenView)
         contenView.snp.makeConstraints {
             $0.centerX.equalTo(snp.centerX)
@@ -159,13 +159,13 @@ fileprivate class WXEmptyTipView: UIView {
     //MARK: - Getter UI
     
     //提示背景主视图
-    lazy var contenView: UIView = {
+    private lazy var contenView: UIView = {
         let contenView = UIView()
         contenView.backgroundColor = .clear
         return contenView
     }()
     //提示图片
-    lazy var tipImageView: UIImageView = {
+    private lazy var tipImageView: UIImageView = {
         let tipImageView = UIImageView()
         tipImageView.backgroundColor = .clear
         tipImageView.contentMode = .scaleAspectFit
@@ -173,7 +173,7 @@ fileprivate class WXEmptyTipView: UIView {
         return tipImageView
     }()
     //提示文案
-    lazy var tipLabel: UILabel = {
+    private lazy var tipLabel: UILabel = {
         let tipLabel = UILabel()
         tipLabel.backgroundColor = .clear
         tipLabel.font = UIFont.systemFont(ofSize: 14)
@@ -185,7 +185,7 @@ fileprivate class WXEmptyTipView: UIView {
         return tipLabel
     }()
     //提示描述文案
-    lazy var subTitleLabel: UILabel = {
+    private lazy var subTitleLabel: UILabel = {
         let tipLabel = UILabel()
         tipLabel.backgroundColor = .clear
         tipLabel.font = UIFont.systemFont(ofSize: 14)
@@ -197,7 +197,7 @@ fileprivate class WXEmptyTipView: UIView {
         return tipLabel
     }()
     //点击事件按钮
-    lazy var actionBtn: UIButton = {
+    private lazy var actionBtn: UIButton = {
         let mainColor = UIColor.hex("0x999999")
         let actionBtn = UIButton(type: .custom)
         actionBtn.setTitleColor(mainColor, for: .normal)

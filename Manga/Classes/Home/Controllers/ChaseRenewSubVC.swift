@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import MJRefresh
 import WXNetworkingSwift
-import KakaJSON
 import Reusable
 
 class ChaseRenewSubVC: BaseVC {

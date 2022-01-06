@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import KakaJSON
 import SwiftyJSON
 import MJRefresh
 import WXNetworkingSwift

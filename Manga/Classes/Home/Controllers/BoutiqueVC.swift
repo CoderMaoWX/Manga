@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import KakaJSON
 import SwiftyJSON
 import Reusable
 import WXNetworkingSwift
