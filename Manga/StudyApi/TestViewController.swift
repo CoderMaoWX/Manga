@@ -20,7 +20,7 @@ class TestViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.31.5:8090/pullLogcat", catchTag: "mwx678")
+        WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.41.162:8090/pullLogcat", catchTag: "mwx678")
         configNavgationView()
         testIOS15Api()
     }
@@ -30,7 +30,7 @@ class TestViewController: UIViewController {
         navigationItem.title = "测试标题"
         view.addLineTo(position: .top, thinSize: 1)
         setNavBarLeftItem(info: [UIImage(named:"like_select")!, "Message"]) { button in
-            self.testGetRequest()
+            self.testBatchData()
         }
         setNavBarRightItem(info: ["Bag", UIImage(named: "selected_on")!]) { button in
             showAlertControllerToast(message: "右侧按钮: \(button)")
@@ -57,7 +57,7 @@ class TestViewController: UIViewController {
         api.successStatusMap = (key: "retcode", value: "0")
         api.parseModelMap = (parseKey: "data", modelType: WeiboModel.self)
         api.startRequest { [weak self] responseModel in
-            self?.textView.text = responseModel.responseDict?.debugDescription
+            self?.textView.text = responseModel.responseDict?.debugDescription.unicodeToString
         }
     }
 
@@ -100,7 +100,7 @@ class TestViewController: UIViewController {
         api.parseModelMap = (parseKey: "data.returnData.comicLists", modelType: ComicListModel.self)
 
 		api.startRequest { [weak self] responseModel in
-            self?.textView.text = responseModel.responseDict?.debugDescription
+            self?.textView.text = responseModel.responseDict?.debugDescription.unicodeToString
         }
     }
     
@@ -231,6 +231,7 @@ class TestViewController: UIViewController {
         textView.frame = CGRect(x: 0, y: 1, width: size.width, height: size.height)
         textView.textColor = .black
         textView.isEditable = false
+        textView.dataDetectorTypes = .link;
         view.addSubview(textView)
         return textView
     }()
