@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WXNetworkingSwift
 
 class BaseVC: UIViewController {
     
@@ -87,15 +88,26 @@ class BaseVC: UIViewController {
     @objc func goBackAction() {
         if let _ = presentingViewController {
             dismiss(animated: true, completion: nil)
-            
-        } else if let vcArray = navigationController?.viewControllers, vcArray.last == self {
+        } else {
             navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    ///父类释放时取消子类所有请求操作
+    lazy var requestTaskArr: [WXDataRequest] = {
+        return Array<WXDataRequest>()
+    }()
+    
+    func cancelRequestSessionTask() {
+        let _ = requestTaskArr.map { requestTask in
+            requestTask.cancel()
         }
     }
     
     //MARK: - 导航器销毁事件
     deinit {
         NotificationCenter.default.removeObserver(self)
+        cancelRequestSessionTask()
         debugLog("♻️♻️♻️ \(self.className) 已销毁 ♻️♻️♻️")
     }
     

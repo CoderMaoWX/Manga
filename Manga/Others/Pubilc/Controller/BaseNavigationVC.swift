@@ -102,7 +102,11 @@ class BaseNavigationVC: UINavigationController {
     }
     
     @objc func goBackAction() {
-        popViewController(animated: true)
+        if let vcArray = navigationController?.viewControllers, let lastVC = vcArray.last?.presentingViewController  {
+            lastVC.dismiss(animated: true, completion: nil)
+        } else {
+            popViewController(animated: true)
+        }
     }
     
     //MARK: - 拦截所有的pop事件
