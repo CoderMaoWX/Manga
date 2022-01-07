@@ -35,7 +35,11 @@ class TestViewController: BaseVC {
         }
         setNavBarRightItem(info: ["Bag", UIImage(named: "selected_on")!]) { button in
             //showAlertControllerToast(message: "右侧按钮: \(button)")
-            OpenZXDeeplink(url: "Manga://open?params=%7B%22m_param%22%20%3A%20%7B%7D%2C%20%22source%22%3A%22%22%2C%22url%22%20%3A%20%22100004293741%22%2C%22action%22%20%3A%20%221%22%2C%22name%22%3A%22%22%7D", title: "Baidu")
+            if button.tag == 0 {
+                self.setValue("123", forKey: "name")
+            } else {
+                OpenZXDeeplink(url: "Manga://open?params=%7B%22m_param%22%20%3A%20%7B%7D%2C%20%22source%22%3A%22%22%2C%22url%22%20%3A%20%22100004293741%22%2C%22action%22%20%3A%20%221%22%2C%22name%22%3A%22%22%7D", title: "Baidu")
+            }
         }
     }
     

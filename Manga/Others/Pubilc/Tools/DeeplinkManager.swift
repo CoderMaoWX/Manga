@@ -8,7 +8,7 @@
 import Foundation
 import KakaJSON
 
-enum DeeplinkActionType: Int {
+enum DeeplinkActionType: Int, ConvertibleEnum {
     case jump_Default = 0
     case jump_Home = 1
     case jump_Detail = 2
@@ -35,6 +35,8 @@ func OpenZXDeeplink(url: String?, title: String?) {
         guard url.contains(params) else { return }
         
         if let allJson = url.components(separatedBy: params).last, let paramsJson = allJson.removingPercentEncoding {
+            debugLog("Deeplink的解析参数: params=\(paramsJson)")
+            
             if var model = paramsJson.kj.model(type: DeeplinkModel.self) as? DeeplinkModel {
                 if model.name?.isEmpty == true {
                     model.name = title
@@ -59,7 +61,7 @@ func OpenZXDeeplink(url: String?, title: String?) {
 
 ///跳转页面类型 (deeplink文档: xxxx)
 private func jumpDeeplinkWithModel(jumpModel: DeeplinkModel) {
-    debugLog("deeplink跳转类型: action=\(jumpModel.action), url=\(jumpModel.url), name=\(jumpModel.name ?? "")")
+    debugLog("Deeplink跳转类型: action=\(jumpModel.action), url=\(jumpModel.url), name=\(jumpModel.name ?? "")")
     
     let currentVC = appTopVC
     switch jumpModel.action {

@@ -31,7 +31,7 @@ extension UIViewController {
     
     @objc func wx_viewDidAppear(animated: Bool) {
         self.wx_viewDidAppear(animated: animated)
-        debugLog("wx_viewDidAppear 替换了", self.className)
+        debugLog("进入控制器:", self.className)
     }
     
     fileprivate struct AssociatedKeys {
