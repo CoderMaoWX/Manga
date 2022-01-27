@@ -7,7 +7,7 @@ use_modular_headers!
 
 platform :ios, '10.0'
 
-target 'Manga' do
+target 'iManga' do
   pod 'SnapKitExtend'
   pod 'PromiseKit'
   pod 'Moya'

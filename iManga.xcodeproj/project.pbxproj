@@ -63,13 +63,13 @@
 		58CDFB7C26BA33F100056527 /* GlobalTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CDFB6226BA33F000056527 /* GlobalTools.swift */; };
 		58CDFB7D26BA33F100056527 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB6426BA33F000056527 /* Assets.xcassets */; };
 		58CDFB8926BA34E200056527 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58CDFB8626BA34E200056527 /* LaunchScreen.storyboard */; };
-		7075E033816A232E3D55CCF6 /* libPods-Manga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */; };
 		A32CD80F25CC494A009A5C56 /* URankCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32CD80E25CC494A009A5C56 /* URankCCell.swift */; };
 		A3878E9E274E884500850F13 /* NetworkPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3878E9D274E884500850F13 /* NetworkPort.swift */; };
 		A3878EA2274E920B00850F13 /* CalenderListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3878EA1274E920B00850F13 /* CalenderListModel.swift */; };
 		A3878EA6274E947400850F13 /* CalenderListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3878EA4274E947400850F13 /* CalenderListCell.swift */; };
 		A3878EA7274E947400850F13 /* CalenderListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3878EA5274E947400850F13 /* CalenderListCell.xib */; };
 		A3BAAB2C26C7C151008854F9 /* SwizzlingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */; };
+		F3E8EB9DE1E32BBCE8377505 /* libPods-iManga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ECEF1D64072C0FB05B267EAC /* libPods-iManga.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,7 +87,7 @@
 		583D452025CBF6A500C053F7 /* UCateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UCateModel.swift; sourceTree = "<group>"; };
 		5846C87D26D36C4300CEF2FC /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		5846C87E26D36C4300CEF2FC /* TestViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestViewController.xib; sourceTree = "<group>"; };
-		584D5D9325C3F27A00FA507C /* Manga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Manga.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		584D5D9325C3F27A00FA507C /* iManga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iManga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584D5D9625C3F27A00FA507C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5887389725C5587C0049ECAD /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		5887389A25C558C00049ECAD /* CateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CateVC.swift; sourceTree = "<group>"; };
@@ -133,15 +133,15 @@
 		58CDFB6426BA33F000056527 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58CDFB8226BA34AC00056527 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		58CDFB8726BA34E200056527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Manga.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A32CD80E25CC494A009A5C56 /* URankCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URankCCell.swift; sourceTree = "<group>"; };
 		A3878E9D274E884500850F13 /* NetworkPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkPort.swift; sourceTree = "<group>"; };
 		A3878EA1274E920B00850F13 /* CalenderListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalenderListModel.swift; sourceTree = "<group>"; };
 		A3878EA4274E947400850F13 /* CalenderListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalenderListCell.swift; sourceTree = "<group>"; };
 		A3878EA5274E947400850F13 /* CalenderListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalenderListCell.xib; sourceTree = "<group>"; };
 		A3BAAB2B26C7C151008854F9 /* SwizzlingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwizzlingMethod.swift; sourceTree = "<group>"; };
-		C4DEF34117E1022E8F7858A7 /* Pods-Manga.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Manga.debug.xcconfig"; path = "Target Support Files/Pods-Manga/Pods-Manga.debug.xcconfig"; sourceTree = "<group>"; };
-		C7AFDB0A11E2C413F9EE7078 /* Pods-Manga.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Manga.release.xcconfig"; path = "Target Support Files/Pods-Manga/Pods-Manga.release.xcconfig"; sourceTree = "<group>"; };
+		ADED29FB494C26A7BB0CCC71 /* Pods-iManga.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iManga.release.xcconfig"; path = "Target Support Files/Pods-iManga/Pods-iManga.release.xcconfig"; sourceTree = "<group>"; };
+		C88A78509C312DE7493075EF /* Pods-iManga.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iManga.debug.xcconfig"; path = "Target Support Files/Pods-iManga/Pods-iManga.debug.xcconfig"; sourceTree = "<group>"; };
+		ECEF1D64072C0FB05B267EAC /* libPods-iManga.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iManga.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,7 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7075E033816A232E3D55CCF6 /* libPods-Manga.a in Frameworks */,
+				F3E8EB9DE1E32BBCE8377505 /* libPods-iManga.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,7 +159,7 @@
 		2E3B7F8F9F10B82C622FA726 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				808AAC00D1CDE03EC7A33350 /* libPods-Manga.a */,
+				ECEF1D64072C0FB05B267EAC /* libPods-iManga.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -167,8 +167,8 @@
 		3412133B075244D1B1462FAE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C4DEF34117E1022E8F7858A7 /* Pods-Manga.debug.xcconfig */,
-				C7AFDB0A11E2C413F9EE7078 /* Pods-Manga.release.xcconfig */,
+				C88A78509C312DE7493075EF /* Pods-iManga.debug.xcconfig */,
+				ADED29FB494C26A7BB0CCC71 /* Pods-iManga.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -195,7 +195,7 @@
 		584D5D9425C3F27A00FA507C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				584D5D9325C3F27A00FA507C /* Manga.app */,
+				584D5D9325C3F27A00FA507C /* iManga.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -418,9 +418,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		584D5D9225C3F27A00FA507C /* Manga */ = {
+		584D5D9225C3F27A00FA507C /* iManga */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 584D5DA725C3F27A00FA507C /* Build configuration list for PBXNativeTarget "Manga" */;
+			buildConfigurationList = 584D5DA725C3F27A00FA507C /* Build configuration list for PBXNativeTarget "iManga" */;
 			buildPhases = (
 				358766775DC9801B81D3696D /* [CP] Check Pods Manifest.lock */,
 				584D5D8F25C3F27A00FA507C /* Sources */,
@@ -432,9 +432,9 @@
 			);
 			dependencies = (
 			);
-			name = Manga;
+			name = iManga;
 			productName = U17Demo;
-			productReference = 584D5D9325C3F27A00FA507C /* Manga.app */;
+			productReference = 584D5D9325C3F27A00FA507C /* iManga.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -452,7 +452,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 584D5D8E25C3F27900FA507C /* Build configuration list for PBXProject "Manga" */;
+			buildConfigurationList = 584D5D8E25C3F27900FA507C /* Build configuration list for PBXProject "iManga" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -465,7 +465,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				584D5D9225C3F27A00FA507C /* Manga */,
+				584D5D9225C3F27A00FA507C /* iManga */,
 			);
 		};
 /* End PBXProject section */
@@ -494,15 +494,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Manga/Pods-Manga-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-iManga/Pods-iManga-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Manga/Pods-Manga-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-iManga/Pods-iManga-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Manga/Pods-Manga-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iManga/Pods-iManga-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		358766775DC9801B81D3696D /* [CP] Check Pods Manifest.lock */ = {
@@ -520,7 +520,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Manga-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-iManga-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -724,7 +724,7 @@
 		};
 		584D5DA825C3F27A00FA507C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C4DEF34117E1022E8F7858A7 /* Pods-Manga.debug.xcconfig */;
+			baseConfigurationReference = C88A78509C312DE7493075EF /* Pods-iManga.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -749,7 +749,7 @@
 		};
 		584D5DA925C3F27A00FA507C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7AFDB0A11E2C413F9EE7078 /* Pods-Manga.release.xcconfig */;
+			baseConfigurationReference = ADED29FB494C26A7BB0CCC71 /* Pods-iManga.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -774,7 +774,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		584D5D8E25C3F27900FA507C /* Build configuration list for PBXProject "Manga" */ = {
+		584D5D8E25C3F27900FA507C /* Build configuration list for PBXProject "iManga" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				584D5DA525C3F27A00FA507C /* Debug */,
@@ -783,7 +783,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		584D5DA725C3F27A00FA507C /* Build configuration list for PBXNativeTarget "Manga" */ = {
+		584D5DA725C3F27A00FA507C /* Build configuration list for PBXNativeTarget "iManga" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				584D5DA825C3F27A00FA507C /* Debug */,

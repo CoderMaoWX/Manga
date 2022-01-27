@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_MangaVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_MangaVersionString[];
+FOUNDATION_EXPORT double Pods_iMangaVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_iMangaVersionString[];
 

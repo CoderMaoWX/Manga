@@ -6,7 +6,7 @@
 //
 
 #import "MonitorLoad.h"
-#import "Manga-Swift.h"
+#import "iManga-Swift.h"
 
 @implementation MonitorLoad
 

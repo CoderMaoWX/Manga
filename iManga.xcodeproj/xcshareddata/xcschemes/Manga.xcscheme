@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "584D5D9225C3F27A00FA507C"
-               BuildableName = "Manga.app"
-               BlueprintName = "Manga"
-               ReferencedContainer = "container:Manga.xcodeproj">
+               BuildableName = "iManga.app"
+               BlueprintName = "iManga"
+               ReferencedContainer = "container:iManga.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "584D5D9225C3F27A00FA507C"
-            BuildableName = "Manga.app"
-            BlueprintName = "Manga"
-            ReferencedContainer = "container:Manga.xcodeproj">
+            BuildableName = "iManga.app"
+            BlueprintName = "iManga"
+            ReferencedContainer = "container:iManga.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "584D5D9225C3F27A00FA507C"
-            BuildableName = "Manga.app"
-            BlueprintName = "Manga"
-            ReferencedContainer = "container:Manga.xcodeproj">
+            BuildableName = "iManga.app"
+            BlueprintName = "iManga"
+            ReferencedContainer = "container:iManga.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

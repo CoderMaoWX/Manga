@@ -59,7 +59,7 @@ DEPENDENCIES:
   - Reusable
   - SnapKitExtend
   - SwiftyJSON
-  - WXNetworkingSwift (= 0.2.6)
+  - WXNetworkingSwift
   - YYCache
 
 SPEC REPOS:
@@ -109,6 +109,6 @@ SPEC CHECKSUMS:
   WXNetworkingSwift: 9cf0d75f1d99431e9c00d8efa678a0e3fc39ebef
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: 5bfe48f1da90f009b366917363ffa5fce93fcf7d
+PODFILE CHECKSUM: 489d5260d44cd4a654f3a3aefc349c0e02659c83
 
 COCOAPODS: 1.11.2

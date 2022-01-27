@@ -1,0 +1,6 @@
+module Pods_iManga {
+  umbrella header "Pods-iManga-umbrella.h"
+
+  export *
+  module * { export * }
+}

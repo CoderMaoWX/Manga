@@ -1,6 +1,0 @@
-module Pods_Manga {
-  umbrella header "Pods-Manga-umbrella.h"
-
-  export *
-  module * { export * }
-}
