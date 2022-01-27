@@ -729,7 +729,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = P8FFNR95EQ;
+				DEVELOPMENT_TEAM = 958LL4AQFJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -737,7 +737,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.test.luke;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zaful.Zaful2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Manga/Others/Tools/Manga-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -753,7 +753,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = P8FFNR95EQ;
+				DEVELOPMENT_TEAM = 958LL4AQFJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -761,7 +761,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.test.luke;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zaful.Zaful2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Manga/Others/Tools/Manga-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
