@@ -20,15 +20,24 @@ class TestViewController: BaseVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.41.162:8090/pullLogcat", catchTag: "mwx678")
+        configRequest()
         configNavgationView()
         testIOS15Api()
     }
     
+    func configRequest() {
+        //测试设置全局: 请求状态/解析模型
+        WXRequestConfig.shared.successStatusMap = (key: "returnCode",  value: "SUCCESS")
+        WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.41.162:8090/pullLogcat", catchTag: nil)
+        WXRequestConfig.shared.messageTipKeyAndFailInfo = (tipKey: "returnCode", defaultTip: "我的默认错误页面提示文案")
+        WXRequestConfig.shared.forbidProxyCaught = true
+        WXRequestConfig.shared.urlResponseLogTuple = (printf: true, hostTitle: "开发环境")
+        WXRequestConfig.shared.requestHUDCalss = WXLoadingHUD.self
+    }
+    
     ///导航栏事件
     func configNavgationView() {
-        navigationItem.title = "测试标题"
+        navigationItem.title = "测试标题2"
         view.addLineTo(position: .top, thinSize: 1)
         setNavBarLeftItem(info: [UIImage(named:"acg_like")!, "Message"]) { button in
             self.testBatchData()
@@ -71,16 +80,20 @@ class TestViewController: BaseVC {
         let url0 = "http://123.207.32.32:8000/home/multidata"
         let api0 = WXRequestApi(url0, method: .get, parameters: nil)
         api0.successStatusMap = (key: "returnCode",  value: "SUCCESS")
-        api0.autoCacheResponse = true
+//        api0.autoCacheResponse = true
         
         
         let url1 = "https://httpbin.org/delay/5"
         //let para0: [String : Any] = ["name" : "张三"]
         let api1 = WXRequestApi(url1, method: .get)
-        api1.autoCacheResponse = true
+//        api1.autoCacheResponse = true
         
         
-        let api = WXBatchRequestApi(apiArray: [api0, api1], loadingTo: view)
+        let url3 = "https://httpbin.org/post"
+        let api3 = WXRequestApi(url3, method: .post)
+
+        
+        let api = WXBatchRequestApi(apiArray: [api1, api0, api3], loadingTo: view)
         api.startRequest({ batchApi in
             debugLog("批量请求回调", batchApi.responseDataArray)
         }, waitAllDone: false)
@@ -271,7 +284,7 @@ class TestViewController: BaseVC {
     
     @objc func topViewAction(button: UIButton) {
         debugLog("点击了浮层")
-        button.backgroundColor = .random
+//        button.backgroundColor = .random
     }
     
     @objc func myUIAction(button: UIButton) {

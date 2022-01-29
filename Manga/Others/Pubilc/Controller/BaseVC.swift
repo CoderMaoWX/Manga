@@ -22,6 +22,14 @@ class BaseVC: UIViewController {
         }
     }
     
+    /// 安装: InjectionIII.app, 实现此方法进入实时调试模式(方法名: injected是固定的)
+    @objc func injected() {
+#if DEBUG
+        print("进入实时调试模式: \(self)")
+        self.viewDidLoad()
+#endif
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //公共配置

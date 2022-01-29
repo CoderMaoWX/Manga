@@ -13,6 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+#if DEBUG
+        // 安装: InjectionIII.app, 进入实时调试模式(路径是固定的)
+        Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")?.load()
+#endif
+        
         //开启网络监听
         networkListen()
         

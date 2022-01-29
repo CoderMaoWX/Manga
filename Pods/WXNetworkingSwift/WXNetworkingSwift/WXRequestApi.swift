@@ -19,7 +19,7 @@ public typealias WXNetworkResponseBlock = (WXResponseModel) -> ()
 
 enum WXRequestSerializerType {
     case EncodingJSON       // application/json
-    case FROM_URLEncoded    // application/x-www-form-urlencoded
+    case EncodingFormURL    // application/x-www-form-urlencoded
 }
 
 ///保存请求对象,避免提前释放
@@ -57,8 +57,8 @@ public class WXBaseRequest: NSObject {
     public var timeOut: TimeInterval = 30
     ///请求自定义头信息
     public var requestHeaderDict: Dictionary<String, String>? = nil
-    ///请求序列化对象 (, )
-    var requestSerializer: WXRequestSerializerType = .FROM_URLEncoded
+    ///请求序列化对象 (json, form表单)
+    var requestSerializer: WXRequestSerializerType = .EncodingFormURL
     ///请求任务对象
     fileprivate var requestDataTask: Request? = nil
     
@@ -440,7 +440,7 @@ public class WXRequestApi: WXBaseRequest {
         if let error = responseObj as? NSError { // Fail (NSError, AFError, Error都可相互转换)
             rspModel.error = error
             rspModel.responseCode = error.code
-            rspModel.responseMsg = error.domain
+            rspModel.responseMsg = configFailMessage
 
         } else if responseObj == nil { // Fail
             rspModel.error = NSError(domain: configFailMessage, code: -444, userInfo: nil)
@@ -742,16 +742,16 @@ public class WXBatchRequestApi {
     ///全部请求是否都成功了
     public var isAllSuccess: Bool = false
     
-    ///全部响应数据, 按请求requestArray的添加顺序排序
+    ///全部响应数据, 按请求requestArray的Api添加顺序排序返回
     public var responseDataArray: [WXResponseModel] = []
     
-    ///全部请求对象, 响应时按添加顺序返回
+    ///全部请求对象, 响应时Api按添加顺序返回
     fileprivate var requestArray: [WXRequestApi]
     ///请求转圈的父视图
     fileprivate (set) var loadingSuperView: UIView? = nil
     
-    fileprivate var requestCount: Int = 0
-    fileprivate var hasMarkBatchFail: Bool = false
+    
+    //以下内部私有属性, 外部请忽略
     fileprivate var batchRequest: WXBatchRequestApi? = nil //避免提前释放当前对象
     fileprivate var responseBatchBlock: ((WXBatchRequestApi) -> ())? = nil
     fileprivate var responseInfoDict: Dictionary<String, WXResponseModel> = [:]
@@ -774,23 +774,72 @@ public class WXBatchRequestApi {
                       waitAllDone: Bool = true) {
         
         responseDataArray.removeAll()
-        requestCount = requestArray.count
-        hasMarkBatchFail = false
         batchRequest = self
         responseBatchBlock = responseBlock
         for api in requestArray {
             judgeShowLoading(show: true)
             
             api.startRequest { [weak self] responseModel in
-                if responseModel.responseDict == nil {
-                    self?.hasMarkBatchFail = true
-                }
+                //配置响应数据
+                self?.configAllResponseData(responseModel: responseModel)
+                
                 if waitAllDone {
                     self?.finalHandleBatchResponse(responseModel: responseModel)
                 } else { //回调多次
                     self?.oftenHandleBatchResponse(responseModel: responseModel)
                 }
             }
+        }
+    }
+    
+    ///配置响应数据
+    func configAllResponseData(responseModel: WXResponseModel) {
+        //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用缓存
+        let apiUniquelyIp = responseModel.apiUniquelyIp
+        if responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
+            responseInfoDict[apiUniquelyIp] = responseModel
+        }
+        // 请求最终回调数据: 按请求对象添加顺序排序
+        responseDataArray = requestArray.compactMap {
+            responseInfoDict[ $0.apiUniquelyIp ]
+        }
+    }
+    
+    ///标记是否都成功: 一个失败就标记不是都成功
+    func refreshIsAllSuccess() {
+        for respModel in responseDataArray {
+            if respModel.isCacheData == false, respModel.responseDict == nil {
+                isAllSuccess = false//一个失败就标记不是都成功
+                break
+            }
+        }
+    }
+    
+    ///待所有请求都响应才回调到页面
+    fileprivate func finalHandleBatchResponse(responseModel: WXResponseModel) {
+        if responseModel.isCacheData == false, responseDataArray.count >= requestArray.count {
+            refreshIsAllSuccess()
+            judgeShowLoading(show: false)
+            
+            if let responseBatchBlock = responseBatchBlock {
+                responseBatchBlock(self)
+            }
+            batchRequest = nil
+        }
+    }
+    
+    ///每次请求响应都回调到页面
+    fileprivate func oftenHandleBatchResponse(responseModel: WXResponseModel) {
+        if responseModel.isCacheData == false, responseDataArray.count >= requestArray.count {
+            refreshIsAllSuccess()
+        }
+        judgeShowLoading(show: false)
+        
+        if let responseBatchBlock = responseBatchBlock {
+            responseBatchBlock(self)
+        }
+        if responseModel.isCacheData == false, responseDataArray.count >= requestArray.count {
+            batchRequest = nil
         }
     }
     
@@ -803,66 +852,6 @@ public class WXBatchRequestApi {
             } else {
                 WXRequestTools.hideLoading(from: loadingSuperView)
             }
-        }
-    }
-    
-    ///待所有请求都响应才回调到页面
-    fileprivate func finalHandleBatchResponse(responseModel: WXResponseModel) {
-        let apiUniquelyIp = responseModel.apiUniquelyIp
-        
-        //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用用缓存
-        if responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
-            responseInfoDict[apiUniquelyIp] = responseModel
-        }
-        if responseModel.isCacheData == false {
-            requestCount -= 1
-        }
-        guard requestCount <= 0 else { return }
-        
-        isAllSuccess = !hasMarkBatchFail
-        
-        // 请求最终回调
-        responseDataArray = requestArray.compactMap {
-            responseInfoDict[ $0.apiUniquelyIp ]
-        }
-        judgeShowLoading(show: false)
-        if let responseBatchBlock = responseBatchBlock {
-            responseBatchBlock(self)
-        }
-        batchRequest = nil
-    }
-    
-    ///每次请求响应都回调到页面
-    fileprivate func oftenHandleBatchResponse(responseModel: WXResponseModel) {
-        //本地有缓存, 当前请求失败了就不保存当前失败RspModel,则使用用缓存
-        let apiUniquelyIp = responseModel.apiUniquelyIp
-        if responseInfoDict[apiUniquelyIp] == nil || responseModel.responseDict != nil {
-            responseInfoDict[apiUniquelyIp] = responseModel
-        }
-        if responseModel.isCacheData == false {
-            isAllSuccess = !hasMarkBatchFail
-        }
-        ///按请求对象添加顺序排序
-        let tmpRspArray = responseInfoDict.values
-        var finalRspArray: [WXResponseModel] = []
-        for request in requestArray {
-            for response in tmpRspArray {
-                if request.apiUniquelyIp == response.apiUniquelyIp {
-                    finalRspArray.append(response)
-                    break
-                }
-            }
-        }
-        judgeShowLoading(show: false)
-        if finalRspArray.count > 0 {
-            responseDataArray.removeAll()
-            responseDataArray += finalRspArray
-            if let responseBatchBlock = responseBatchBlock {
-                responseBatchBlock(self)
-            }
-        }
-        if requestCount >= responseDataArray.count {
-            batchRequest = nil
         }
     }
     
@@ -891,7 +880,8 @@ public class WXResponseModel: NSObject {
     public var isSuccess: Bool = false
     ///本次响应Code码
     public var responseCode: Int? = nil
-    ///本次响应的提示信息 (页面可直接用于Toast提示,如果接口有返回messageTipKeyAndFailInfo.tipKey则会取这个值, 如果没有返回则取defaultTip的默认值)
+    ///本次响应的提示信息 (页面可直接用于Toast提示,
+    ///如果接口有返回messageTipKeyAndFailInfo.tipKey则会取这个值, 如果没有返回则取defaultTip的默认值)
     public var responseMsg: String? = nil
     ///本次数据是否为缓存
     public var isCacheData: Bool = false

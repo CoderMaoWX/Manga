@@ -5,3 +5,4 @@
 // 在这里导入需要给Swift用的OC头文件
 
 #import "MonitorLoad.h"
+#import "UIImage+Extension.h"
