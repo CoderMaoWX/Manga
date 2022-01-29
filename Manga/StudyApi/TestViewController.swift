@@ -40,7 +40,8 @@ class TestViewController: BaseVC {
         navigationItem.title = "测试标题2"
         view.addLineTo(position: .top, thinSize: 1)
         setNavBarLeftItem(info: [UIImage(named:"acg_like")!, "Message"]) { button in
-            self.testBatchData()
+            self.showEmptyTipView(config: nil)
+//            self.testJsonData()
         }
         setNavBarRightItem(info: ["Bag", UIImage(named: "selected_on")!]) { button in
             //showAlertControllerToast(message: "右侧按钮: \(button)")

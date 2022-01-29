@@ -78,8 +78,10 @@ class BaseVC: UIViewController {
     }()
     
     ///配置显示空白提示页
-    func showEmptyTipView(config: (WXEmptyTipView) -> ()) {
-        config(emptyTipView)
+    func showEmptyTipView(config: ( (WXEmptyTipView) -> () )? ) {
+        if let config = config {
+            config(emptyTipView)
+        }
         view.bringSubviewToFront(emptyTipView)
         emptyTipView.isHidden = false
         emptyTipView.snp.remakeConstraints {
