@@ -26,7 +26,7 @@ struct DeeplinkModel: Convertible {
  * 1.如果是Manga开头: 就用deeplink打开,
  * 2.http/https开头 :则打开webVC
 */
-func OpenZXDeeplink(url: String?, title: String?) {
+func OpenWXDeeplink(url: String?, title: String?) {
     guard var url = url, url.isEmpty == false else { return }
     url = url.trimmingCharacters(in: .whitespacesAndNewlines)
     
