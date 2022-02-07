@@ -209,27 +209,28 @@ extension UIView {
             return label?.text
         }
         set {
-            var number = Int(newValue ?? "0")
-            if let text = newValue {
-                number = Int(text.replacingOccurrences(of: " ", with: ""))
-            }
-            if number == nil || number == 0 {
+            let badgeString = newValue?.replacingOccurrences(of: " ", with: "")
+            if newValue == nil || badgeString!.count == 0 || Int(badgeString ?? "0") == 0 {
                 let dotLabel = viewWithTag(kDotLabelTag)
                 dotLabel?.removeFromSuperview()
                 return
             }
-            let badge = "\(number!)"
+            let badgeText = badgeString!
             let label = (viewWithTag(kDotLabelTag) as? UILabel) ?? UILabel()
             label.tag = kDotLabelTag
-            label.text = badge
+            label.text = badgeText
             label.backgroundColor = .red
             label.font = .boldSystemFont(ofSize: 12)
             label.textAlignment = .center
             label.textColor = .white
-            label.text = (badge.count > 2) ? "99+" : badge
+            if let number = Int(badgeText) {//数字类型: "100"
+                label.text = ("\(number)".count > 2) ? "99+" : "\(number)"
+            } else {//文字类型: "new"
+                label.text = badgeText
+            }
             label.sizeToFit()
             let dotH = label.bounds.size.height
-            var dotW = label.bounds.size.width + (badge.count > 1 ? 5 : 0)
+            var dotW = label.bounds.size.width + (badgeText.count > 1 ? 5 : 0)
             if dotW < dotH { dotW = dotH }
             label.layer.cornerRadius = dotH / 2.0
             label.layer.masksToBounds = true

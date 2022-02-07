@@ -226,7 +226,7 @@ class TestViewController: BaseVC {
             hideLoading(from: self.view)
             showAlertControllerToast(message: "休息一下,马上回来,休息一下,马上回来")
             
-        }.first!.badgeValue = "new"
+        }.first!.badgeValue = " new "
         
         let img1 = UIImage(named: "refresh_icon")!
         let img2 = UIImage(named: "delete_icon")!
