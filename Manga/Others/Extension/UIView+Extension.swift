@@ -156,42 +156,91 @@ extension UIView {
         return animation;
     }
     
-    ///设置/获取: 红点数字提示
-    var redDotValue: String? {
+    /// 设置/获取: 红色小圆点提示
+    var showRedDot: Bool {
         get {
-            let dotLabel = viewWithTag(kDotLabelTag) as? UILabel
-            return dotLabel?.text
+            let label = viewWithTag(kDotLabelTag) as? UILabel
+            return (label != nil)
         }
         set {
-            if let number = Int(newValue ?? "0"), number == 0 {
+            if newValue == false {
                 let dotLabel = viewWithTag(kDotLabelTag)
                 dotLabel?.removeFromSuperview()
                 return
             }
+            let label = (viewWithTag(kDotLabelTag) as? UILabel) ?? UILabel()
+            label.tag = kDotLabelTag
+            label.backgroundColor = .red
+            let dotSize = 8.0
+            label.layer.cornerRadius = dotSize / 2.0
+            label.layer.masksToBounds = true
+            label.clipsToBounds = true
+            layer.masksToBounds = false
+            clipsToBounds = false
+            addSubview(label)
+            label.snp.remakeConstraints {
+                $0.leading.equalTo(self.snp.trailing).offset(-dotSize/2.0)
+                $0.top.equalTo(self.snp.top).offset(-dotSize/2.0)
+                $0.size.equalTo(CGSize(width: dotSize, height: dotSize))
+            }
+        }
+    }
+    
+    /// 设置: 红色小圆点提示 (控制偏移位置)
+    /// - Parameters:
+    ///   - show: 是都显示红色小圆点
+    ///   - offset: 在控件右上角中心位置的基础上进行 偏移控制
+    func showRedDot(_ show: Bool, offset: CGPoint) {
+        showRedDot = show
+        if show == true, let dotLabel = viewWithTag(kDotLabelTag), dotLabel.superview != nil  {
+            let dotSize = 8.0
+            dotLabel.snp.remakeConstraints {
+                $0.leading.equalTo(self.snp.trailing).offset(-dotSize/2 + offset.x)
+                $0.top.equalTo(self.snp.top).offset(-dotSize/2 + offset.y)
+                $0.size.equalTo(CGSize(width: dotSize, height: dotSize))
+            }
+        }
+    }
+    
+    ///设置/获取: 数字提示 (红色背景,白色文字)
+    var badgeValue: String? {
+        get {
+            let label = viewWithTag(kDotLabelTag) as? UILabel
+            return label?.text
+        }
+        set {
+            var number = Int(newValue ?? "0")
             if let text = newValue {
-                let dotLabel = (viewWithTag(kDotLabelTag) as? UILabel) ?? UILabel()
-                dotLabel.tag = kDotLabelTag
-                dotLabel.text = text
-                dotLabel.backgroundColor = .red
-                dotLabel.font = .boldSystemFont(ofSize: 12)
-                dotLabel.textAlignment = .center
-                dotLabel.textColor = .white
-                dotLabel.text = (text.count > 2) ? "99+" : text
-                dotLabel.sizeToFit()
-                let dotH = dotLabel.bounds.size.height
-                var dotW = dotLabel.bounds.size.width + (text.count > 1 ? 5 : 0)
-                if dotW < dotH { dotW = dotH }
-                dotLabel.layer.cornerRadius = dotH / 2
-                dotLabel.layer.masksToBounds = true
-                dotLabel.clipsToBounds = true
-                layer.masksToBounds = false
-                clipsToBounds = false
-                addSubview(dotLabel)
-                dotLabel.snp.remakeConstraints {
-                    $0.leading.equalTo(self.snp.trailing).offset(-dotW/2)
-                    $0.top.equalTo(self.snp.top).offset(-dotH/2)
-                    $0.size.equalTo(CGSize(width: dotW, height: dotH))
-                }
+                number = Int(text.replacingOccurrences(of: " ", with: ""))
+            }
+            if number == nil || number == 0 {
+                let dotLabel = viewWithTag(kDotLabelTag)
+                dotLabel?.removeFromSuperview()
+                return
+            }
+            let badge = "\(number!)"
+            let label = (viewWithTag(kDotLabelTag) as? UILabel) ?? UILabel()
+            label.tag = kDotLabelTag
+            label.text = badge
+            label.backgroundColor = .red
+            label.font = .boldSystemFont(ofSize: 12)
+            label.textAlignment = .center
+            label.textColor = .white
+            label.text = (badge.count > 2) ? "99+" : badge
+            label.sizeToFit()
+            let dotH = label.bounds.size.height
+            var dotW = label.bounds.size.width + (badge.count > 1 ? 5 : 0)
+            if dotW < dotH { dotW = dotH }
+            label.layer.cornerRadius = dotH / 2.0
+            label.layer.masksToBounds = true
+            label.clipsToBounds = true
+            layer.masksToBounds = false
+            clipsToBounds = false
+            addSubview(label)
+            label.snp.remakeConstraints {
+                $0.leading.equalTo(self.snp.trailing).offset(-dotW/2.0)
+                $0.top.equalTo(self.snp.top).offset(-dotH/2.0)
+                $0.size.equalTo(CGSize(width: dotW, height: dotH))
             }
         }
     }
@@ -200,10 +249,9 @@ extension UIView {
     /// - Parameters:
     ///   - number: 提示的数字
     ///   - offset: 在控件右上角中心位置的基础上进行 偏移控制
-    func redDotValue(_ number: String?, offset: CGPoint) {
-        redDotValue = number
-        let dotLabel = viewWithTag(kDotLabelTag)
-        if let numberString = number, let dotLabel = dotLabel, dotLabel.superview != nil  {
+    func badgeValue(_ number: String?, offset: CGPoint) {
+        badgeValue = number
+        if let numberString = number, let dotLabel = viewWithTag(kDotLabelTag), dotLabel.superview != nil  {
             dotLabel.sizeToFit()
             let dotH = dotLabel.bounds.size.height
             var dotW = dotLabel.bounds.size.width + (numberString.count > 1 ? 5 : 0)

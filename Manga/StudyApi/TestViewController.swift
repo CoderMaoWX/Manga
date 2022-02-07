@@ -23,6 +23,7 @@ class TestViewController: BaseVC {
         configRequest()
         configNavgationView()
         testIOS15Api()
+        testAlert()
     }
     
     func configRequest() {
@@ -40,8 +41,7 @@ class TestViewController: BaseVC {
         navigationItem.title = "测试标题2"
         view.addLineTo(position: .top, thinSize: 1)
         setNavBarLeftItem(info: [UIImage(named:"acg_like")!, "Message"]) { button in
-            self.showEmptyTipView(config: nil)
-//            self.testJsonData()
+            self.testBatchData()
         }
         setNavBarRightItem(info: ["Bag", UIImage(named: "selected_on")!]) { button in
             //showAlertControllerToast(message: "右侧按钮: \(button)")
@@ -226,7 +226,7 @@ class TestViewController: BaseVC {
             hideLoading(from: self.view)
             showAlertControllerToast(message: "休息一下,马上回来,休息一下,马上回来")
             
-        }.first!.redDotValue = "18"
+        }.first!.badgeValue = "new"
         
         let img1 = UIImage(named: "refresh_icon")!
         let img2 = UIImage(named: "delete_icon")!
