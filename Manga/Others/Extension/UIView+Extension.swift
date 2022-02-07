@@ -129,7 +129,7 @@ extension UIView {
     }
     
     ///缩放动画 max：结束最大值
-    func scaleToVlaueAnimation(scale: CGFloat) -> CAKeyframeAnimation {
+    func scaleAnimationToScale(_ scale: CGFloat) -> CAKeyframeAnimation {
         //FIXME: occ Bug 1101
         let a = transform.a;
         let b = transform.b;

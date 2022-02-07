@@ -130,23 +130,27 @@ class WXEmptyTipView: UIView {
             $0.centerY.equalTo(snp.centerY)
             $0.width.equalTo(snp.width)
         }
+        
         contenView.addSubview(tipImageView)
         tipImageView.snp.makeConstraints {
             $0.top.equalTo(contenView.snp.top)
             $0.centerX.equalTo(contenView.snp.centerX)
         }
+        
         contenView.addSubview(tipLabel)
         tipLabel.snp.makeConstraints {
             $0.top.equalTo(tipImageView.snp.bottom).offset(16);
             $0.leading.equalTo(contenView.snp.leading).offset(12);
             $0.trailing.equalTo(contenView.snp.trailing).offset(-12);
         }
+        
         contenView.addSubview(subTitleLabel)
         subTitleLabel.snp.makeConstraints {
             $0.top.equalTo(tipLabel.snp.bottom).offset(0);
             $0.leading.equalTo(contenView.snp.leading).offset(12);
             $0.trailing.equalTo(contenView.snp.trailing).offset(-12);
         }
+        
         contenView.addSubview(actionBtn)
         actionBtn.snp.makeConstraints {
             $0.top.equalTo(subTitleLabel.snp.bottom).offset(0);
