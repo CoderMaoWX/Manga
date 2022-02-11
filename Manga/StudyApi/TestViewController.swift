@@ -23,25 +23,18 @@ class TestViewController: BaseVC {
         configRequest()
         configNavgationView()
         testIOS15Api()
-        testAlert()
-    }
-    
-    func configRequest() {
-        //测试设置全局: 请求状态/解析模型
-        WXRequestConfig.shared.successStatusMap = (key: "returnCode",  value: "SUCCESS")
-        WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.41.162:8090/pullLogcat", catchTag: nil)
-        WXRequestConfig.shared.messageTipKeyAndFailInfo = (tipKey: "returnCode", defaultTip: "我的默认错误页面提示文案")
-        WXRequestConfig.shared.forbidProxyCaught = true
-        WXRequestConfig.shared.urlResponseLogTuple = (printf: true, hostTitle: "开发环境")
-        WXRequestConfig.shared.requestHUDCalss = WXLoadingHUD.self
     }
     
     ///导航栏事件
     func configNavgationView() {
-        navigationItem.title = "测试标题2"
+        navigationItem.title = "测试标题"
         view.addLineTo(position: .top, thinSize: 1)
         setNavBarLeftItem(info: [UIImage(named:"acg_like")!, "Message"]) { button in
-            self.testBatchData()
+            if button.tag == 1 {
+                self.testGetRequest()
+            } else {
+                ApiClass.studyApi()
+            }
         }
         setNavBarRightItem(info: ["Bag", UIImage(named: "selected_on")!]) { button in
             //showAlertControllerToast(message: "右侧按钮: \(button)")
@@ -51,6 +44,17 @@ class TestViewController: BaseVC {
                 OpenWXDeeplink(url: "Manga://open?params=%7B%22m_param%22%20%3A%20%7B%7D%2C%20%22source%22%3A%22%22%2C%22url%22%20%3A%20%22100004293741%22%2C%22action%22%20%3A%20%221%22%2C%22name%22%3A%22%22%7D", title: "Baidu")
             }
         }
+    }
+    
+    func configRequest() {
+        //测试设置全局: 请求状态/解析模型
+        WXRequestConfig.shared.successStatusMap = (key: "returnCode",  value: "SUCCESS")
+        WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.41.162:8090/pullLogcat", catchTag: nil)
+        WXRequestConfig.shared.messageTipKeyAndFailInfo = (tipKey: "returnCode", defaultTip: "我的默认错误页面提示文案")
+        WXRequestConfig.shared.forbidProxyCaught = true
+        WXRequestConfig.shared.isDistributionOnlineRelease = true
+        WXRequestConfig.shared.urlResponseLogTuple = (printf: true, hostTitle: "开发环境")
+        WXRequestConfig.shared.requestHUDCalss = WXLoadingHUD.self
     }
     
     //MARK: ----- 测试请求代码 -----
