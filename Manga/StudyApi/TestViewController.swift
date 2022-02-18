@@ -34,6 +34,13 @@ class TestViewController: BaseVC {
                 self.testGetRequest()
             } else {
                 ApiClass.studyApi()
+                var str = "ABCDEFGH"
+                let start = str.index(str.startIndex, offsetBy: 2)
+                let end = str.index(str.endIndex, offsetBy: -1)
+                let range = start...end
+                str.removeSubrange(range)
+                debugLog("判断空字符串", str)
+                
             }
         }
         setNavBarRightItem(info: ["Bag", UIImage(named: "selected_on")!]) { button in
