@@ -1,42 +1,41 @@
 PODS:
-  - Alamofire (5.4.4)
+  - Alamofire (5.5.0)
   - CleanJSON (1.0.9)
   - EmptyDataSet-Swift (5.0.0)
   - FDFullscreenPopGesture (1.1)
   - HandyJSON (5.0.2)
   - HMSegmentedControl (1.5.6)
-  - IQKeyboardManagerSwift (6.5.6)
-  - JKSwiftExtension (1.8.2):
-    - Kingfisher
+  - IQKeyboardManagerSwift (6.5.9)
+  - JKSwiftExtension (2.0.9)
   - KakaJSON (1.1.2)
   - Kingfisher (6.3.1)
   - KVOController (1.2.0)
   - LLCycleScrollView (1.6.0):
     - Kingfisher
-  - MJRefresh (3.7.2)
-  - Moya (14.0.0):
-    - Moya/Core (= 14.0.0)
-  - Moya/Core (14.0.0):
+  - MJRefresh (3.7.5)
+  - Moya (15.0.0):
+    - Moya/Core (= 15.0.0)
+  - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
-  - PromiseKit (6.15.3):
-    - PromiseKit/CorePromise (= 6.15.3)
-    - PromiseKit/Foundation (= 6.15.3)
-    - PromiseKit/UIKit (= 6.15.3)
-  - PromiseKit/CorePromise (6.15.3)
-  - PromiseKit/Foundation (6.15.3):
+  - PromiseKit (6.17.0):
+    - PromiseKit/CorePromise (= 6.17.0)
+    - PromiseKit/Foundation (= 6.17.0)
+    - PromiseKit/UIKit (= 6.17.0)
+  - PromiseKit/CorePromise (6.17.0)
+  - PromiseKit/Foundation (6.17.0):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.15.3):
+  - PromiseKit/UIKit (6.17.0):
     - PromiseKit/CorePromise
-  - Reusable (4.1.1):
-    - Reusable/Storyboard (= 4.1.1)
-    - Reusable/View (= 4.1.1)
-  - Reusable/Storyboard (4.1.1)
-  - Reusable/View (4.1.1)
+  - Reusable (4.1.2):
+    - Reusable/Storyboard (= 4.1.2)
+    - Reusable/View (= 4.1.2)
+  - Reusable/Storyboard (4.1.2)
+  - Reusable/View (4.1.2)
   - SnapKit (5.0.1)
   - SnapKitExtend (1.1.0):
     - SnapKit
   - SwiftyJSON (5.0.1)
-  - WXNetworkingSwift (0.3.1):
+  - WXNetworkingSwift (0.3.2):
     - Alamofire
     - KakaJSON
   - YYCache (1.0.4)
@@ -87,28 +86,28 @@ SPEC REPOS:
     - YYCache
 
 SPEC CHECKSUMS:
-  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
+  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   CleanJSON: 910a36465ce4829e264a902ccf6d1455fdd9f980
   EmptyDataSet-Swift: eb382c0c87a2d9c678077385a595cec52da38171
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   HMSegmentedControl: 34c1f54d822d8308e7b24f5d901ec674dfa31352
-  IQKeyboardManagerSwift: c7df9d2deb356c04522f5c4b7b6e4ce4d8ed94fe
-  JKSwiftExtension: 4ce0fc39b8ddb4bcc2e7ce3c81d4136689ed3eed
+  IQKeyboardManagerSwift: 6e839c575c4aa1078d58a596e41244e77abe918f
+  JKSwiftExtension: 6f04ff06b1f5da5cfcd65402e26875a26f1da2f1
   KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
   Kingfisher: 016c8b653a35add51dd34a3aba36b580041acc74
   KVOController: d72ace34afea42468329623b3379ab3cd1d286b6
   LLCycleScrollView: a08f666671f9fd1a205df9defebc3c217d59abc8
-  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
-  Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
-  PromiseKit: 3b2b6995e51a954c46dbc550ce3da44fbfb563c5
-  Reusable: 53a9acf5c536f229b31b5865782414b508252ddb
+  MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  PromiseKit: 996202d4cae72b7801b312abef4cd2f995b2978a
+  Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SnapKitExtend: aa30cf37196195fae9c4354686cc7710184ebfcc
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
-  WXNetworkingSwift: 3212e8194d4be71943e1b56aac918a3c5d19c5d9
+  WXNetworkingSwift: 32f2b5d56c39ac8a83ed66bdca148d22f8334c04
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: 489d5260d44cd4a654f3a3aefc349c0e02659c83
+PODFILE CHECKSUM: 40fb23a7aeda741a969adc53561b23b37b3fcf3c
 
 COCOAPODS: 1.11.2

@@ -42,6 +42,8 @@ target 'iManga' do
   
   #自己写的网络库
   pod 'WXNetworkingSwift'
+  
+#  pod 'YogaKit'
 
 end
 

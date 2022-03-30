@@ -13,6 +13,8 @@ import FDFullscreenPopGesture
 import MobileCoreServices
 import WXNetworkingSwift
 import SwiftUI
+//盒子布局框架
+//import YogaKit
 
 class TestViewController: BaseVC {
     
@@ -22,7 +24,28 @@ class TestViewController: BaseVC {
         super.viewDidLoad()
         configRequest()
         configNavgationView()
-        testIOS15Api()
+//        testIOS15Api()
+        testYogaKit()
+    }
+    
+    func testYogaKit() {
+//        // 1
+//        let contentView = UIView()
+//        contentView.backgroundColor = .lightGray
+//        // 2
+//        contentView.configureLayout { (layout) in
+//          // 3
+//          layout.isEnabled = true
+//          // 4
+//          layout.flexDirection = .row
+////          layout.width = 320
+////          layout.height = 80
+////          layout.marginTop = 40
+////          layout.marginLeft = 10
+//        }
+//        view.addSubview(contentView)
+//        // 5
+//        contentView.yoga.applyLayout(preservingOrigin: true)
     }
     
     ///导航栏事件

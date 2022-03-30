@@ -19,21 +19,51 @@
 
 ## 导入方式
 
-     platform :ios, '9.0'
-     
-     target '项目名字' do
-       use_frameworks!
-       pod 'JKSwiftExtension'
+#### 方式一：Swift Package Manager
 
-     end
+- File > Swift Packages > Add Package Dependency
+- Add `https://github.com/JoanKing/JKSwiftExtension.git`
+- Select "Up to Next Major" with "2.0.0"
+
+#### 方式二：CocoaPods
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+use_frameworks!
+
+target 'MyApp' do
+  pod 'JKSwiftExtension'
+end
+```
 
 ## Requirements
 
     Swift5.0+
     
-## 这个基础库的目的：快速开发，不重复再去查找资料，如果觉得此项目对您的Swift学习有帮助，欢迎点赞...
-    
+## JKSwiftExtension基础库的目的：快速开发，不重复再去查找资料，如果觉得此项目对您有帮助，欢迎点赞...
+
+## 讨论
+- 微信号: wangc2318151015
+- 邮箱: jkironman@163.com
+<img src="https://user-images.githubusercontent.com/19670000/150451850-eb0ddf38-f426-4a5a-be6c-c9ea32773097.png" alt="微信交流群" width="220">
+
 ## 版本说明
+   - 2.0.8、版本：WKWebView 在Xcode13.3的bug修复
+   - 2.0.6、版本：修复Array+Extension 添加数组和 Int转CountableRange的问题
+   - 2.0.5、版本：修复JKWeakTimer在未开启下的崩溃
+   - 2.0.2、版本：新增JKMems辅助查看内存的小工具类和JKPlaceHolderTextView设置PlaceHolder
+   - 2.0.0、版本：开始支持 SPM(Swift Package Manager)
+   - 1.9.5、版本：DateFormatter耗时优化
+   - 1.9.2、版本：常量增加前缀`jk_`
+   - 1.9.1、版本：mark注释更新
+   - 1.9.0、版本：1.9.0之后的版本去除JKEKEvent.swift和JKContactsKit.swift，原因是：对于日历和通讯录的API使用，苹果机审需要在：info.plist中添加对用的key和value
+   - 1.8.9、版本：去除依赖库
+   - 1.8.8、版本：kTabbatBottom 改为 kTabbarBottom
+   - 1.8.7、版本：CALayer+Extension.swift中baseBasicAnimation动画repeatNumber: 重复的次数的使用
+   - 1.8.6、版本：去除Kingfisher依赖
+   - 1.8.5、版本：UIView+Extension新增内阴影
+   - 1.8.2、版本：扩展更新
    - 1.8.0、版本：新增智能换肤
        用户可以设置时间来定义：浅色和深色的切换时间，到时间自动切换模式，需要开发者自己去找触发机制，具体的测试用例在：JKDarkModeUtilViewController
        
@@ -133,7 +163,7 @@
          }
         使用，建议设置一个业务颜色的扩展，在使用的时候调用业务的颜色，如下
         
-         // MARK:- 业务颜色的使用
+         // MARK: - 业务颜色的使用
          extension UIColor {
             /// 颜色
             private(set) static var cB1: UIColor = UIColor.darkModeColor(lightColor: UIColor.green, darkColor: UIColor.blue)
