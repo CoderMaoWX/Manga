@@ -1,4 +1,4 @@
-module HMSegmentedControl {
+framework module HMSegmentedControl {
   umbrella header "HMSegmentedControl-umbrella.h"
 
   export *

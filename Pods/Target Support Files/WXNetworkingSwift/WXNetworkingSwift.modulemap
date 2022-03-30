@@ -1,4 +1,4 @@
-module WXNetworkingSwift {
+framework module WXNetworkingSwift {
   umbrella header "WXNetworkingSwift-umbrella.h"
 
   export *

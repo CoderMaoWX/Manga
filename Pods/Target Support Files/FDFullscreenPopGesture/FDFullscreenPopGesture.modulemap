@@ -1,4 +1,4 @@
-module FDFullscreenPopGesture {
+framework module FDFullscreenPopGesture {
   umbrella header "FDFullscreenPopGesture-umbrella.h"
 
   export *

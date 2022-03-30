@@ -1,4 +1,4 @@
-module EmptyDataSet_Swift {
+framework module EmptyDataSet_Swift {
   umbrella header "EmptyDataSet-Swift-umbrella.h"
 
   export *

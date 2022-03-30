@@ -76,12 +76,13 @@ class MineVC: BaseVC {
         dict["sort_type"] = "hot"
         
         let url = "https://manga.1kxun.mobi/api/mycenter/getList"
-        let request = WXRequestApi(url, method: .get, parameters: dict)
-        request.loadingSuperView = view
-        request.successStatusMap = (key: "status",  value: "success")
-        request.parseModelMap = (parseKey: "data" , modelType: MineListModel.self)
+        let api = WXRequestApi(url, method: .get, parameters: dict)
+        api.requestSerializer = .EncodingFormURL
+        api.loadingSuperView = view
+        api.successStatusMap = (key: "status",  value: "success")
+        api.parseModelMap = (parseKey: "data" , modelType: MineListModel.self)
 
-        request.startRequest { [weak self] (responseModel) in
+        api.startRequest { [weak self] (responseModel) in
             var listModel = (responseModel.parseKeyPathModel as? [MineListModel]) ?? []
             listModel.insert(contentsOf: self?.defaultUserItem() ?? [], at: 0)
             self?.dataArray = listModel

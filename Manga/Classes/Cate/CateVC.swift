@@ -53,12 +53,13 @@ class CateVC: BaseVC {
     
     func loadListData() {
         let url: String = "http://app.u17.com/v3/appV3_3/ios/phone/sort/mobileCateList"
-        let request = WXRequestApi(url, method: .get, parameters: nil)
-        request.loadingSuperView = view
-        request.successStatusMap = (key: "code",  value: "1")
-        request.parseModelMap = (parseKey: "data.returnData.rankingList" , modelType: RankingModel.self)
+        let api = WXRequestApi(url, method: .get, parameters: nil)
+        api.requestSerializer = .EncodingFormURL
+        api.loadingSuperView = view
+        api.successStatusMap = (key: "code",  value: "1")
+        api.parseModelMap = (parseKey: "data.returnData.rankingList" , modelType: RankingModel.self)
         
-        request.startRequest { [weak self] (responseModel) in
+        api.startRequest { [weak self] (responseModel) in
             self?.rankingList = (responseModel.parseKeyPathModel as? [RankingModel]) ?? []
             self?.collectionView.reloadData(autoEmptyViewInfo: self?.rankingList)
         }

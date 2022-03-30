@@ -53,11 +53,12 @@ class BoutiqueVC: BaseVC {
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/comic/boutiqueListNew"
         let param: [String : Any] = ["sexType" : 1]
         
-        let request = WXRequestApi(url, method: .get, parameters: param)
-        request.successStatusMap = (key: "code",  value: "1")
-        request.parseModelMap = (parseKey: "data.returnData.comicLists" , modelType: ComicListModel.self)
+        let api = WXRequestApi(url, method: .get, parameters: param)
+        api.requestSerializer = .EncodingFormURL
+        api.successStatusMap = (key: "code",  value: "1")
+        api.parseModelMap = (parseKey: "data.returnData.comicLists" , modelType: ComicListModel.self)
         
-        request.startRequest { [weak self] (responseModel) in
+        api.startRequest { [weak self] (responseModel) in
             self?.comicLists = (responseModel.parseKeyPathModel as? [ComicListModel]) ?? []
             self?.collectionView.reloadData(autoEmptyViewInfo: self?.comicLists)
             debugLog(responseModel);

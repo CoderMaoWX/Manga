@@ -1,1 +1,0 @@
-../../../Target Support Files/JKSwiftExtension/JKSwiftExtension-umbrella.h

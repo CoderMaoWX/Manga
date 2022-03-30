@@ -1,4 +1,4 @@
-module YYCache {
+framework module YYCache {
   umbrella header "YYCache-umbrella.h"
 
   export *

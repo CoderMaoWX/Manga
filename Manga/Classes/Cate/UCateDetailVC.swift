@@ -50,12 +50,13 @@ class UCateDetailVC: BaseVC {
         param["argValue"] = argValue
         
         let url = "http://app.u17.com/v3/appV3_3/ios/phone/list/commonComicList"
-        let request = WXRequestApi(url, method: .get, parameters: param)
-        request.loadingSuperView = view
-        request.successStatusMap = (key: "code",  value: "1")
-        request.parseModelMap = (parseKey: "data.returnData.comics" , modelType: ComicModel.self)
+        let api = WXRequestApi(url, method: .get, parameters: param)
+        api.requestSerializer = .EncodingFormURL
+        api.loadingSuperView = view
+        api.successStatusMap = (key: "code",  value: "1")
+        api.parseModelMap = (parseKey: "data.returnData.comics" , modelType: ComicModel.self)
 
-        request.startRequest { [weak self] (responseModel) in
+        api.startRequest { [weak self] (responseModel) in
             self?.dataArray = (responseModel.parseKeyPathModel as? [ComicModel]) ?? []
             self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
         }

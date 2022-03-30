@@ -2,8 +2,11 @@ source 'https://cdn.cocoapods.org/'
 #source 'https://github.com/CocoaPods/Specs.git'
 
 inhibit_all_warnings! #屏蔽所有warning
-use_modular_headers!
-# use_frameworks!
+
+#use_modular_headers!
+
+#安装YogaKit时使用use_modular_headers编译失败
+use_frameworks!
 
 platform :ios, '10.0'
 
@@ -43,7 +46,9 @@ target 'iManga' do
   #自己写的网络库
   pod 'WXNetworkingSwift'
   
-#  pod 'YogaKit'
+  #Flexbox的跨平台布局引擎: https://github.com/facebook/yoga#readme
+  #https://yogalayout.com/docs
+  pod 'YogaKit'
 
 end
 

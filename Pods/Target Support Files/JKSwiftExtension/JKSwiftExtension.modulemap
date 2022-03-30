@@ -1,4 +1,4 @@
-module JKSwiftExtension {
+framework module JKSwiftExtension {
   umbrella header "JKSwiftExtension-umbrella.h"
 
   export *

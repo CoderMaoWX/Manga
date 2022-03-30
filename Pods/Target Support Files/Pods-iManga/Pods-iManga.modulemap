@@ -1,4 +1,4 @@
-module Pods_iManga {
+framework module Pods_iManga {
   umbrella header "Pods-iManga-umbrella.h"
 
   export *

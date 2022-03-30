@@ -75,13 +75,14 @@ class CommunityVC: BaseVC {
         dict["sort_type"] = "hot"
         
         let url = "https://jp.forum.1kxun.mobi/api/forum/specialPosts"
-        let request = WXRequestApi(url, method: .get, parameters: dict)
-        request.successStatusMap = (key: "status", value: "success")
-        request.parseModelMap = (parseKey: "data", modelType: TrendInfoModel.self)
+        let api = WXRequestApi(url, method: .get, parameters: dict)
+        api.requestSerializer = .EncodingFormURL
+        api.successStatusMap = (key: "status", value: "success")
+        api.parseModelMap = (parseKey: "data", modelType: TrendInfoModel.self)
         if tableView.mj_header?.state != .refreshing {
-            request.loadingSuperView = view
+            api.loadingSuperView = view
         }
-        request.startRequest { [weak self] (responseModel) in
+        api.startRequest { [weak self] (responseModel) in
             let listModel =  (responseModel.parseKeyPathModel as? [TrendInfoModel]) ?? []
             if firstPage {
                 self?.dataArray = listModel

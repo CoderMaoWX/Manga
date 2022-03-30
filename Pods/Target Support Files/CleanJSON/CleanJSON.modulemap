@@ -1,4 +1,4 @@
-module CleanJSON {
+framework module CleanJSON {
   umbrella header "CleanJSON-umbrella.h"
 
   export *

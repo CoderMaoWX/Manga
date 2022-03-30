@@ -1,4 +1,4 @@
-module Reusable {
+framework module Reusable {
   umbrella header "Reusable-umbrella.h"
 
   export *

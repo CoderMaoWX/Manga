@@ -38,6 +38,9 @@ PODS:
   - WXNetworkingSwift (0.3.2):
     - Alamofire
     - KakaJSON
+  - Yoga (1.14.0)
+  - YogaKit (1.18.1):
+    - Yoga (~> 1.14)
   - YYCache (1.0.4)
 
 DEPENDENCIES:
@@ -59,6 +62,7 @@ DEPENDENCIES:
   - SnapKitExtend
   - SwiftyJSON
   - WXNetworkingSwift
+  - YogaKit
   - YYCache
 
 SPEC REPOS:
@@ -83,6 +87,8 @@ SPEC REPOS:
     - SnapKitExtend
     - SwiftyJSON
     - WXNetworkingSwift
+    - Yoga
+    - YogaKit
     - YYCache
 
 SPEC CHECKSUMS:
@@ -106,8 +112,10 @@ SPEC CHECKSUMS:
   SnapKitExtend: aa30cf37196195fae9c4354686cc7710184ebfcc
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   WXNetworkingSwift: 32f2b5d56c39ac8a83ed66bdca148d22f8334c04
+  Yoga: cff67a400f6b74dc38eb0bad4f156673d9aa980c
+  YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: 40fb23a7aeda741a969adc53561b23b37b3fcf3c
+PODFILE CHECKSUM: 86c6c7d6e4bb73b2206498ab84036db5d37ad0d2
 
 COCOAPODS: 1.11.2

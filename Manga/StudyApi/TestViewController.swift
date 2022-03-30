@@ -13,8 +13,8 @@ import FDFullscreenPopGesture
 import MobileCoreServices
 import WXNetworkingSwift
 import SwiftUI
-//盒子布局框架
-//import YogaKit
+//盒子布局框架:https://yogalayout.com/docs
+import YogaKit
 
 class TestViewController: BaseVC {
     
@@ -25,27 +25,54 @@ class TestViewController: BaseVC {
         configRequest()
         configNavgationView()
 //        testIOS15Api()
-        testYogaKit()
+//        testYogaKit()
     }
     
     func testYogaKit() {
-//        // 1
-//        let contentView = UIView()
-//        contentView.backgroundColor = .lightGray
-//        // 2
-//        contentView.configureLayout { (layout) in
-//          // 3
+//        self.view.configureLayout{ (layout) in
 //          layout.isEnabled = true
-//          // 4
-//          layout.flexDirection = .row
-////          layout.width = 320
-////          layout.height = 80
-////          layout.marginTop = 40
-////          layout.marginLeft = 10
+//          layout.width = YGValue(self.view.bounds.size.width)
+//          layout.height = YGValue(self.view.bounds.size.height)
+//          layout.alignItems = .center
+//          layout.justifyContent = .center
 //        }
-//        view.addSubview(contentView)
-//        // 5
-//        contentView.yoga.applyLayout(preservingOrigin: true)
+        
+        let contentView = UIView()
+        contentView.backgroundColor = .lightGray
+        view.addSubview(contentView)
+        contentView.configureLayout { (layout) in
+          layout.isEnabled = true
+          layout.flexDirection = .row
+          layout.width = 320
+          layout.height = 80
+          layout.marginTop = 40
+          layout.marginLeft = 10
+          layout.padding = 10
+        }
+        
+        let child1 = UIView()
+        child1.backgroundColor = .red
+        contentView.addSubview(child1)
+        child1.configureLayout{ (layout)  in
+          layout.isEnabled = true
+          layout.width = 80
+          layout.marginRight = 10
+        }
+        
+        let child2 = UIView()
+        child2.backgroundColor = .blue
+        contentView.addSubview(child2)
+        child2.configureLayout{ (layout)  in
+          layout.isEnabled = true
+          layout.width = 80
+          layout.flexGrow = 1
+          layout.height = 20
+          layout.alignSelf = .center
+        }
+        
+        contentView.yoga.applyLayout(preservingOrigin: true)
+//        self.view.yoga.applyLayout(preservingOrigin: true)
+        
     }
     
     ///导航栏事件
@@ -102,6 +129,7 @@ class TestViewController: BaseVC {
             "version" : "409",
         ]
         let api = WXRequestApi(url, method: .get, parameters: param)
+        api.requestSerializer = .EncodingFormURL
         api.timeOut = 40
         api.loadingSuperView = view
         api.successStatusMap = (key: "retcode", value: "0")
@@ -115,17 +143,20 @@ class TestViewController: BaseVC {
         let url0 = "http://123.207.32.32:8000/home/multidata"
         let api0 = WXRequestApi(url0, method: .get, parameters: nil)
         api0.successStatusMap = (key: "returnCode",  value: "SUCCESS")
+        api0.requestSerializer = .EncodingFormURL
 //        api0.autoCacheResponse = true
         
         
         let url1 = "https://httpbin.org/delay/5"
         //let para0: [String : Any] = ["name" : "张三"]
         let api1 = WXRequestApi(url1, method: .get)
+        api1.requestSerializer = .EncodingFormURL
 //        api1.autoCacheResponse = true
         
         
         let url3 = "https://httpbin.org/post"
         let api3 = WXRequestApi(url3, method: .post)
+        api3.requestSerializer = .EncodingFormURL
 
         
         let api = WXBatchRequestApi(apiArray: [api1, api0, api3], loadingTo: view)
@@ -140,6 +171,7 @@ class TestViewController: BaseVC {
 		let param: [String : Any] = ["sexType" : 1]
 
         let api = WXRequestApi(url, method: .get, parameters: param)
+        api.requestSerializer = .EncodingFormURL
 //        api.debugJsonResponse = "http://10.8.41.162:8090/app/activity/page/detail/92546"  //http(s) URL
 //        api.debugJsonResponse = "/Users/xin610582/Desktop/test.json"                      //Desktop json file
 //        api.debugJsonResponse = "test.json"                                               //Bundle json file

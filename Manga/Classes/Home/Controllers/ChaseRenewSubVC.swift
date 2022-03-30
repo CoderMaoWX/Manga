@@ -68,6 +68,7 @@ class ChaseRenewSubVC: BaseVC {
         param["_carrier"] = "中国电信"
 
         let api = WXRequestApi(path(.calender_list), method: .get, parameters: param)
+        api.requestSerializer = .EncodingFormURL
         api.successStatusMap = (key: "status",  value: "success")
         api.parseModelMap = (parseKey: "data" , modelType: CalenderListModel.self)
         if tableView.mj_header?.state != .refreshing {
