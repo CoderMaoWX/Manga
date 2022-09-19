@@ -63,10 +63,14 @@ class ShowVideoVC: BaseVC {
         }) { (bool, error) in
             if bool {
                 showToastText("保存成功")
-                self.textLabel.text = "保存成功"
+                DispatchQueue.main.async {
+                    self.textLabel.text = "保存成功"
+                }
             }else{
                 showToastText("保存失败")
-                self.textLabel.text = "保存失败"
+                DispatchQueue.main.async {
+                    self.textLabel.text = "保存失败"
+                }
             }
         }
     }
