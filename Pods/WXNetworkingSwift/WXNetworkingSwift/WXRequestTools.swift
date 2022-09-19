@@ -64,7 +64,9 @@ public class WXRequestTools {
         formatter.timeZone = NSTimeZone.local
         
         let logHeader = appendingPrintfLogHeader(request: request, responseModel: responseModel)
-        let logFooter = dictionaryToJSON(dictionary: responseModel.responseDict)
+        var logFooter = dictionaryToJSON(dictionary: responseModel.responseDict)
+        //去除URL中的反斜杠
+        logFooter = logFooter?.replacingOccurrences(of: "\\/", with: "/")
         var body = catchTag + logHeader + (logFooter ?? "")
         //var body = catchTag + logHeader + "点击 👆【查看格式化详情】👆查看响应Json日志"
         body = body.replacingOccurrences(of: "\n", with: "<br>")
@@ -109,13 +111,14 @@ public class WXRequestTools {
         let statusFlag = isCacheData ? "❤️❤️❤️" : (isSuccess ? "✅✅✅" : "❌❌❌")
         let dataType = responseModel.isDebugResponse ? "【Debug】数据" : "网络数据"
         let statusString  = isCacheData ? "本地缓存数据成功" : (isSuccess ? "\(dataType)成功" : "\(dataType)失败");
+        let feeTime = "（⤵️耗时:\(Int(responseModel.responseDuration ?? 0))ms）"
 		return """
 
 			\(statusFlag)请求接口地址\(hostTitle)= \(request.requestURL)
 
 			请求参数json= \(requestJson)\(headersString)
 
-			\(statusString)返回=
+			\(statusString)返回=\(feeTime)
 
 			"""
     }
@@ -131,6 +134,8 @@ public class WXRequestTools {
             if let jsonData = jsonData {
                 responseJson = String(data: jsonData, encoding: .utf8) ?? responseJson
             }
+            //去除URL中的反斜杠
+            responseJson = responseJson.replacingOccurrences(of: "\\/", with: "/")
             return responseJson
         } else {
             return responseModel.error?.description ?? ""

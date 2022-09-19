@@ -752,7 +752,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.test.luke;
+				PRODUCT_BUNDLE_IDENTIFIER = com.luke.swift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Manga/Others/Tools/Manga-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -777,7 +777,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.test.luke;
+				PRODUCT_BUNDLE_IDENTIFIER = com.luke.swift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Manga/Others/Tools/Manga-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

@@ -307,7 +307,7 @@
 		78079FE3271F118CE83CFD8D5E4F8C21 /* TransformOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C18AE56DB0C4C23B5B832734B8D21D9 /* TransformOf.swift */; };
 		78280E5024F68B488566CB4AEA603EF5 /* MJRefreshNormalHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = F495E7CA22C0053FA0D1C9FB26EBBCF4 /* MJRefreshNormalHeader.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		785299E28C33F7E674E5BD4CBB5767FA /* AnyPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05A30EE5BA2F1069E9F9A436C194940 /* AnyPromise.swift */; };
-		78539A27BE4E7B971AFDC504F649C95A /* JKSwiftExtension-JKSwiftExtension in Resources */ = {isa = PBXBuildFile; fileRef = 22EFCFAE2A2CE6D0338326CFB1F1DF8A /* JKSwiftExtension-JKSwiftExtension */; };
+		78539A27BE4E7B971AFDC504F649C95A /* JKSwiftExtension.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22EFCFAE2A2CE6D0338326CFB1F1DF8A /* JKSwiftExtension.bundle */; };
 		78DE8DE64F023B0ACE1099C30C79CE59 /* MemoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0A2E7ECF027E46E40B698802D77DED /* MemoryStorage.swift */; };
 		7930C94414B4C661867AC4FBE82E996C /* URLEncodedFormEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E0225955818E0AE0A14C6D5B0E13B2 /* URLEncodedFormEncoder.swift */; };
 		7948E27F56832A968DB4D9C4049A528A /* MJRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 576AAB966BE65E4524E4046FDFA421F6 /* MJRefreshHeader.m */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
@@ -930,7 +930,7 @@
 		222F8FBF6FE01F0CA90BAE928C9DC07C /* UIScrollView+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIScrollView+Extension.swift"; path = "Sources/Classes/UIKitExtension/UIScrollView+Extension.swift"; sourceTree = "<group>"; };
 		2287F900525383CD107B08A4AC41D001 /* CleanJSON.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = CleanJSON.modulemap; sourceTree = "<group>"; };
 		22931EB1362457E9EF59EAC17E86C73C /* Deprecations.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Deprecations.swift; path = Sources/Deprecations.swift; sourceTree = "<group>"; };
-		22EFCFAE2A2CE6D0338326CFB1F1DF8A /* JKSwiftExtension-JKSwiftExtension */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "JKSwiftExtension-JKSwiftExtension"; path = JKSwiftExtension.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		22EFCFAE2A2CE6D0338326CFB1F1DF8A /* JKSwiftExtension.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JKSwiftExtension.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		2308321D1D3AEA839405EFA2EBCD22BD /* CleanJSONDecodingStorage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CleanJSONDecodingStorage.swift; path = Sources/CleanJSON/CleanJSONDecodingStorage.swift; sourceTree = "<group>"; };
 		231767C68BD051987DE86EF364FBD1A1 /* HandyJSON-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "HandyJSON-prefix.pch"; sourceTree = "<group>"; };
 		231BD36689029A743FF4648629F1D761 /* YGNodePrint.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YGNodePrint.h; path = yoga/YGNodePrint.h; sourceTree = "<group>"; };
@@ -1312,7 +1312,7 @@
 		9CC02F3E47DC1D4075B3D52AC7F40F78 /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UINavigationController+Extension.swift"; path = "Sources/Classes/UIKitExtension/UINavigationController+Extension.swift"; sourceTree = "<group>"; };
 		9D0A7AC5038A6501D20993E43E2E8998 /* WXRequestConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WXRequestConfig.swift; path = WXNetworkingSwift/WXRequestConfig.swift; sourceTree = "<group>"; };
 		9D0B1393B595ACE1F8352DB19C06BCD5 /* AnyPromise.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AnyPromise.m; path = Sources/AnyPromise.m; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E4BFC801CCE67C31A40966330613F0E /* KakaJSON.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = KakaJSON.release.xcconfig; sourceTree = "<group>"; };
 		9E996B7B5F90E1E705848118E9349C33 /* KVOController-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "KVOController-Info.plist"; sourceTree = "<group>"; };
 		9ECE5092A0566104F38D585DEAD32F8F /* MJRefreshAutoStateFooter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJRefreshAutoStateFooter.m; path = MJRefresh/Custom/Footer/Auto/MJRefreshAutoStateFooter.m; sourceTree = "<group>"; };
@@ -1820,7 +1820,6 @@
 				9688D4D21A5AF1954428FCB8DBC9B5A1 /* YYMemoryCache.m */,
 				229CA1D9B0A71058214F6E5945C512C2 /* Support Files */,
 			);
-			name = YYCache;
 			path = YYCache;
 			sourceTree = "<group>";
 		};
@@ -1832,7 +1831,6 @@
 				B0FD4D274E9E518DA38015EF9A9BA3B7 /* Support Files */,
 				D93228F083F1E68A84556C348076E378 /* UIKit */,
 			);
-			name = PromiseKit;
 			path = PromiseKit;
 			sourceTree = "<group>";
 		};
@@ -1889,7 +1887,6 @@
 				0335A605391E9613990D02AA36D5174D /* Values.swift */,
 				320AC11CEFF06FD6D73DEF47598E6083 /* Support Files */,
 			);
-			name = KakaJSON;
 			path = KakaJSON;
 			sourceTree = "<group>";
 		};
@@ -1903,7 +1900,6 @@
 				BF6EAE664C6DDF3E190F39A814C07E38 /* EmptyDataSetView+Extension.swift */,
 				8D3F6DD9DFECC8541B7F310E6A516BA1 /* Support Files */,
 			);
-			name = "EmptyDataSet-Swift";
 			path = "EmptyDataSet-Swift";
 			sourceTree = "<group>";
 		};
@@ -1920,7 +1916,6 @@
 				347AC73C0080328BAD0B217F65C48FCA /* Resources */,
 				751C41A805ED7058BC1D999C40A50F9B /* Support Files */,
 			);
-			name = LLCycleScrollView;
 			path = LLCycleScrollView;
 			sourceTree = "<group>";
 		};
@@ -1980,7 +1975,6 @@
 				339AF0C8FEF28DFE4EF8845C3A974796 /* Validation.swift */,
 				A7080552712BB5BEF4C357F6E6D1B7C7 /* Support Files */,
 			);
-			name = Alamofire;
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
@@ -1990,7 +1984,6 @@
 				39EB3CD1C96A2757019091F92623CDE0 /* Core */,
 				939AA73A61B4F338371972F2CBE37965 /* Support Files */,
 			);
-			name = Moya;
 			path = Moya;
 			sourceTree = "<group>";
 		};
@@ -2073,7 +2066,6 @@
 				B75F796EA597668A5ABEEB05A3CA2EFC /* Resources */,
 				6B4ECD67110FE7BA63AAB86A54B0BE4A /* Support Files */,
 			);
-			name = MJRefresh;
 			path = MJRefresh;
 			sourceTree = "<group>";
 		};
@@ -2083,7 +2075,6 @@
 				52ED11BD5FA7E84DD98BF7D7E254D5D7 /* ConstraintArrayDSL.swift */,
 				77BF12624356747CCAEE1CE10ED9F359 /* Support Files */,
 			);
-			name = SnapKitExtend;
 			path = SnapKitExtend;
 			sourceTree = "<group>";
 		};
@@ -2094,7 +2085,6 @@
 				3B01D600F3F9DAFD47EBB75A8603892F /* HMSegmentedControl.m */,
 				164119C56782EE4BC91F25E3623BA44C /* Support Files */,
 			);
-			name = HMSegmentedControl;
 			path = HMSegmentedControl;
 			sourceTree = "<group>";
 		};
@@ -2213,7 +2203,6 @@
 				084B53EEC0E2F5E4C6C49F9D90C743E6 /* WKInterfaceImage+Kingfisher.swift */,
 				DC634C0B64E27568EED69FF386D8AE15 /* Support Files */,
 			);
-			name = Kingfisher;
 			path = Kingfisher;
 			sourceTree = "<group>";
 		};
@@ -2353,7 +2342,6 @@
 				5D77F6FA58D781975B4931F74188088E /* ToJSON.swift */,
 				AEDA5D150F9300A232A16B1A65A681AE /* Support Files */,
 			);
-			name = CleanJSON;
 			path = CleanJSON;
 			sourceTree = "<group>";
 		};
@@ -2376,7 +2364,6 @@
 				D3C0DBBA571487EB7B9200B734ED1153 /* YGLayoutExtensions.swift */,
 				CEED89DD0270337F38D0CF4777BD5FE8 /* Support Files */,
 			);
-			name = YogaKit;
 			path = YogaKit;
 			sourceTree = "<group>";
 		};
@@ -2403,7 +2390,6 @@
 				76F5E79FE030EB975B4B1EEFAB79BAB3 /* WXRequestTools.swift */,
 				C5E5D4684E759C8433F4BEE141EB094C /* Support Files */,
 			);
-			name = WXNetworkingSwift;
 			path = WXNetworkingSwift;
 			sourceTree = "<group>";
 		};
@@ -2503,7 +2489,6 @@
 				C576098D7872C28F386B2B630AE1152B /* Resources */,
 				511E46AA7C29A568F0B9DB9DD936547D /* Support Files */,
 			);
-			name = JKSwiftExtension;
 			path = JKSwiftExtension;
 			sourceTree = "<group>";
 		};
@@ -2559,7 +2544,6 @@
 				6B38B859BBBC4B696F8C9DAE1324C767 /* UINavigationController+FDFullscreenPopGesture.m */,
 				D68769B05EF3810FD49356FF222C4092 /* Support Files */,
 			);
-			name = FDFullscreenPopGesture;
 			path = FDFullscreenPopGesture;
 			sourceTree = "<group>";
 		};
@@ -2604,7 +2588,6 @@
 				5C478B147A62FC899D2E94C1FC3A3A7C /* URLTransform.swift */,
 				AD3CFCC64B46639B368ABFFEFACF11D0 /* Support Files */,
 			);
-			name = HandyJSON;
 			path = HandyJSON;
 			sourceTree = "<group>";
 		};
@@ -2664,7 +2647,6 @@
 				3DC149C501277BDD35CD2A91C50F7829 /* UILayoutSupport+Extensions.swift */,
 				F4BEC3222AF4F78192E75C3CD58D1E42 /* Support Files */,
 			);
-			name = SnapKit;
 			path = SnapKit;
 			sourceTree = "<group>";
 		};
@@ -2727,7 +2709,6 @@
 				96BCBF587FFD52BFA9063673DFB9EFF9 /* SwiftyJSON.swift */,
 				DBAD2458B620BC569A6E988E9875D68C /* Support Files */,
 			);
-			name = SwiftyJSON;
 			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
@@ -2738,7 +2719,6 @@
 				8C652F22773C24AE9E93C05424DEC196 /* Support Files */,
 				F859F43AEBF51329DA169B8536377C6B /* View */,
 			);
-			name = Reusable;
 			path = Reusable;
 			sourceTree = "<group>";
 		};
@@ -2938,7 +2918,7 @@
 				EAF47B8D3BA5B9248FB8BA7EFB248038 /* HMSegmentedControl */,
 				A8E950A16D00F649C54FFB30F81D7842 /* IQKeyboardManagerSwift */,
 				68877A42BD63BB778BB23FFC0031B17A /* JKSwiftExtension */,
-				22EFCFAE2A2CE6D0338326CFB1F1DF8A /* JKSwiftExtension-JKSwiftExtension */,
+				22EFCFAE2A2CE6D0338326CFB1F1DF8A /* JKSwiftExtension.bundle */,
 				7D3ECBBFDE3A5E800F07584A97048F05 /* KakaJSON */,
 				C3F44C782D64D7EB20B61CE3844EBFAD /* Kingfisher */,
 				399EC9508E73C0D54D9BBD8741FBA137 /* KVOController */,
@@ -2999,7 +2979,6 @@
 				F4DD1F9B803A899EAE51892A48D2CB40 /* Yoga-internal.h */,
 				CBE49474CC0D09AD460C47284E7A5D57 /* Support Files */,
 			);
-			name = Yoga;
 			path = Yoga;
 			sourceTree = "<group>";
 		};
@@ -3046,7 +3025,6 @@
 				3682B39A5D4D4ECC43CFE47738D58969 /* IQUIViewController+Additions.swift */,
 				89521FA5E664484003628C996F30A526 /* Support Files */,
 			);
-			name = IQKeyboardManagerSwift;
 			path = IQKeyboardManagerSwift;
 			sourceTree = "<group>";
 		};
@@ -3086,7 +3064,6 @@
 				6140D68E1E20BBCF3D90F197A0FCB881 /* NSObject+FBKVOController.m */,
 				DCEEAEC2AEF0B12291BEA95C23473398 /* Support Files */,
 			);
-			name = KVOController;
 			path = KVOController;
 			sourceTree = "<group>";
 		};
@@ -3626,7 +3603,7 @@
 			);
 			name = "JKSwiftExtension-JKSwiftExtension";
 			productName = JKSwiftExtension;
-			productReference = 22EFCFAE2A2CE6D0338326CFB1F1DF8A /* JKSwiftExtension-JKSwiftExtension */;
+			productReference = 22EFCFAE2A2CE6D0338326CFB1F1DF8A /* JKSwiftExtension.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		8FE0EB310F454719A11FBFEAAC09FE3E /* FDFullscreenPopGesture */ = {
@@ -3958,7 +3935,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78539A27BE4E7B971AFDC504F649C95A /* JKSwiftExtension-JKSwiftExtension in Resources */,
+				78539A27BE4E7B971AFDC504F649C95A /* JKSwiftExtension.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5363,6 +5340,7 @@
 			baseConfigurationReference = BDFE36372FED462BA405FBF68751557F /* JKSwiftExtension.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/JKSwiftExtension";
+				DEVELOPMENT_TEAM = P8FFNR95EQ;
 				ENABLE_BITCODE = NO;
 				IBSC_MODULE = JKSwiftExtension;
 				INFOPLIST_FILE = "Target Support Files/JKSwiftExtension/ResourceBundle-JKSwiftExtension-JKSwiftExtension-Info.plist";
@@ -6008,6 +5986,7 @@
 			baseConfigurationReference = B745E4D175661E41AC5E1045903B1750 /* JKSwiftExtension.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/JKSwiftExtension";
+				DEVELOPMENT_TEAM = P8FFNR95EQ;
 				ENABLE_BITCODE = NO;
 				IBSC_MODULE = JKSwiftExtension;
 				INFOPLIST_FILE = "Target Support Files/JKSwiftExtension/ResourceBundle-JKSwiftExtension-JKSwiftExtension-Info.plist";
