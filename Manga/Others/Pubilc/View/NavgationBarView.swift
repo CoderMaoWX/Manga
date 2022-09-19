@@ -34,7 +34,7 @@ class NavgationBarView: UIView {
     required init(backAction: (()->())?) {
         super.init(frame: .zero)
         goBackButtonClosure = backAction
-        initSubView()
+        initAddSubView()
         layoutSubView()
     }
     
@@ -45,7 +45,7 @@ class NavgationBarView: UIView {
     //MARK: - 布局UI
     
     ///由子类重写覆盖
-    fileprivate func initSubView() {
+    fileprivate func initAddSubView() {
         backgroundColor = .white
         if goBackButtonClosure != nil {
             addSubview(backButton)

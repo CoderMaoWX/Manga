@@ -72,9 +72,9 @@ extension UIView {
     ///   - thinSize: 天条宽度或高度
     /// - Returns: 添加的线条
     @discardableResult
-    func addLineTo(position: WXDrawLinePosition, thinSize: CGFloat) -> UIView {
+    func addLineTo(position: WXDrawLinePosition, color: UIColor = .groupTableViewBackground, thinSize: CGFloat) -> UIView {
         let line = UIView()
-        line.backgroundColor = .groupTableViewBackground
+        line.backgroundColor = color
         addSubview(line)
         
         switch position {

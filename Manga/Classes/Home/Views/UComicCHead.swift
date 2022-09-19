@@ -32,7 +32,7 @@ class UComicCHead: UICollectionReusableView, Reusable {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initSubView()
+        initAddSubView()
         layoutSubView()
     }
     
@@ -67,7 +67,7 @@ class UComicCHead: UICollectionReusableView, Reusable {
         moreActionClosure = closure
     }
     
-    func initSubView() {
+    func initAddSubView() {
         clipsToBounds = true
         addSubview(imgView)
         addSubview(titleLabel)

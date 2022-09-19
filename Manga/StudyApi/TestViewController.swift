@@ -97,8 +97,10 @@ class TestViewController: BaseVC {
             //showAlertControllerToast(message: "右侧按钮: \(button)")
             if button.tag == 0 {
                 self.setValue("123", forKey: "name")
+                OpenWXDeeplink(url: "https://www.free-api.com/doc/383", title: "Baidu")
             } else {
-                OpenWXDeeplink(url: "Manga://open?params=%7B%22m_param%22%20%3A%20%7B%7D%2C%20%22source%22%3A%22%22%2C%22url%22%20%3A%20%22100004293741%22%2C%22action%22%20%3A%20%221%22%2C%22name%22%3A%22%22%7D", title: "Baidu")
+                let videoVC = ShowVideoVC()
+                self.navigationController?.pushViewController(videoVC, animated: true)
             }
         }
     }
@@ -106,8 +108,8 @@ class TestViewController: BaseVC {
     func configRequest() {
         //测试设置全局: 请求状态/解析模型
         WXRequestConfig.shared.successStatusMap = (key: "returnCode",  value: "SUCCESS")
+        WXRequestConfig.shared.messageTipKeyAndFailInfo = (tipKey: "msg", defaultTip: "程序小哥开小差,请稍后再试!")
         WXRequestConfig.shared.uploadRequestLogTuple = (url: "http://10.8.41.162:8090/pullLogcat", catchTag: nil)
-        WXRequestConfig.shared.messageTipKeyAndFailInfo = (tipKey: "returnCode", defaultTip: "我的默认错误页面提示文案")
         WXRequestConfig.shared.forbidProxyCaught = true
         WXRequestConfig.shared.isDistributionOnlineRelease = true
         WXRequestConfig.shared.urlResponseLogTuple = (printf: true, hostTitle: "开发环境")
@@ -136,6 +138,7 @@ class TestViewController: BaseVC {
         api.parseModelMap = (parseKey: "data", modelType: WeiboModel.self)
         api.startRequest { [weak self] responseModel in
             self?.textView.text = responseModel.responseDict?.debugDescription.unicodeToString
+            showToastText(responseModel.responseMsg)
         }
     }
 
@@ -236,6 +239,10 @@ class TestViewController: BaseVC {
         //url = "https://video.yinyuetai.com/d5f84f3e87c14db78bc9b99454e0710c.mp4"
         //压缩包
         url = "http://i.gtimg.cn/qqshow/admindata/comdata/vipThemeNew_item_2018/2018_i_6_0_i_2.zip"
+        
+        url = "https://tucdn.wpon.cn/api-girl/index.php?wpon=302"
+        
+        url = "https://v.api.aa1.cn/api/api-dy-girl/index.php?aa1=ajdu987hrjfw"
         
         let api = WXRequestApi(url, method: .get, parameters: nil)
         api.loadingSuperView = view

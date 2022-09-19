@@ -55,7 +55,7 @@ class HomeVC: BaseVC {
         return segmente
     }()
     
-    override func initSubView() {
+    override func initAddSubView() {
         view.addSubview(pageVC.view)
         
         let colorKey = NSAttributedString.Key.foregroundColor

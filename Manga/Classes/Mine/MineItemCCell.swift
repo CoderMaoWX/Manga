@@ -26,7 +26,7 @@ class MineItemCCell: UBaseCCell {
         }
     }
     
-    override func initSubView() {
+    override func initAddSubView() {
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
     }

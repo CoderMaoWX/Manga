@@ -45,7 +45,7 @@ class MineVC: BaseVC {
         loadData()
     }
     
-    override func initSubView() {
+    override func initAddSubView() {
         view.addSubview(collectionView)
     }
     

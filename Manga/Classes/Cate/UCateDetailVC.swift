@@ -34,7 +34,7 @@ class UCateDetailVC: BaseVC {
         loadListData()
     }
     
-    override func initSubView() {
+    override func initAddSubView() {
         view .addSubview(tableView)
     }
     

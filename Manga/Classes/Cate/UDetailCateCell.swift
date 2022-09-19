@@ -39,7 +39,7 @@ class UDetailCateCell: UBaseTableViewCell {
         return lb
     }()
     
-    override func initSubView() {
+    override func initAddSubView() {
         contentView .addSubview(imgView)
         contentView .addSubview(titleLabel)
         contentView .addSubview(subTitleLabel)

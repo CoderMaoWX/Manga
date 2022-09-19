@@ -38,7 +38,7 @@ class ChaseRenewSubVC: BaseVC {
         })
     }
     
-    override func initSubView() {
+    override func initAddSubView() {
         view.addSubview(tableView)
     }
     

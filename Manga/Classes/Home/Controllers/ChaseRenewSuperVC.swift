@@ -14,7 +14,7 @@ class ChaseRenewSuperVC: BaseVC {
         super.viewDidLoad()
     }
     
-    override func initSubView() {
+    override func initAddSubView() {
         view.addSubview(pageVC.view)
         
         let colorKey = NSAttributedString.Key.foregroundColor

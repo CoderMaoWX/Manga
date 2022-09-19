@@ -30,7 +30,7 @@ class CommunityVC: BaseVC {
         return tb
     }()
 
-    override func initSubView() {
+    override func initAddSubView() {
         view.addSubview(tableView)
     }
     

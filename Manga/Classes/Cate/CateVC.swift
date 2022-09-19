@@ -43,7 +43,7 @@ class CateVC: BaseVC {
         }
     }
     
-    override func initSubView() {
+    override func initAddSubView() {
         view.addSubview(collectionView)
     }
     

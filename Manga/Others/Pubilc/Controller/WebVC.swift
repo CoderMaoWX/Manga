@@ -38,7 +38,7 @@ class WebVC: BaseVC {
         return wb
     }()
     
-    override func initSubView() {
+    override func initAddSubView() {
         view.addSubview(webView)
         view.addSubview(progressView)
     }
@@ -204,7 +204,7 @@ class PreviewImgVC: BaseVC {
         self.imgView.mg.setImageURL(previewURL)
     }
     
-    override func initSubView() {
+    override func initAddSubView() {
         view.backgroundColor = .black
         view.addSubview(imgView)
     }

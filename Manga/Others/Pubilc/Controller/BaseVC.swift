@@ -36,13 +36,13 @@ class BaseVC: UIViewController {
         publicConfig()
         
         //初始化布局UI
-        initSubView()
+        initAddSubView()
         
         layoutSubView()
     }
     
     // MARK: - 初始化布局UI
-    func initSubView() {
+    func initAddSubView() {
         //由子类重写覆盖
     }
     func layoutSubView()  {

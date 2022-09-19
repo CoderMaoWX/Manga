@@ -31,6 +31,7 @@
 		588738A125C558DC0049ECAD /* MineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588738A025C558DC0049ECAD /* MineVC.swift */; };
 		588944B526F5964C00E153EB /* UIImage+System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588944B426F5964C00E153EB /* UIImage+System.swift */; };
 		5899402B26BA39B20086C830 /* MonitorLoad.m in Sources */ = {isa = PBXBuildFile; fileRef = 5899402A26BA39B20086C830 /* MonitorLoad.m */; };
+		5899662928D8710B001F27D0 /* ShowVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5899662828D8710B001F27D0 /* ShowVideoVC.swift */; };
 		58A23DC526DDC51A0012A6F1 /* NavgationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A23DC426DDC51A0012A6F1 /* NavgationBarView.swift */; };
 		58A4C11825E100EB00C1DAB5 /* BoutiqueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */; };
 		58A4C11B25E1035A00C1DAB5 /* BoutiqueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A4C11A25E1035A00C1DAB5 /* BoutiqueCell.swift */; };
@@ -104,6 +105,7 @@
 		5899402826BA39B20086C830 /* Manga-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Manga-Bridging-Header.h"; sourceTree = "<group>"; };
 		5899402926BA39B20086C830 /* MonitorLoad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MonitorLoad.h; sourceTree = "<group>"; };
 		5899402A26BA39B20086C830 /* MonitorLoad.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MonitorLoad.m; sourceTree = "<group>"; };
+		5899662828D8710B001F27D0 /* ShowVideoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowVideoVC.swift; sourceTree = "<group>"; };
 		58A23DC426DDC51A0012A6F1 /* NavgationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavgationBarView.swift; sourceTree = "<group>"; };
 		58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoutiqueVC.swift; sourceTree = "<group>"; };
 		58A4C11A25E1035A00C1DAB5 /* BoutiqueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoutiqueCell.swift; sourceTree = "<group>"; };
@@ -403,6 +405,7 @@
 				581AFFFB274E4CD1005AF330 /* ChaseRenewSubVC.swift */,
 				581DDE89274E3A3A0043FCC7 /* HandpickVC.swift */,
 				58A4C11725E100EB00C1DAB5 /* BoutiqueVC.swift */,
+				5899662828D8710B001F27D0 /* ShowVideoVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				58B4924B25CFD5220052A97C /* UCateDetailVC.swift in Sources */,
 				58B812DF262D60E500EB00C7 /* MineItemCCell.swift in Sources */,
 				5824E5E426C655CB00246D19 /* GlobalConst.swift in Sources */,
+				5899662928D8710B001F27D0 /* ShowVideoVC.swift in Sources */,
 				588738A125C558DC0049ECAD /* MineVC.swift in Sources */,
 				58CDFB7C26BA33F100056527 /* GlobalTools.swift in Sources */,
 				58CDFB7B26BA33F100056527 /* GlobalConfigure.swift in Sources */,
@@ -744,7 +748,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
-				DEVELOPMENT_TEAM = P8FFNR95EQ;
+				DEVELOPMENT_TEAM = 958LL4AQFJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -752,7 +756,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.luke.swift;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zaful.Zaful2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Manga/Others/Tools/Manga-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -769,7 +773,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
-				DEVELOPMENT_TEAM = P8FFNR95EQ;
+				DEVELOPMENT_TEAM = 958LL4AQFJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Manga/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -777,7 +781,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.luke.swift;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zaful.Zaful2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Manga/Others/Tools/Manga-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

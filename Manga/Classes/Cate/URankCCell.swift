@@ -25,7 +25,7 @@ class URankCCell: UBaseCCell {
         return lb
     }()
     
-    override func initSubView() {
+    override func initAddSubView() {
         layer.cornerRadius = 5
         layer.masksToBounds = true
         layer.borderWidth = 1

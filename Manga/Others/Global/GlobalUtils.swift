@@ -313,14 +313,17 @@ func showLoading(to paramater: AnyObject?, animation: Bool = false) {
 /// - Parameters:
 ///   - with: 纯文本Toast
 ///   - parmaters: (可传字段包装含有kLoadingViewKey的键值对)
-func showToastText(_ message: String,
-                   toView parmaters: AnyObject,
+func showToastText(_ message: String?,
+                   toView parmaters: AnyObject? = nil,
                    animation: Bool = true) {
     ///在主线程中显示UI
     DispatchQueue.main.async {
         
         let loadingSuperView = fetchHUDSuperView(parmater: parmaters)
         hideLoading(from: parmaters, animation: false)
+        
+        //如果message为空,只做上面hideLoading的用途
+        guard let tipMsg = message else { return }
         
         let oldToastView = loadingSuperView.viewWithTag(kLoadingHUDTag)
         oldToastView?.removeFromSuperview()
@@ -345,7 +348,7 @@ func showToastText(_ message: String,
         messageLabel.textAlignment = .center
         messageLabel.preferredMaxLayoutWidth = maxTextWidth
         messageLabel.numberOfLines = 0
-        messageLabel.text = message
+        messageLabel.text = tipMsg
         messageLabel.sizeToFit()
         let msgWidth = messageLabel.bounds.size.width
         let msgHeight = messageLabel.bounds.size.height
@@ -358,14 +361,20 @@ func showToastText(_ message: String,
         blackView.center = CGPoint(x: loadingSuperView.bounds.size.width/2, y: loadingSuperView.bounds.size.height / 2)
         messageLabel.center = CGPoint(x: blackView.bounds.size.width/2, y: blackView.bounds.size.height/2)
         
-        var time: Double = Double(message.count) / 6.0
+        if animation {
+            blackView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            UIView.animate(withDuration: 0.1) {
+                blackView.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }
+        }
+        var time: Double = Double(tipMsg.count) / 6.0
         time = max(kToastShowTime, time)
         time = min(5, time)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + time) {
             if animation {
-                UIView.animate(withDuration: 0.1) {
-                    blackView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                UIView.animate(withDuration: 0.2) {
+                    blackView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
                     blackView.alpha = 0.0
                 } completion: { _ in
                     blackView.removeFromSuperview()

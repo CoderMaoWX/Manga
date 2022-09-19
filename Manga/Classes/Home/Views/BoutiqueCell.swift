@@ -32,7 +32,7 @@ class BoutiqueCell: UBaseCCell {
         return lb
     }()
     
-    override func initSubView() {
+    override func initAddSubView() {
         clipsToBounds = true
         contentView.backgroundColor = .white
         contentView.addSubview(imageView)

@@ -12,7 +12,7 @@ class UBaseCCell: UICollectionViewCell, Reusable {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initSubView()
+        initAddSubView()
         
         layoutSubView()
     }
@@ -21,7 +21,7 @@ class UBaseCCell: UICollectionViewCell, Reusable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func initSubView() {
+    func initAddSubView() {
         
     }
     
@@ -34,7 +34,7 @@ class UBaseTableViewCell: UITableViewCell, Reusable {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        initSubView()
+        initAddSubView()
         
         layoutSubView()
     }
@@ -43,7 +43,7 @@ class UBaseTableViewCell: UITableViewCell, Reusable {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func initSubView() {
+    func initAddSubView() {
         
     }
     
