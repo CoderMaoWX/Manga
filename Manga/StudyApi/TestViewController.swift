@@ -25,7 +25,55 @@ class TestViewController: BaseVC {
         configRequest()
         configNavgationView()
 //        testIOS15Api()
-//        testYogaKit()
+        testYogaKit()
+    }
+    
+    @IBOutlet weak var testView: UIView?
+    @IBAction func testVisibilty(switchbutton: UISwitch) {
+
+        let viewHeight: CGFloat = switchbutton.isOn ? 100 : 0.0
+        self.testView?.visiblity(gone: !switchbutton.isOn, dimension: viewHeight)
+
+        // set visibility for width constraint
+        //let viewWidth:CGFloat = switchbutton.isOn ? 300 : 0.0
+        //self.testView?.visiblity(gone: !switchbutton.isOn, dimension: viewWidth, attribute: .width)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        test_iOS16_Swift_v5_7()
+    }
+    
+    func test_iOS16_Swift_v5_7() {
+        
+        // MARK: Hide
+        let message = "the cat sat on the mat"
+        if #available(iOS 16.0, *) {
+            debugLog(message.ranges(of: "at"))
+            debugLog(message.replacing("cat", with: "dog"))
+            debugLog(message.trimmingPrefix("the "))
+            
+            debugLog("====================")
+            
+            debugLog(message.ranges(of: /[a-z]at/))
+            debugLog(message.replacing(/[a-m]at/, with: "dog"))
+            debugLog(message.trimmingPrefix(/The/.ignoresCase()))
+            
+            // MARK: Show
+            do {
+                let atSearch = try Regex("[a-z]at")
+                print(message.ranges(of: atSearch))
+            } catch {
+                print("Failed to create regex")
+            }
+            
+        } else {
+            // Fallback on earlier versions
+        }
+        
+    }
+    
+    func drawLotto1<T: Sequence>(from options: T, count: Int = 7) -> [T.Element] {
+        Array(options.shuffled().prefix(count))
     }
     
     func testYogaKit() {
@@ -42,7 +90,7 @@ class TestViewController: BaseVC {
         view.addSubview(contentView)
         contentView.configureLayout { (layout) in
           layout.isEnabled = true
-          layout.flexDirection = .row
+            layout.flexDirection = .row
           layout.width = 320
           layout.height = 80
           layout.marginTop = 40

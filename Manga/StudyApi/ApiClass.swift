@@ -44,6 +44,8 @@ struct PaintMixer {
     func handle(color: ZFColor) {
         
     }
+    
+    var name: String
 }
 
 class StudentModel: Codable {
@@ -67,6 +69,48 @@ struct Clamped<T: Comparable> {
 
 
 class ApiClass: NSObject {
+    
+    
+    //MARK: iOS16 Swift v5.7 新特性
+    
+    func iOS16_Swift_v5_7() {
+        
+        //解包可选型的 if let 速记
+        let name: String? = "Linda"
+        if let name {
+            print("Hello, \(name)!")
+        }
+        
+        //不适用于对象内的属性
+        let user: PaintMixer? = PaintMixer(name: "Linda")
+        if let name2 = user?.name {
+            print("Welcome, \(name2)!")
+        }
+        
+        //多语句闭包类型推断
+        let scores = [100, 80, 85]
+        
+        //多语句闭包类型推断: 新的写法
+        let results = scores.map { score in
+            if score >= 85 {
+                return "\(score)%: Pass"
+            } else {
+                return "\(score)%: Fail"
+            }
+        }
+        
+        //多语句闭包类型推断: 旧的写法
+        let oldResults = scores.map { score -> String in
+            if score >= 85 {
+                return "\(score)%: Pass"
+            } else {
+                return "\(score)%: Fail"
+            }
+        }
+        
+        
+    }
+    
     
     ///APi学习
     static func studyApi() {
