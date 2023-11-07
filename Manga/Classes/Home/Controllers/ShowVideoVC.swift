@@ -31,8 +31,8 @@ class ShowVideoVC: BaseVC {
     func configNavgationView() {
         navigationItem.title = "小视频"
         setNavBarRightItem(info: ["下载视频"]) { [self] button in
-//            self.downVideoFile()
-            self.downVideoFileBy(downURL: "https://v.api.aa1.cn/api/api-dy-girl/index.php?aa1=ajdu987hrjfw")
+            self.downVideoFile()
+//            self.downVideoFileBy(downURL: "https://v.api.aa1.cn/api/api-dy-girl/index.php?aa1=ajdu987hrjfw")
         }
     }
     
@@ -117,7 +117,7 @@ class ShowVideoVC: BaseVC {
     ///下载视频文件
     func downVideoFile() {
         var url = "https://tucdn.wpon.cn/api-girl/index.php?wpon=302"
-        url = "https://v.api.aa1.cn/api/api-dy-girl/index.php?aa1=ajdu987hrjfw"
+//        url = "https://v.api.aa1.cn/api/api-dy-girl/index.php?aa1=ajdu987hrjfw"
         
         let api = WXRequestApi(url, method: .get, parameters: nil)
         api.loadingSuperView = view

@@ -25,7 +25,7 @@ class TestViewController: BaseVC {
         configRequest()
         configNavgationView()
 //        testIOS15Api()
-        testYogaKit()
+//        testYogaKit()
     }
     
     @IBOutlet weak var testView: UIView?
@@ -129,7 +129,7 @@ class TestViewController: BaseVC {
         view.addLineTo(position: .top, thinSize: 1)
         setNavBarLeftItem(info: [UIImage(named:"acg_like")!, "Message"]) { button in
             if button.tag == 1 {
-                self.testGetRequest()
+                self.testUploadFile()
             } else {
                 ApiClass.studyApi()
                 var str = "ABCDEFGH"
@@ -213,7 +213,7 @@ class TestViewController: BaseVC {
         let api = WXBatchRequestApi(apiArray: [api1, api0, api3], loadingTo: view)
         api.startRequest({ batchApi in
             debugLog("批量请求回调", batchApi.responseDataArray)
-        }, waitAllDone: false)
+        }, waitAllDone: true)
     }
     
     ///测试不发请求,直接返回赋值的 testResponseJson
@@ -249,7 +249,7 @@ class TestViewController: BaseVC {
 //        let path = URL(fileURLWithPath: "/Users/luke/Desktop/video.mp4")
 //        let imageData = Data.init(base64Encoded: path.absoluteString)
         
-        let url = "http://10.8.31.5:8090/uploadImage"
+        let url = "http://10.8.31.61:8090/uploadImage"
         let param = [
             "appName" : "TEST",
             "platform" : "iOS",

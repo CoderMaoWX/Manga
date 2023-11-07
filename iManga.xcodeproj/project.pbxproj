@@ -22,6 +22,9 @@
 		5846C87F26D36C4300CEF2FC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5846C87D26D36C4300CEF2FC /* TestViewController.swift */; };
 		5846C88026D36C4300CEF2FC /* TestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5846C87E26D36C4300CEF2FC /* TestViewController.xib */; };
 		584D5D9725C3F27A00FA507C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584D5D9625C3F27A00FA507C /* AppDelegate.swift */; };
+		585003312AF8ED100023F8E9 /* ImgAddClickEvent.js in Resources */ = {isa = PBXBuildFile; fileRef = 585003302AF8ED100023F8E9 /* ImgAddClickEvent.js */; };
+		585003332AF8ED180023F8E9 /* NativeApi.js in Resources */ = {isa = PBXBuildFile; fileRef = 585003322AF8ED180023F8E9 /* NativeApi.js */; };
+		585003352AF9CB6C0023F8E9 /* testWeb.html in Resources */ = {isa = PBXBuildFile; fileRef = 585003342AF9CB6C0023F8E9 /* testWeb.html */; };
 		5870EA7627A4F06300E3BBCE /* WXLoadingHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5870EA7527A4F06300E3BBCE /* WXLoadingHUD.swift */; };
 		5870EA7827A4F0BC00E3BBCE /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5870EA7727A4F0BC00E3BBCE /* loading.gif */; };
 		5870EA7C27A4F19900E3BBCE /* UIImage+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 5870EA7B27A4F19900E3BBCE /* UIImage+Extension.m */; };
@@ -93,6 +96,9 @@
 		5846C87E26D36C4300CEF2FC /* TestViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestViewController.xib; sourceTree = "<group>"; };
 		584D5D9325C3F27A00FA507C /* iManga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iManga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		584D5D9625C3F27A00FA507C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		585003302AF8ED100023F8E9 /* ImgAddClickEvent.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ImgAddClickEvent.js; sourceTree = "<group>"; };
+		585003322AF8ED180023F8E9 /* NativeApi.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NativeApi.js; sourceTree = "<group>"; };
+		585003342AF9CB6C0023F8E9 /* testWeb.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = testWeb.html; sourceTree = "<group>"; };
 		5870EA7527A4F06300E3BBCE /* WXLoadingHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WXLoadingHUD.swift; sourceTree = "<group>"; };
 		5870EA7727A4F0BC00E3BBCE /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
 		5870EA7A27A4F19900E3BBCE /* UIImage+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Extension.h"; sourceTree = "<group>"; };
@@ -358,6 +364,9 @@
 			children = (
 				58CDFB5926BA33F000056527 /* BaseVC.swift */,
 				58CDFB5A26BA33F000056527 /* WebVC.swift */,
+				585003342AF9CB6C0023F8E9 /* testWeb.html */,
+				585003302AF8ED100023F8E9 /* ImgAddClickEvent.js */,
+				585003322AF8ED180023F8E9 /* NativeApi.js */,
 				58CDFB5B26BA33F000056527 /* BaseNavigationVC.swift */,
 				58CDFB5C26BA33F000056527 /* TabBarController.swift */,
 			);
@@ -491,11 +500,14 @@
 			files = (
 				58B3BDBF262949720075272C /* TrendRecommedCell.xib in Resources */,
 				58B812DC262D3D9400EB00C7 /* MineCenterHeaderView.xib in Resources */,
+				585003352AF9CB6C0023F8E9 /* testWeb.html in Resources */,
 				58CDFB7D26BA33F100056527 /* Assets.xcassets in Resources */,
 				58CDFB8926BA34E200056527 /* LaunchScreen.storyboard in Resources */,
+				585003312AF8ED100023F8E9 /* ImgAddClickEvent.js in Resources */,
 				A3878EA7274E947400850F13 /* CalenderListCell.xib in Resources */,
 				5870EA7827A4F0BC00E3BBCE /* loading.gif in Resources */,
 				5846C88026D36C4300CEF2FC /* TestViewController.xib in Resources */,
+				585003332AF8ED180023F8E9 /* NativeApi.js in Resources */,
 				58A821B9260ADFA2002F7689 /* TrendInfoCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
