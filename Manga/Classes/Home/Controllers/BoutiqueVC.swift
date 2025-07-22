@@ -56,10 +56,10 @@ class BoutiqueVC: BaseVC {
         let api = WXRequestApi(url, method: .get, parameters: param)
         api.requestSerializer = .EncodingFormURL
         api.successStatusMap = (key: "code",  value: "1")
-        api.parseModelMap = (parseKey: "data.returnData.comicLists" , modelType: ComicListModel.self)
+        api.parseModelMap = (keyPath: "data.returnData.comicLists" , modelType: ComicListModel.self)
         
         api.startRequest { [weak self] (responseModel) in
-            self?.comicLists = (responseModel.parseKeyPathModel as? [ComicListModel]) ?? []
+            self?.comicLists = (responseModel.parseModel as? [ComicListModel]) ?? []
             self?.collectionView.reloadData(autoEmptyViewInfo: self?.comicLists)
             debugLog(responseModel);
         }

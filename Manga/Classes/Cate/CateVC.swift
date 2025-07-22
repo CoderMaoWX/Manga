@@ -57,10 +57,10 @@ class CateVC: BaseVC {
         api.requestSerializer = .EncodingFormURL
         api.loadingSuperView = view
         api.successStatusMap = (key: "code",  value: "1")
-        api.parseModelMap = (parseKey: "data.returnData.rankingList" , modelType: RankingModel.self)
+        api.parseModelMap = (keyPath: "data.returnData.rankingList" , modelType: RankingModel.self)
         
         api.startRequest { [weak self] (responseModel) in
-            self?.rankingList = (responseModel.parseKeyPathModel as? [RankingModel]) ?? []
+            self?.rankingList = (responseModel.parseModel as? [RankingModel]) ?? []
             self?.collectionView.reloadData(autoEmptyViewInfo: self?.rankingList)
         }
     }

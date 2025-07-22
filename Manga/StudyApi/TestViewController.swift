@@ -129,7 +129,7 @@ class TestViewController: BaseVC {
         view.addLineTo(position: .top, thinSize: 1)
         setNavBarLeftItem(info: [UIImage(named:"acg_like")!, "Message"]) { button in
             if button.tag == 1 {
-                self.testUploadFile()
+                self.testDownFile()
             } else {
                 ApiClass.studyApi()
                 var str = "ABCDEFGH"
