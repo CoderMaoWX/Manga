@@ -5427,9 +5427,9 @@
 			};
 			name = Release;
 		};
-		3FF8B0A1FE41B1A9C9EBB09C7B29FFC7 /* Release */ = {
+		35C483CB69D42D28849F7A93223A31C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 639ACB3A93C113763CF8AA60CCC25FFD /* WXNetworkingSwift.release.xcconfig */;
+			baseConfigurationReference = CE819037D7D335849EA16902F37EBF4F /* WXNetworkingSwift.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -5462,11 +5462,10 @@
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
 		509C866CA437FA7F0D551D9FDB5327B0 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -6041,46 +6040,6 @@
 			};
 			name = Debug;
 		};
-		80446879A836768EFFEB0460D3E25068 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CE819037D7D335849EA16902F37EBF4F /* WXNetworkingSwift.debug.xcconfig */;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_BITCODE = NO;
-				ENABLE_MODULE_VERIFIER = NO;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GCC_PREFIX_HEADER = "Target Support Files/WXNetworkingSwift/WXNetworkingSwift-prefix.pch";
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "Target Support Files/WXNetworkingSwift/WXNetworkingSwift-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/WXNetworkingSwift/WXNetworkingSwift.modulemap";
-				PRODUCT_MODULE_NAME = WXNetworkingSwift;
-				PRODUCT_NAME = WXNetworkingSwift;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		81343A44163F4C127988EBAB75121219 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 63584CED7B6506CD2496213E8917F735 /* MJRefresh.debug.xcconfig */;
@@ -6639,6 +6598,47 @@
 			};
 			name = Release;
 		};
+		D280384F50ACF4E566E13528318C2D6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 639ACB3A93C113763CF8AA60CCC25FFD /* WXNetworkingSwift.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/WXNetworkingSwift/WXNetworkingSwift-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Target Support Files/WXNetworkingSwift/WXNetworkingSwift-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/WXNetworkingSwift/WXNetworkingSwift.modulemap";
+				PRODUCT_MODULE_NAME = WXNetworkingSwift;
+				PRODUCT_NAME = WXNetworkingSwift;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		D5BCF3318C1269870D24CF055E7DD8A3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2C1639FFA4C254B82F05383397580C32 /* CleanJSON.release.xcconfig */;
@@ -7046,8 +7046,8 @@
 		16B4AF73FF0FD2ED1155E46E6BD73BB1 /* Build configuration list for PBXNativeTarget "WXNetworkingSwift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				80446879A836768EFFEB0460D3E25068 /* Debug */,
-				3FF8B0A1FE41B1A9C9EBB09C7B29FFC7 /* Release */,
+				35C483CB69D42D28849F7A93223A31C3 /* Debug */,
+				D280384F50ACF4E566E13528318C2D6A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

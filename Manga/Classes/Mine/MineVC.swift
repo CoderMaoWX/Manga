@@ -80,10 +80,10 @@ class MineVC: BaseVC {
         api.requestSerializer = .EncodingFormURL
         api.loadingSuperView = view
         api.successStatusMap = (key: "status",  value: "success")
-        api.parseModelMap = (parseKey: "data" , modelType: MineListModel.self)
+        api.parseModelMap = (keyPath: "data" , modelType: MineListModel.self)
 
         api.startRequest { [weak self] (responseModel) in
-            var listModel = (responseModel.parseKeyPathModel as? [MineListModel]) ?? []
+            var listModel = (responseModel.parseModel as? [MineListModel]) ?? []
             listModel.insert(contentsOf: self?.defaultUserItem() ?? [], at: 0)
             self?.dataArray = listModel
             self?.collectionView.reloadData(autoEmptyViewInfo: self?.dataArray)

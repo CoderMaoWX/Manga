@@ -78,12 +78,12 @@ class CommunityVC: BaseVC {
         let api = WXRequestApi(url, method: .get, parameters: dict)
         api.requestSerializer = .EncodingFormURL
         api.successStatusMap = (key: "status", value: "success")
-        api.parseModelMap = (parseKey: "data", modelType: TrendInfoModel.self)
+        api.parseModelMap = (keyPath: "data", modelType: TrendInfoModel.self)
         if tableView.mj_header?.state != .refreshing {
             api.loadingSuperView = view
         }
         api.startRequest { [weak self] (responseModel) in
-            let listModel =  (responseModel.parseKeyPathModel as? [TrendInfoModel]) ?? []
+            let listModel =  (responseModel.parseModel as? [TrendInfoModel]) ?? []
             if firstPage {
                 self?.dataArray = listModel
             } else {

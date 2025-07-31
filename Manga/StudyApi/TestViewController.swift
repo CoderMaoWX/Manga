@@ -183,7 +183,7 @@ class TestViewController: BaseVC {
         api.timeOut = 40
         api.loadingSuperView = view
         api.successStatusMap = (key: "retcode", value: "0")
-        api.parseModelMap = (parseKey: "data", modelType: WeiboModel.self)
+        api.parseModelMap = (keyPath: "data", modelType: WeiboModel.self)
         api.startRequest { [weak self] responseModel in
             self?.textView.text = responseModel.responseDict?.debugDescription.unicodeToString
             showToastText(responseModel.responseMsg)
@@ -234,7 +234,7 @@ class TestViewController: BaseVC {
         api.autoCacheResponse = false
         api.retryWhenFailTuple = (times: 3, delay: 1.0)
         api.successStatusMap = (key: "code", value: "1")
-        api.parseModelMap = (parseKey: "data.returnData.comicLists", modelType: ComicListModel.self)
+        api.parseModelMap = (keyPath: "data.returnData.comicLists", modelType: ComicListModel.self)
 
 		api.startRequest { [weak self] responseModel in
             self?.textView.text = responseModel.responseDict?.debugDescription.unicodeToString
@@ -260,8 +260,8 @@ class TestViewController: BaseVC {
         api.retryWhenFailTuple = (times: 3, delay: 3.0)
         //api.successStatusMap = (key: "code", value: "1")
         
-        api.uploadFileDataArr = [imageData!]
-        api.uploadConfigDataBlock = { multipartFormData in
+        //api.uploadFileDataTuple = (withName: "files", dataArr: [ imageData! ])
+        api.uploadFileManualConfigBlock = { multipartFormData in
             multipartFormData.append(imageData!, withName: "files", fileName: "womenPic.png", mimeType: "image/png")
         }
         api.fileProgressBlock = { progress in

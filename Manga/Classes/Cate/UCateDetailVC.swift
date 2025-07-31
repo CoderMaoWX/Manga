@@ -54,10 +54,10 @@ class UCateDetailVC: BaseVC {
         api.requestSerializer = .EncodingFormURL
         api.loadingSuperView = view
         api.successStatusMap = (key: "code",  value: "1")
-        api.parseModelMap = (parseKey: "data.returnData.comics" , modelType: ComicModel.self)
+        api.parseModelMap = (keyPath: "data.returnData.comics" , modelType: ComicModel.self)
 
         api.startRequest { [weak self] (responseModel) in
-            self?.dataArray = (responseModel.parseKeyPathModel as? [ComicModel]) ?? []
+            self?.dataArray = (responseModel.parseModel as? [ComicModel]) ?? []
             self?.tableView.reloadData(autoEmptyViewInfo: self?.dataArray)
         }
     }
